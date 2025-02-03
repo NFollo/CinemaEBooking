@@ -1,0 +1,6 @@
+A list of references
+This file should be deleted or removed for submissions
+
+create-react-app issues
+https://stackoverflow.com/questions/65396568/react-js-npm-start-shows-failed-to-compile-web-vitals
+
