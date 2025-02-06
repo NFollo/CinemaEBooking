@@ -1,29 +1,22 @@
 .MainFeatured {
-    background-color: white;
+    background-color: rgb(255, 255, 255);
     padding: 1% 5% 10% 5%;
     color: black;
 }
 
 .MainFeaturedText {
     font-size: 500%;
+    padding-bottom: 2%;
 }
 
 .MainFeaturedCarousel {   
-    width: 80%;
+    width: 100%;
     justify-self: center;
 }
 
 .MainFeaturedCarouselItem {
     display: flex;
     flex-direction: column;
-}
-
-.MainFeaturedCarouselItem img{
-    width: 100%;
-    margin-left: 0%;
-    display: flex;
-    flex-direction: row;
-    justify-self: center;
 }
 
 .MainFeaturedCarouselVideoContainer {
@@ -44,14 +37,19 @@
 
 .carousel-control-prev-icon,
 .carousel-control-next-icon {
-    filter: invert(100%); /* Makes arrows white */
+    filter: invert(100%);
+}
+
+.carousel-indicators {
+    filter: invert(100%);
 }
 
 .MainFeaturedCarouselTitle {
     font-size: 300%;
-    padding-left: 6%;
+    padding-left: 16%;
 }
 .MainFeaturedCarouselBody {
     font-size: 160%;
-    padding-left: 6%;
+    padding-left: 16%;
+    padding-bottom: 3%;
 }
