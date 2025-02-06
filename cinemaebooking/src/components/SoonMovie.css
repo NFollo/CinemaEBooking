@@ -1,0 +1,12 @@
+.SoonMovie {
+    color: white;
+    font-size: 200%;
+    font-weight: bolder;
+    display: inline;
+    width: 20%;
+    margin: 5%;
+}
+
+.SoonMovie img {
+    width: 100%;
+}
