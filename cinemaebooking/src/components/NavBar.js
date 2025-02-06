@@ -3,7 +3,7 @@ import './NavBar.css';
 function NavBar() {
   return (
     <div className="NavBar">
-        Put navbar stuff here
+        Put navbar stuff here (Home, Search, Login)
     </div>
   );
 }

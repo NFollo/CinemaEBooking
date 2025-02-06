@@ -1,18 +1,57 @@
 .MainFeatured {
-    background-color: rgb(52, 51, 54);
-    padding: 3% 5% 40% 5%;
+    background-color: white;
+    padding: 1% 5% 10% 5%;
+    color: black;
 }
 
 .MainFeaturedText {
-    color: rgb(255, 255, 255);
     font-size: 500%;
 }
 
-.MainFeaturedCarousel {
-    color: black;
+.MainFeaturedCarousel {   
+    width: 80%;
+    justify-self: center;
+}
+
+.MainFeaturedCarouselItem {
     display: flex;
-    justify-content: center;
     flex-direction: column;
+}
+
+.MainFeaturedCarouselItem img{
+    width: 100%;
+    margin-left: 0%;
+    display: flex;
+    flex-direction: row;
+    justify-self: center;
+}
+
+.MainFeaturedCarouselVideoContainer {
+    width: 100%;  
+    max-width: 1200px;  
+    margin: 0 auto; 
+    aspect-ratio: 16 / 9; 
+    display: flex; 
+    justify-content: center;
     align-items: center;
-    height: 100vh;
+}
+
+.MainFeaturedCarouselItem iframe{
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    filter: invert(100%); /* Makes arrows white */
+}
+
+.MainFeaturedCarouselTitle {
+    font-size: 300%;
+    padding-left: 6%;
+}
+.MainFeaturedCarouselBody {
+    font-size: 160%;
+    padding-left: 6%;
 }
