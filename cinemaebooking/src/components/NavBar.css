@@ -1,7 +1,69 @@
-.NavBar {
-    background-color: rgb(158, 22, 22);
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgb(158,22,22);
     padding: 0.5% 2%;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
 
-    font-size: 150%;
-    /*box-shadow: 0px 0px 122px -24px rgba(0,0,0,0.75) inset;*/
+.leftPart {
+    flex: 1;
+}
+
+.home {
+    background: none;
+    border: none;
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.home:hover {
+    color: #ffcc00;
+}
+
+.center {
+    flex: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.search {
+    padding: 7px 10px;
+    font-size: 14px;
+    border: none;
+    border-radius: 5px;
+    outline: none;
+}
+
+.searchButton {
+    background: white;
+    border: none;
+    padding: 6px 5px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-left: 5px;
+}
+
+.searchButton:hover {
+    background-color: #e0e0e0;
+}
+
+.rightPart {
+    flex: 1;
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    padding-right: 10px;
+}
+
+.signUp:hover {
+    background-color: #e0e0e0;
+}
+
+.login:hover {
+    background-color: #e0e0e0;
 }
