@@ -1,16 +1,44 @@
 import './Main.css';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import NavBar from './NavBar';
 import TitleBody from './TitleBody';
 import MainFeatured from './MainFeatured';
 import ComingSoon from './ComingSoon';
+import LoginPage from './LoginPage';
 
 function Main() {
   return (
     <div className="Main">
-      <NavBar />
-      <TitleBody />
-      <MainFeatured />
-      <ComingSoon />
+      <Router>
+        <div className="AllRoutes">
+          <Routes>
+            <Route exact path='/' 
+              element={
+                <div>
+                  <NavBar />
+                  <TitleBody />
+                  <MainFeatured />
+                  <ComingSoon />
+                </div>
+              } 
+            />
+            <Route exact path='/login' 
+              element={
+                <div>
+                  <LoginPage />
+                </div>
+              } 
+            />
+            <Route exact path='/signup' 
+              element={
+                <div>
+                  <LoginPage />
+                </div>
+              } 
+            />
+          </Routes>
+        </div>
+      </Router>
     </div>
   );
 }

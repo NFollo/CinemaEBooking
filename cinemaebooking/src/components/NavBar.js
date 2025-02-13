@@ -1,5 +1,6 @@
 import "./NavBar.css";
 import { useState } from "react";
+import { Link } from 'react-router-dom';
 
 function NavBar() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -22,8 +23,12 @@ function NavBar() {
       </div>
 
       <div className="rightPart">
-        <button className="signUp">Sign Up</button>
-        <button className="login">Login</button>
+        <Link to={'/login'}>
+          <button className="signUp">Sign Up</button>
+        </Link> 
+        <Link to={'/login'}>
+          <button className="login">Login</button>
+        </Link>        
       </div>
     </nav>
   );
