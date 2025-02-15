@@ -7,6 +7,7 @@ import login from "../img/login.png";
 // import user from "../img/user.png"; 
 // import edit from "../img/edit.png";
 // import logout from "../img/log-out.png";
+import { Link } from 'react-router-dom';
 
 function DropdownItem({ img, text }) {
   return (
@@ -49,8 +50,18 @@ function NavBar() {
             <CgProfile size={28} className="profileIcon" />
           </div>
           <ul className={`dropdown-menu ${openMenu ? "active" : ""}`}>
-            <DropdownItem img={createAcc} text="Create Account" />
-            <DropdownItem img={login} text="Login" />
+            {/* <DropdownItem img={createAcc} text="Sign Up" /> */}
+            <Link to={'/signUp'}>
+              <button className="signUp">
+                <DropdownItem img={createAcc} text="Sign Up" />
+              </button>
+            </Link>
+            <Link to={'/login'}>
+              <button className="login">
+                <DropdownItem img={login} text="Login" />
+              </button>
+            </Link>
+            
             {/* <DropdownItem img={user} text="My Profile" />
             <DropdownItem img={edit} text="Edit Profile" />
             <DropdownItem img={logout} text="Logout" /> */}

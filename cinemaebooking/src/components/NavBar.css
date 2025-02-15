@@ -89,7 +89,7 @@
     background: white;
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-    width: 165px;
+    width: 150px;
     list-style: none;
     padding: 10px 0;
     z-index: 100;
@@ -116,4 +116,16 @@
     width: 20px;
     height: 20px;
     margin-right: 10px;
+}
+
+.signUp {
+    border: none;
+    background-color: #ffffff;
+    width: 150px;
+}
+
+.login {
+    border: none;
+    background-color: #ffffff;
+    width: 150px;
 }
