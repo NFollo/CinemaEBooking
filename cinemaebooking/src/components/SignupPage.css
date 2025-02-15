@@ -1,0 +1,12 @@
+.SignupPageHome {
+    background: none;
+    border: none;
+    color: black;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.SignupPage {
+    background-color: rgb(158,22,22);
+}

@@ -1,0 +1,33 @@
+.LoginForm {
+    color: black;
+}
+
+.LoginFormForm {    
+    font-weight: normal;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    font-size: 120%;
+    font-weight: 500;
+}
+
+.LoginFormTitle {
+    font-size: 300%;
+    font-weight: bolder;
+    justify-self: center;
+    padding-bottom: 50px;
+}
+
+.LoginFormSection {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.LoginFormSubmit {
+    color: white;
+    font-weight: bold;
+    padding: 10px 0px;
+    background-color: rgb(158,22,22);
+    border-radius: 5px;
+}
