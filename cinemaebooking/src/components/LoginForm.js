@@ -1,18 +1,24 @@
 import "./LoginForm.css";
-import { Link } from 'react-router-dom';
 
 function LoginForm() {
     return (
       <div className="LoginForm">
-        hi        
+        <div className="LoginFormTitle">
+          Login
+        </div>
+        <form className="LoginFormForm">
+          <div className="LoginFormSection">
+            Username:
+            <input type="text"></input>
+          </div>
+          <div className="LoginFormSection">
+            Password:
+            <input type="text"></input>
+          </div>  
+          <input type="submit" value="Login" className="LoginFormSubmit"></input>  
+        </form>
       </div>
     );
 }
   
 export default LoginForm;
-
-/*
-<Link to={'/'}>
-          <button className="loginhome">Home</button>
-        </Link>  
-*/

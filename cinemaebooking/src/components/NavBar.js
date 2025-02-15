@@ -23,7 +23,7 @@ function NavBar() {
       </div>
 
       <div className="rightPart">
-        <Link to={'/login'}>
+        <Link to={'/signup'}>
           <button className="signUp">Sign Up</button>
         </Link> 
         <Link to={'/login'}>

@@ -1,4 +1,4 @@
-.LoginPageHome {
+.SignupPageHome {
     background: none;
     border: none;
     color: black;
@@ -7,7 +7,6 @@
     cursor: pointer;
 }
 
-.LoginPage {
+.SignupPage {
     background-color: rgb(158,22,22);
-    height: 100vh;
 }
