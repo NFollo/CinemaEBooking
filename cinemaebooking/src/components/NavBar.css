@@ -21,7 +21,7 @@
 }
 
 .home:hover {
-    color: #ffcc00;
+    color: black;
 }
 
 .center {
@@ -60,10 +60,60 @@
     padding-right: 10px;
 }
 
-.signUp:hover {
-    background-color: #e0e0e0;
+.profile {
+    width: 40px;
+    height: 40px;
+    
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    cursor: pointer;
+    margin-left: 15px;
+  }
+  
+  .profileIcon {
+    color: rgb(255, 255, 255);
+    font-size: 24px;
+  }
+  
+  .profileIcon:hover {
+    color: black; 
+  }
+
+.dropdown-menu {
+    position: absolute;
+    right: 10px;
+    top: 50px;
+    background: white;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    width: 165px;
+    list-style: none;
+    padding: 10px 0;
+    z-index: 100;
+    display: none; 
 }
 
-.login:hover {
-    background-color: #e0e0e0;
+.dropdown-menu.active {
+    display: block;
+}
+
+.dropdownItem {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.dropdownItem:hover {
+    background: #f0f0f0;
+}
+
+.dropdownIcon {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
 }
