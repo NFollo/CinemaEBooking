@@ -1,8 +1,10 @@
 import { useState } from "react";
 import "./SoonMovie.css";
+import BuyTicketsPopup from "./BuyTicketsPopup";
 
 function SoonMovie() {
   const [isClicked, setIsClicked] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
 
   return (
     <div className="SoonMovie">
@@ -15,12 +17,16 @@ function SoonMovie() {
           alt="poster"
         />
         {isClicked && (
-          <button className="overlayText">Buy Tickets</button>
+          <button className="buyTicketsButton" onClick={() => setShowPopup(true)}>
+          Buy Tickets
+        </button>
           )}
       </div>
       <div className="SoonMovieTitle">
         Dog Man
       </div>
+
+      {showPopup && <BuyTicketsPopup onClose={() => setShowPopup(false)} />}
     </div>
   );
 }
