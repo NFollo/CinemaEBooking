@@ -7,11 +7,11 @@ function LoginPage() {
   return (
     <div className="LoginPage">
       <Link to={'/'}>
-        <button className="loginhome">Home</button>
+        <button className="LoginPageHome">Home</button>
       </Link>  
-      <LoginSignupCard text={<LoginForm />} /> 
+      <LoginSignupCard form={<LoginForm />} /> 
     </div>
   );
 }
-/*this is bugged, it is not passing LoginForm properly*/
+
 export default LoginPage;

@@ -5,6 +5,7 @@ import TitleBody from './TitleBody';
 import MainFeatured from './MainFeatured';
 import ComingSoon from './ComingSoon';
 import LoginPage from './LoginPage';
+import SignupPage from './SignupPage';
 
 function Main() {
   return (
@@ -32,7 +33,7 @@ function Main() {
             <Route exact path='/signup' 
               element={
                 <div>
-                  <LoginPage />
+                  <SignupPage />
                 </div>
               } 
             />
