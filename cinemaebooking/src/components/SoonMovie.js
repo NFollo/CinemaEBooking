@@ -25,6 +25,9 @@ function SoonMovie() {
       <div className="SoonMovieTitle">
         Dog Man
       </div>
+      <div className="SoonMovieDesc">
+        Description of movie here
+      </div>
 
       {showPopup && <BuyTicketsPopup onClose={() => setShowPopup(false)} />}
     </div>

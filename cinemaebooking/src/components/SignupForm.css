@@ -15,7 +15,29 @@
     font-size: 300%;
     font-weight: bolder;
     justify-self: center;
-    padding-bottom: 50px;
+    padding-bottom: 5px;
+}
+
+.SignupFormLoginLinkContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    text-decoration: none;
+    padding-bottom: 10px;
+}
+
+.SignupFormLoginLink {
+    justify-self: center;
+    color: blue;
+    border: none;
+    outline: none;
+    background: none;
+    text-decoration: none;
+}
+
+.SignupFormLoginLink:hover {
+    color: rgb(19, 101, 255);
+    text-decoration: underline;
 }
 
 .SignupFormSection {
@@ -30,6 +52,10 @@
     padding: 10px 0px;
     background-color: rgb(158,22,22);
     border-radius: 5px;
+}
+
+.SignupFormSubmit:hover {
+    background-color: rgb(233, 35, 35);
 }
 
 input::-webkit-outer-spin-button,
