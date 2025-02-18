@@ -1,11 +1,21 @@
 import "./SignupForm.css";
+import { Link, useNavigate } from 'react-router-dom';
 
 function SignupForm() {
+
+    const navigate = useNavigate();
+    const onSubmit = () => {
+      navigate("/confirmation");
+    }
+
     return (
       <div className="SignupForm">
         <div className="SignupFormTitle">
           Signup
         </div>
+        <Link to={'/login'} className="SignupFormLoginLinkContainer">
+          <button className="SignupFormLoginLink">Already have an account? Login here</button>
+        </Link>  
         <form className="SignupFormForm">
           <div className="SignupFormSection">
             Email:
@@ -72,7 +82,7 @@ function SignupForm() {
           <input type="number"></input>
           </div>
 
-          <input type="submit" value="Signup" className="SignupFormSubmit"></input>  
+          <input type="submit" value="Signup" onClick={onSubmit} className="SignupFormSubmit"></input>  
         </form>
       </div>
     );

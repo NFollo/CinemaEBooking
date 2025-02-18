@@ -1,0 +1,30 @@
+.ConfirmationFormTitle {
+    font-size: 300%;
+    font-weight: bolder;
+    justify-self: center;
+    padding-bottom: 5px;
+}
+
+.ConfirmationFormSubtitle {
+    justify-self: center;
+}
+
+.ConfirmationFormLinkContainer {
+    display: flex;
+    justify-self: center;
+    text-decoration: none;
+}
+
+.ConfirmationFormLink {
+    justify-self: center;
+    color: blue;
+    border: none;
+    outline: none;
+    background: none;
+    text-decoration: none;
+}
+
+.ConfirmationFormLink:hover {
+    color: rgb(19, 101, 255);
+    text-decoration: underline;
+}

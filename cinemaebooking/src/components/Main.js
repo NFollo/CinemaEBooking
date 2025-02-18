@@ -6,6 +6,7 @@ import MainFeatured from './MainFeatured';
 import ComingSoon from './ComingSoon';
 import LoginPage from './LoginPage';
 import SignupPage from './SignupPage';
+import ConfirmationPage from './ConfirmationPage';
 
 function Main() {
   return (
@@ -34,6 +35,13 @@ function Main() {
               element={
                 <div>
                   <SignupPage />
+                </div>
+              } 
+            />
+            <Route exact path='/confirmation' 
+              element={
+                <div>
+                  <ConfirmationPage />
                 </div>
               } 
             />
