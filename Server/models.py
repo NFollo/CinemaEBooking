@@ -19,7 +19,7 @@ class Review(me.EmbeddedDocument):
     body = me.StringField()
 
 class Movie(me.Document):
-    title = me.StringField()
+    title = me.StringField(required=True)
     synopsis = me.StringField()
     mpaa_us_film_rating_code = me.StringField()
     reviews = me.ListField(me.StringField()) # array of strings 
