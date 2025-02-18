@@ -5,7 +5,7 @@ from models import *
 #Routes
 def init_routes(app):
 
-    @app.route('/login', methods=['POST', 'GET']) 
+    @app.route('/users', methods=['POST', 'GET']) 
     def login(): 
         if request.method == 'POST': # Handle POST requests
             json = request.json 
@@ -20,7 +20,12 @@ def init_routes(app):
             
             return jsonify({"message": "Success added!"}), 201
         elif request.method == 'GET': # Handle GET requests
-            return
+            try:
+                users = User.objects()  # Fetch all movies from the database
+                users_list = [user.to_mongo().to_dict() for user in users]  # Convert to JSON
+                return jsonify(users_list), 200
+            except Exception as err:
+                    return jsonify({"error": "Failed to fetch movies", "message": str(err)}), 500
         
 
     @app.route('/movies', methods=['POST', 'GET']) 

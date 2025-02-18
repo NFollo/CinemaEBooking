@@ -10,6 +10,7 @@ connect("CinemaEBooking", host=os.environ["MONGO_URI"])
 class User(me.Document):
     email = me.StringField(required=True)
     password = me.StringField(required=True)
+    privelage = me.StringField(default="user") # either a user or an admin
     meta = {"collection": "users"} # explicitly set the collection name, otherwise the collection will be called user instead of users
 
 class Review(me.EmbeddedDocument):
