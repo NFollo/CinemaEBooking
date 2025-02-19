@@ -19,11 +19,12 @@ function DropdownItem({ img, text }) {
   );
 }
 
-function NavBar({onSearch, input}) {
+function NavBar({onSearch, input, clearInput}) {
   const [openMenu, setOpenMenu] = useState(false);
   
   const navigate = useNavigate();
   const navHome = () => {
+    clearInput();
     navigate("/");
   }
   const onSearchSubmit = (e) => {

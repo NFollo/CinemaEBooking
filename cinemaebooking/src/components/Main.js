@@ -14,6 +14,7 @@ function Main() {
 
   const [input, setInput] = useState("");
   const onSearch = (e) => setInput(e.target.value);
+  const clearInput = () => setInput("");
 
   return (
     <div className="Main">
@@ -23,7 +24,7 @@ function Main() {
             <Route exact path='/' 
               element={
                 <div>
-                  <NavBar onSearch={onSearch} input={input}/>
+                  <NavBar onSearch={onSearch} input={input} clearInput={clearInput}/>
                   <TitleBody />
                   <MainFeatured />
                   <ComingSoon />
@@ -54,7 +55,7 @@ function Main() {
             <Route exact path='/search' 
               element={
                 <div>
-                  <NavBar onSearch={onSearch} input={input}/>
+                  <NavBar onSearch={onSearch} input={input} clearInput={clearInput}/>
                   <SearchPage query={input}/>
                 </div>
               } 
