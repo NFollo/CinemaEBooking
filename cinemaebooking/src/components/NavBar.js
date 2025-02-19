@@ -19,9 +19,8 @@ function DropdownItem({ img, text }) {
   );
 }
 
-function NavBar() {
+function NavBar({onSearch, input}) {
   const [openMenu, setOpenMenu] = useState(false);
-  const [input, setInput] = useState("");
 
   return (
     <nav className="navbar">
@@ -35,7 +34,7 @@ function NavBar() {
           <FaSearch id="search-icon"/>
           <input 
             placeholder="Type to search..." 
-            value={input} onChange={(e) => setInput(e.target.value)}/>
+            value={input} onChange={onSearch}/>
         </div>
         </div>
       </div>

@@ -1,5 +1,6 @@
 import './Main.css';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { useState } from 'react';
 import NavBar from './NavBar';
 import TitleBody from './TitleBody';
 import MainFeatured from './MainFeatured';
@@ -7,8 +8,13 @@ import ComingSoon from './ComingSoon';
 import LoginPage from './LoginPage';
 import SignupPage from './SignupPage';
 import ConfirmationPage from './ConfirmationPage';
+import SearchPage from './SearchPage/SearchPage';
 
 function Main() {
+
+  const [input, setInput] = useState("");
+  const onSearch = (e) => setInput(e.target.value);
+
   return (
     <div className="Main">
       <Router>
@@ -17,7 +23,7 @@ function Main() {
             <Route exact path='/' 
               element={
                 <div>
-                  <NavBar />
+                  <NavBar onSearch={onSearch} input={input}/>
                   <TitleBody />
                   <MainFeatured />
                   <ComingSoon />
@@ -42,6 +48,13 @@ function Main() {
               element={
                 <div>
                   <ConfirmationPage />
+                </div>
+              } 
+            />
+            <Route exact path='/search' 
+              element={
+                <div>
+                  <SearchPage />
                 </div>
               } 
             />
