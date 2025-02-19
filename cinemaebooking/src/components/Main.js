@@ -60,6 +60,16 @@ function Main() {
                 </div>
               } 
             />
+            <Route exact path='/loggedin' 
+              element={
+                <div>
+                  <NavBar onSearch={onSearch} input={input} clearInput={clearInput}/>
+                  <TitleBody />
+                  <MainFeatured />
+                  <ComingSoon />
+                </div>
+              } 
+            />
           </Routes>
         </div>
       </Router>

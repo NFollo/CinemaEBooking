@@ -43,7 +43,7 @@ function NavBar({onSearch, input, clearInput}) {
           <div className="input-wrapper">
           <FaSearch id="search-icon"/>
           <form onSubmit={onSearchSubmit}>
-            <input 
+            <input className="NavBarInput"
               placeholder="Type to search..." 
               value={input} onChange={onSearch}
             />
