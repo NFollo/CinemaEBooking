@@ -18,19 +18,19 @@ function SignupForm() {
         </Link>  
         <form className="SignupFormForm">
           <div className="SignupFormSection">
-            Email:
+            <div>Email:<span>*</span></div>
           <input type="text"></input>
           </div>
           <div className="SignupFormSection">
-            Username:
+            <div>Username:<span>*</span></div>
           <input type="text"></input>
           </div>
           <div className="SignupFormSection">
-            Password:
+            <div>Password:<span>*</span></div>
             <input type="text"></input>
           </div>  
           <div className="SignupFormSection">
-            Phone Number:
+            <div>Phone Number:<span>*</span></div>
           <input type="number"></input>
           </div>
 

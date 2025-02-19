@@ -9,6 +9,8 @@ import LoginPage from './LoginPage';
 import SignupPage from './SignupPage';
 import ConfirmationPage from './ConfirmationPage';
 import SearchPage from './SearchPage/SearchPage';
+import EditProfile from './LoggedInView/EditProfile';
+import LoggedNavBar from './LoggedInView/LoggedNavBar';
 
 function Main() {
 
@@ -63,10 +65,18 @@ function Main() {
             <Route exact path='/loggedin' 
               element={
                 <div>
-                  <NavBar onSearch={onSearch} input={input} clearInput={clearInput}/>
+                  <LoggedNavBar onSearch={onSearch} input={input} clearInput={clearInput}/>
                   <TitleBody />
                   <MainFeatured />
                   <ComingSoon />
+                </div>
+              } 
+            />
+            <Route exact path='/editprofile' 
+              element={
+                <div>
+                  <LoggedNavBar onSearch={onSearch} input={input} clearInput={clearInput}/>
+                  <EditProfile />
                 </div>
               } 
             />

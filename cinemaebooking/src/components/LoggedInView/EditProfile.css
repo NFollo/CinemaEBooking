@@ -1,0 +1,25 @@
+.EditProfile {
+    padding: 3% 7%;
+}
+
+.EditProfileTitle {
+    font-size: 300%;
+    font-weight: bolder;
+    padding-bottom: 2%;
+}
+
+.EditProfileForm {
+    font-size: 120%;
+    font-weight: bold;
+}
+
+.EditProfile input {
+    margin-bottom: 1%;
+    width: 30%;
+}
+
+.EditProfileSubtitle {
+    font-size: 120%;
+    padding-top: 1%;
+    padding-bottom: 2%;
+}
