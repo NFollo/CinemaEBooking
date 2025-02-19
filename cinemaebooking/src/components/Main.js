@@ -54,7 +54,8 @@ function Main() {
             <Route exact path='/search' 
               element={
                 <div>
-                  <SearchPage />
+                  <NavBar onSearch={onSearch} input={input}/>
+                  <SearchPage query={input}/>
                 </div>
               } 
             />

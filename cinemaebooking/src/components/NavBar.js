@@ -1,10 +1,10 @@
 import "./NavBar.css";
 import { useState } from "react";
-import { Link } from 'react-router-dom';
 import { FaSearch } from "react-icons/fa";
 import { CgProfile } from "react-icons/cg";
 import createAcc from "../img/create-acc.png";
 import login from "../img/login.png";
+import { Link, useNavigate } from 'react-router-dom';
 // import user from "../img/user.png"; 
 // import edit from "../img/edit.png";
 // import logout from "../img/log-out.png";
@@ -21,20 +21,32 @@ function DropdownItem({ img, text }) {
 
 function NavBar({onSearch, input}) {
   const [openMenu, setOpenMenu] = useState(false);
+  
+  const navigate = useNavigate();
+  const navHome = () => {
+    navigate("/");
+  }
+  const onSearchSubmit = (e) => {
+    e.preventDefault();
+    navigate("/search");
+  };
 
   return (
     <nav className="navbar">
       <div className="leftPart">
-        <button className="home">Home</button>
+        <button className="home" onClick={navHome}>Home</button>
       </div>
 
       <div className="center">
         <div className="search-bar-containter">
           <div className="input-wrapper">
           <FaSearch id="search-icon"/>
-          <input 
-            placeholder="Type to search..." 
-            value={input} onChange={onSearch}/>
+          <form onSubmit={onSearchSubmit}>
+            <input 
+              placeholder="Type to search..." 
+              value={input} onChange={onSearch}
+            />
+          </form>
         </div>
         </div>
       </div>
