@@ -23,8 +23,8 @@ class Movie(me.Document):
     synopsis = me.StringField()
     mpaa_us_film_rating_code = me.StringField()
     reviews = me.ListField(me.StringField()) # array of strings 
-    trailer_picture_url = me.ListField(me.StringField())
-    trailer_video_url = me.ListField(me.StringField())
+    trailer_picture_url = me.StringField()
+    trailer_video_url = me.StringField()
     show_dates_and_times = me.ListField(me.DateTimeField())
     directors = me.ListField(me.StringField())
     casts = me.ListField(me.StringField())
