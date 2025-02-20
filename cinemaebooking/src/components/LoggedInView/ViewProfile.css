@@ -1,35 +1,32 @@
-.EditProfile {
+.ViewProfile {
     padding: 3% 7%;
 }
 
-.EditProfileTitle {
+.ViewProfileTitle {
     font-size: 300%;
     font-weight: bolder;
     padding-bottom: 2%;
 }
 
-.EditProfileForm {
+.ViewProfileInfo {
     font-size: 120%;
     font-weight: bold;
 }
 
-.EditProfile input {
-    margin-bottom: 1%;
-    width: 30%;
+.ViewProfileInfo span {
+    font-weight: normal;
+    padding-left: 10px;
 }
 
-.EditProfileSubtitle {
+.ViewProfileSubtitle {
     font-size: 120%;
     padding-top: 2.5%;
     padding-bottom: 2%;
 }
 
-.EditProfile span {
-    font-weight: normal;
-    padding-left: 10px;
-}
-
-.EditProfileSave {
+.ViewProfileEdit {
+    margin-top: 2%;
+    width: 20%;
     color: white;
     font-weight: bold;
     padding: 10px 0px;
@@ -37,6 +34,6 @@
     border-radius: 5px;
 }
 
-.EditProfileSave:hover {
+.ViewProfileEdit:hover {
     background-color: rgb(233, 35, 35);
 }

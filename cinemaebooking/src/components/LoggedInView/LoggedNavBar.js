@@ -25,7 +25,7 @@ function LoggedNavBar({onSearch, input, clearInput}) {
   const navigate = useNavigate();
   const navHome = () => {
     clearInput();
-    navigate("/");
+    navigate("/loggedin");
   }
   const onSearchSubmit = (e) => {
     e.preventDefault();
@@ -61,7 +61,11 @@ function LoggedNavBar({onSearch, input, clearInput}) {
             <CgProfile size={28} className="profileIcon" />
           </div>
           <ul className={`dropdown-menu ${openMenu ? "active" : ""}`}>
-            
+            <Link to={'/viewprofile'}>
+              <button className="signUp">
+                <DropdownItem img={createAcc} text="View Profile" />
+              </button>
+            </Link>
             <Link to={'/editprofile'}>
               <button className="signUp">
                 <DropdownItem img={createAcc} text="Edit Profile" />

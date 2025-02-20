@@ -11,6 +11,7 @@ import ConfirmationPage from './ConfirmationPage';
 import SearchPage from './SearchPage/SearchPage';
 import EditProfile from './LoggedInView/EditProfile';
 import LoggedNavBar from './LoggedInView/LoggedNavBar';
+import ViewProfile from './LoggedInView/ViewProfile';
 
 function Main() {
 
@@ -69,6 +70,14 @@ function Main() {
                   <TitleBody />
                   <MainFeatured />
                   <ComingSoon />
+                </div>
+              } 
+            />
+            <Route exact path='/viewprofile' 
+              element={
+                <div>
+                  <LoggedNavBar onSearch={onSearch} input={input} clearInput={clearInput}/>
+                  <ViewProfile />
                 </div>
               } 
             />

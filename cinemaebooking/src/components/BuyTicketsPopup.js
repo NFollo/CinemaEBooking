@@ -121,6 +121,7 @@ function BuyTicketsPopup({ onClose }) {
                     </div>
                   </div>
                 ))}
+                <img className="popupOverlaySeats" alt="seatchart" src={require('./images/seatchart.png')}></img>
               </div>
               <div className="totalPrice">Total: ${totalPrice.toFixed(2)}</div>
               <button className="continueButton" onClick={handleSubmit}>Continue</button>
