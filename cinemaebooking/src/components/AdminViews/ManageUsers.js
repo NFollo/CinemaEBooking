@@ -33,6 +33,24 @@ function ManageUsers() {
             <div className="ManageEditButton">Delete</div>
         </div>
       </div>
+      <div className="ManageUnit">
+        <div className="ManageUnitName">sample4@domain.com</div>
+        <div className="ManageUnitOptions">
+            <Link to={'/admineditprofile'} className="ManageEditButton">
+                Edit
+            </Link>
+            <div className="ManageEditButton">Delete</div>
+        </div>
+      </div>
+      <div className="ManageUnit">
+        <div className="ManageUnitName">sample5@domain.com</div>
+        <div className="ManageUnitOptions">
+            <Link to={'/admineditprofile'} className="ManageEditButton">
+                Edit
+            </Link>
+            <div className="ManageEditButton">Delete</div>
+        </div>
+      </div>
 
     </div>
   );

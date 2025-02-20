@@ -1,0 +1,51 @@
+.AdminEdit {
+    padding: 3% 7%;
+}
+
+.AdminEditTitle {
+    font-size: 300%;
+    font-weight: bolder;
+}
+
+.AdminEdit input {
+    margin-bottom: 1%;
+    width: 30%;
+}
+
+.AdminEdit select {
+    margin-bottom: 1%;
+}
+
+.AdminEdit form {
+    font-size: 120%;
+    font-weight: bold;
+}
+
+.AdminEditSubtitle {
+    font-size: 120%;
+    padding-top: 2.5%;
+    padding-bottom: 2%;
+}
+
+.AdminFormSection {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.AdminEdit textarea {
+    width: 30%;
+    padding-bottom: 10%;
+}
+
+.AdminEditSave {
+    color: white;
+    font-weight: bold;
+    padding: 10px 0px;
+    background-color: rgb(158,22,22);
+    border-radius: 5px;
+}
+
+.AdminEditSave:hover {
+    background-color: rgb(233, 35, 35);
+}

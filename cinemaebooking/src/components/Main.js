@@ -18,6 +18,8 @@ import AdminNavBar from './AdminViews/AdminNavBar';
 import ManageUsers from './AdminViews/ManageUsers';
 import ManageMovies from './AdminViews/ManageMovies';
 import ManagePromotions from './AdminViews/ManagePromotions';
+import AdminEditProfile from './AdminViews/AdminEditProfile';
+import EditMovie from './AdminViews/EditMovie';
 
 function Main() {
 
@@ -113,11 +115,27 @@ function Main() {
                 </div>
               } 
             /> 
+            <Route exact path='/admineditprofile' 
+              element={
+                <div>
+                  <AdminNavBar onSearch={onSearch} input={input} clearInput={clearInput}/>
+                  <AdminEditProfile />
+                </div>
+              } 
+            /> 
             <Route exact path='/managemovies' 
               element={
                 <div>
                   <AdminNavBar onSearch={onSearch} input={input} clearInput={clearInput}/>
                   <ManageMovies />
+                </div>
+              } 
+            /> 
+            <Route exact path='/admineditmovie' 
+              element={
+                <div>
+                  <AdminNavBar onSearch={onSearch} input={input} clearInput={clearInput}/>
+                  <EditMovie />
                 </div>
               } 
             /> 

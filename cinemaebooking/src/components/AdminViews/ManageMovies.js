@@ -10,7 +10,7 @@ function ManageMovies() {
       <div className="ManageUnit">
         <div className="ManageUnitName">Sonic</div>
         <div className="ManageUnitOptions">
-            <Link to={'/admineditprofile'} className="ManageEditButton">
+            <Link to={'/admineditmovie'} className="ManageEditButton">
                 Edit
             </Link>
             <div className="ManageEditButton">Delete</div>
@@ -19,7 +19,7 @@ function ManageMovies() {
       <div className="ManageUnit">
         <div className="ManageUnitName">Sonic 2</div>
         <div className="ManageUnitOptions">
-            <Link to={'/admineditprofile'} className="ManageEditButton">
+            <Link to={'/admineditmovie'} className="ManageEditButton">
                 Edit
             </Link>
             <div className="ManageEditButton">Delete</div>
@@ -28,11 +28,16 @@ function ManageMovies() {
       <div className="ManageUnit">
         <div className="ManageUnitName">Detective Pikachu</div>
         <div className="ManageUnitOptions">
-            <Link to={'/admineditprofile'} className="ManageEditButton">
+            <Link to={'/admineditmovie'} className="ManageEditButton">
                 Edit
             </Link>
             <div className="ManageEditButton">Delete</div>
         </div>
+      </div>
+      <div className="ManageUnit">
+        <Link to={'/admineditmovie'} className="ManageEditButtonAdd">
+            Add Movie
+        </Link>
       </div>
 
     </div>

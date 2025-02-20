@@ -9,20 +9,24 @@
 }
 
 .ManageUnit {
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: 20% 10% 70%;
+    grid-template-rows: 100%;
+    grid-template-areas: "name" "buttons" "other";
     margin-bottom: 30px;
-    width: 30%;
 }
 
 .ManageUnitOptions {
     display: flex;
+    grid-column-start: 2;
+    grid-column-end: 3;
 }
 
 .ManageUnitName {
     font-size: 120%;
     font-weight: bold;
+    grid-column-start: 1;
+    grid-column-end: 2;
 }
 
 .ManageEditButton {
@@ -43,6 +47,28 @@
 }
 
 .ManagePromocode {
+    grid-column-start: 3;
+    grid-column-end: end;
     font-size: 120%;
     font-weight: bold;
+}
+
+.ManageEditButtonAdd {
+    color: white;
+    font-weight: bold;
+    padding: 10px 0px;
+    background-color: rgb(158,22,22);
+    border-radius: 5px;
+    border-color: black;
+    border-style: outset;
+    padding: 10px 10px;
+    margin-right: 20px;
+    text-decoration: none;
+    grid-column-start: 1;
+    grid-column-end: 3;
+    text-align: center;
+}
+
+.ManageEditButtonAdd:hover {
+    background-color: rgb(233, 35, 35);
 }
