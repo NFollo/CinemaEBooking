@@ -14,6 +14,10 @@ import LoggedNavBar from './LoggedInView/LoggedNavBar';
 import ViewProfile from './LoggedInView/ViewProfile';
 import BuyTicketsPage from './BuyTicketsPage';
 import SeatSelection from './SeatSelection';
+import AdminNavBar from './AdminViews/AdminNavBar';
+import ManageUsers from './AdminViews/ManageUsers';
+import ManageMovies from './AdminViews/ManageMovies';
+import ManagePromotions from './AdminViews/ManagePromotions';
 
 function Main() {
 
@@ -91,6 +95,40 @@ function Main() {
                 </div>
               } 
             />
+            <Route exact path='/adminhome' 
+              element={
+                <div>
+                  <AdminNavBar onSearch={onSearch} input={input} clearInput={clearInput}/>
+                  <TitleBody />
+                  <MainFeatured />
+                  <ComingSoon />
+                </div>
+              } 
+            />
+            <Route exact path='/manageusers' 
+              element={
+                <div>
+                  <AdminNavBar onSearch={onSearch} input={input} clearInput={clearInput}/>
+                  <ManageUsers />
+                </div>
+              } 
+            /> 
+            <Route exact path='/managemovies' 
+              element={
+                <div>
+                  <AdminNavBar onSearch={onSearch} input={input} clearInput={clearInput}/>
+                  <ManageMovies />
+                </div>
+              } 
+            /> 
+            <Route exact path='/managepromotions' 
+              element={
+                <div>
+                  <AdminNavBar onSearch={onSearch} input={input} clearInput={clearInput}/>
+                  <ManagePromotions />
+                </div>
+              } 
+            />            
             <Route exact path='/buytickets' element={<BuyTicketsPage />} />
             <Route exact path='/seatselection' element={<SeatSelection />} />
           </Routes>
