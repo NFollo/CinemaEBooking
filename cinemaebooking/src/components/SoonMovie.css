@@ -26,6 +26,10 @@
     width: 100%;
     transition: opacity 0.3s ease-in-out;
 }
+
+.SoonMovieImg:hover img {
+    filter: brightness(70%);
+}
   
 .SoonMovieImg.clicked img {
     opacity: 0.5;

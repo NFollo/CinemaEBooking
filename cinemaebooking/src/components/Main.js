@@ -12,6 +12,8 @@ import SearchPage from './SearchPage/SearchPage';
 import EditProfile from './LoggedInView/EditProfile';
 import LoggedNavBar from './LoggedInView/LoggedNavBar';
 import ViewProfile from './LoggedInView/ViewProfile';
+import BuyTicketsPage from './BuyTicketsPage';
+import SeatSelection from './SeatSelection';
 
 function Main() {
 
@@ -89,6 +91,8 @@ function Main() {
                 </div>
               } 
             />
+            <Route exact path='/buytickets' element={<BuyTicketsPage />} />
+            <Route exact path='/seatselection' element={<SeatSelection />} />
           </Routes>
         </div>
       </Router>

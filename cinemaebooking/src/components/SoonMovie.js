@@ -1,35 +1,26 @@
-import { useState } from "react";
+import { useNavigate } from "react-router-dom"; 
 import "./SoonMovie.css";
-import BuyTicketsPopup from "./BuyTicketsPopup";
 
 function SoonMovie() {
-  const [isClicked, setIsClicked] = useState(false);
-  const [showPopup, setShowPopup] = useState(false);
+  const navigate = useNavigate(); 
+
+  const movieData = {
+    title: "Dog Man",
+    description: "Description of move here",
+    image: "https://connect.gtcmovies.com/CDN/Image/Entity/FilmPosterGraphic/HO00004607",
+  };
+
+  const handleClick = () => {
+    navigate("/buytickets", { state: movieData });
+  };
 
   return (
     <div className="SoonMovie">
-      <div 
-        className={`SoonMovieImg ${isClicked ? "clicked" : ""}`} 
-        onClick={() => setIsClicked(!isClicked)} 
-      >
-        <img 
-          src="https://connect.gtcmovies.com/CDN/Image/Entity/FilmPosterGraphic/HO00004607" 
-          alt="poster"
-        />
-        {isClicked && (
-          <button className="buyTicketsButton" onClick={() => setShowPopup(true)}>
-          Buy Tickets
-        </button>
-          )}
+      <div className="SoonMovieImg" onClick={handleClick}> 
+        <img src={movieData.image} alt={movieData.title} />
       </div>
-      <div className="SoonMovieTitle">
-        Dog Man
-      </div>
-      <div className="SoonMovieDesc">
-        Description of movie here
-      </div>
-
-      {showPopup && <BuyTicketsPopup onClose={() => setShowPopup(false)} />}
+      <div className="SoonMovieTitle">{movieData.title}</div>
+      <div className="SoonMovieDesc">{movieData.description}</div>
     </div>
   );
 }

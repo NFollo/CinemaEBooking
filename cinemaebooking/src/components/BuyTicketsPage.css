@@ -1,35 +1,39 @@
-.popupOverlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
+body, html {
     height: 100%;
-    background: rgba(0, 0, 0, 0.8);
+    margin: 0;
+    padding: 0;
+    background: #1b1b2f;
+}
+
+.buyTicketsPage {
+    min-height: 100vh;
     display: flex;
-    align-items: center;
+    flex-direction: column;
     justify-content: center;
-    z-index: 1000;
-}
-  
-.popupContent {
-    background: #222;
-    color: white;
+    align-items: center;
+    background: #1b1b2f; 
     padding: 20px;
-    border-radius: 10px;
-    width: 650px;
-    max-width: 90%;
-    text-align: center;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+    color: white;
 }
-  
-.popupHeader {
+
+.pageHeader {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    width: 90%;
+    max-width: 800px;
     border-bottom: 1px solid white;
     padding-bottom: 10px;
 }
-  
+
+.pageBody {
+    background: #1b1b2f;
+    padding: 20px;
+    flex-grow: 1; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 .navButton {
     background: none;
     border: none;
@@ -47,18 +51,6 @@
     align-items: flex-start;
     text-align: left;
     margin-top: 20px;
-}
-  
-.movieImg {
-    width: 120px;
-    height: 160px;
-    background: gray;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 16px;
-    color: white;
-    margin-right: 20px;
 }
 
 .movieTitle {
@@ -80,16 +72,25 @@
     margin: 0;
     text-align: left;
 }
+  
+.movieImg {
+    width: 120px;
+    height: 160px;
+    background: gray;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    color: white;
+    margin-right: 20px;
+}
 
 .dateSelection {
     display: flex;
     align-items: center;
     gap: 10px;
-    margin-top: 5px;
-}
-
-.dateSelection h3 {
-    margin: 0;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 
 .dateInput {
@@ -128,6 +129,7 @@
     cursor: pointer;
     font-size: 16px;
     border-radius: 5px;
+    align-items: center;
 }
 
 .showtimeButton:hover, .showtimeButton.selected {
@@ -204,7 +206,7 @@
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    width: 100%;
+    width: 40%;
     margin-top: 15px;
 }
 
@@ -218,9 +220,4 @@
     margin-top: 15px;
     text-align: right;
     padding-right: 20px;
-}
-
-.popupOverlaySeats {
-    width:50% !important;
-    height: auto;
 }
