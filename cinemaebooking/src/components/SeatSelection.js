@@ -24,12 +24,12 @@ const SeatSelection = () => {
     localStorage.setItem("selectedSeats", JSON.stringify(selectedSeats));
   }, [selectedSeats]);
 
-  const toggleSeatSelection = (seatIndex) => {
-    if (selectedSeats.includes(seatIndex)) {
-      setSelectedSeats(selectedSeats.filter((index) => index !== seatIndex));
-    } else if (selectedSeats.length < numTickets) {
-      setSelectedSeats([...selectedSeats, seatIndex]);
-    }
+  const toggleSeatSelection = (seatNumber) => {
+    setSelectedSeats((prevSelected) =>
+      prevSelected.includes(seatNumber)
+        ? prevSelected.filter((seat) => seat !== seatNumber) // Remove if already selected
+        : [...prevSelected, seatNumber] // Add if not selected
+    );
   };
 
   const handleConfirm = () => {
@@ -56,28 +56,6 @@ const SeatSelection = () => {
         </p>
       )}
 
-      <div className="container">
-        <div className="screenContainer">
-            <div className="screen"></div>
-        </div>
-
-        {[...Array(6)].map((_, rowIndex) => (
-          <div key={rowIndex} className="row">
-            {[...Array(8)].map((_, seatIndex) => {
-              const globalSeatIndex = rowIndex * 8 + seatIndex;
-              const isSelected = selectedSeats.includes(globalSeatIndex);
-              return (
-                <div
-                  key={globalSeatIndex}
-                  className={`seat ${isSelected ? "selected" : ""}`}
-                  onClick={() => toggleSeatSelection(globalSeatIndex)}
-                ></div>
-              );
-            })}
-          </div>
-        ))}
-      </div>
-
       <div className="seatKey">
         <div className="keyItem">
           <div className="seat unavailable"></div>
@@ -92,6 +70,40 @@ const SeatSelection = () => {
           <small>Occupied</small>
         </div>
       </div>
+
+      <div className="container">
+        <div className="screenContainer">
+            <div className="screen"></div>
+        </div>
+
+        <div className="seatsContainer">
+          {[...Array(8)].map((_, rowIndex) => ( 
+            <div key={rowIndex} className="row">
+              {[...Array(6)].map((_, seatIndex) => { 
+                const seatLetter = String.fromCharCode(65 + seatIndex); 
+                const seatNumber = `${seatLetter}${rowIndex + 1}`; 
+                const isSelected = selectedSeats.includes(seatNumber);
+
+                return (
+                  <div
+                    key={seatNumber}
+                    className={`seat ${isSelected ? "selected" : ""}`}
+                    onClick={() => toggleSeatSelection(seatNumber)}
+                  >
+                    <span className="seatNumber">{seatNumber}</span> 
+                  </div>
+                );
+              })}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {selectedSeats.length > 0 && (
+        <p className="selectedSeatsMessage">
+          Selected seats: {selectedSeats.join(", ")}
+        </p>
+      )}
 
       <button className="confirmButton" onClick={handleConfirm}>Confirm Seats</button>
     </div>
