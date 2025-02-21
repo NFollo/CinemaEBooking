@@ -49,3 +49,33 @@
 .AdminEditSave:hover {
     background-color: rgb(233, 35, 35);
 }
+
+.AdminShowtimeButtons label {
+    margin: 10px 0px 30px;
+}
+
+.AdminShowtimeButtons span{
+    background: #444;
+    border: none;
+    color: white;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 5px;
+    align-items: center;
+    width: 140px;
+    margin-right: 10px;
+}
+
+.AdminShowtimeButtons input:checked + span{
+    background: rgb(245, 65, 65);
+    color: black;
+}
+
+.AdminShowtimeButtons input[type="checkbox"]:not(:checked), 
+input[type="checkbox"]:checked {
+  position: absolute;
+  left: -9999%;
+}
+
+
