@@ -36,3 +36,15 @@
     font-size: 120%;
     font-weight: bolder;
 }
+
+.button {
+    color: white;
+    font-weight: bold;
+    padding: 10px 0px;
+    background-color: rgb(158,22,22);
+    border-radius: 5px;
+    border-color: black;
+    border-style: outset;
+    padding: 10px 10px;
+    text-decoration: none;
+}

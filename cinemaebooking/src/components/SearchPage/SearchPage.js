@@ -1,8 +1,10 @@
 import "./SearchPage.css";
 import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 //import { Link, useNavigate } from 'react-router-dom';
 
 function SearchPage({query}) {
+    const navigate = useNavigate();
 
     var sampleMovies = [
         {
@@ -90,9 +92,17 @@ function SearchPage({query}) {
                 movieDesc.className = "SearchPageMovieDesc";
                 movieDesc.textContent = movie.desc;
 
+                const viewMovieButton = document.createElement("button");
+                viewMovieButton.className = 'button';
+                viewMovieButton.textContent = "View Movie";
+                viewMovieButton.addEventListener("click", () => {
+                    navigate("/movieinfo")
+                })
+
                 movieCard.append(movieImg);
                 movieCard.append(movieTitle);
                 movieCard.append(movieDesc);
+                movieCard.append(viewMovieButton);
                 movieContainer.append(movieCard);
             }
 

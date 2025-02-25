@@ -1,0 +1,77 @@
+.pageContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    margin: 10px;
+
+    gap: 1.5em;
+}
+
+.title {
+    font-weight: bold;
+    font-size: 2em;
+}
+
+.label {
+    font-weight: bold;
+}
+
+.categoriesContainer {
+    display: flex;
+    flex-direction: row;
+    gap: 1.5em;
+}
+
+.poster {
+    max-width: 30%;
+}
+
+.directorsContainer {
+    display: flex;
+    flex-direction: row;
+    gap: 1.5em;
+}
+
+.castMembersContainer {
+    display: flex;
+    flex-direction: row;
+    gap: 1.5em;
+}
+
+.producersContainer {
+    display: flex;
+    flex-direction: row;
+    gap: 1.5em;
+}
+
+.button {
+    color: white;
+    font-weight: bold;
+    padding: 10px 0px;
+    background-color: rgb(158,22,22);
+    border-radius: 5px;
+    border-color: black;
+    border-style: outset;
+    padding: 10px 10px;
+    text-decoration: none;
+}
+
+.reviewsContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5em;
+    align-items: center;
+}
+
+.review {
+    display: flex;
+    flex-direction: row;
+
+    border: 1px solid black;
+    border-radius: 10px;
+
+    padding: 5px;
+    
+    gap: 1em;
+}

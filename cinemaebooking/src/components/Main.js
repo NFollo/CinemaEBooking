@@ -20,6 +20,7 @@ import ManageMovies from './AdminViews/ManageMovies';
 import ManagePromotions from './AdminViews/ManagePromotions';
 import AdminEditProfile from './AdminViews/AdminEditProfile';
 import EditMovie from './AdminViews/EditMovie';
+import MovieInfoPage from './MovieInfoPage';
 
 function Main() {
 
@@ -149,6 +150,12 @@ function Main() {
             />            
             <Route exact path='/buytickets' element={<BuyTicketsPage />} />
             <Route exact path='/seatselection' element={<SeatSelection />} />
+            <Route exact path='/movieinfo' 
+              element={ <div>
+                          <NavBar onSearch={onSearch} input={input} clearInput={clearInput}/>
+                          <MovieInfoPage />
+                        </div>} 
+            />
           </Routes>
         </div>
       </Router>
