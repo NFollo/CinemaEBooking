@@ -31,5 +31,6 @@ class Movie(me.Document):
     categories = me.ListField(me.StringField())
     producers = me.ListField(me.StringField())
     reviews = me.ListField(me.EmbeddedDocumentField(Review))
+    currentlyRunning = me.BooleanField()
     meta = {"collection": "movies"}
 
