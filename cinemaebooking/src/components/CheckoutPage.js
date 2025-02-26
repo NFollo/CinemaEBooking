@@ -6,7 +6,6 @@ const CheckoutPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // Get data from SeatSelection page
   const { movieTitle, selectedDate, showtime, selectedSeats, totalPrice } =
     location.state || {
       movieTitle: "Unknown Movie",
@@ -18,14 +17,12 @@ const CheckoutPage = () => {
 
   return (
     <div className="checkoutPage">
-      {/* Navbar */}
       <div className="header">
         <button className="navButton" onClick={() => navigate(-1)}>Back</button>
         <h2>Checkout</h2>
         <button className="navButton" onClick={() => navigate("/")}>Exit</button>
       </div>
 
-      {/* Order Details */}
       <div className="checkoutContainer">
         <h3 className="orderTitle">Order Details</h3>
         <div className="orderDetails">
@@ -37,7 +34,6 @@ const CheckoutPage = () => {
         </div>
       </div>
 
-      {/* Button moved outside of checkoutContainer */}
       <button className="confirmButton" onClick={() => navigate("/orderconfirmation")}>
          Confirm Purchase
     </button>

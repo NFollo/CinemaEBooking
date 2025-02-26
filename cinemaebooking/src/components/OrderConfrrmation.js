@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import "./OrderConfirmation.css";
-import { FaShoppingBag } from "react-icons/fa"; // Import shopping bag icon
+import { FaShoppingBag } from "react-icons/fa"; 
 
 const ConfirmationPage = () => {
   const navigate = useNavigate();

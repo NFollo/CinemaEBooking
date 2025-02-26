@@ -11,7 +11,7 @@ const SeatSelection = () => {
   const showtime = queryParams.get("showtime") || "N/A";
   const selectedDate = queryParams.get("date") || "N/A";
   const numTickets = parseInt(queryParams.get("tickets"), 10) || 1;
-  const ticketPrice = 15.99; // default (adult) ticket price
+  const ticketPrice = 15.99;
 
   const [selectedSeats, setSelectedSeats] = useState([]);
 
@@ -25,11 +25,14 @@ const SeatSelection = () => {
   }, [selectedSeats]);
 
   const toggleSeatSelection = (seatNumber) => {
-    setSelectedSeats((prevSelected) =>
-      prevSelected.includes(seatNumber)
-        ? prevSelected.filter((seat) => seat !== seatNumber) // Remove if already selected
-        : [...prevSelected, seatNumber] // Add if not selected
-    );
+    setSelectedSeats((prevSelected) => {
+      if (prevSelected.includes(seatNumber)) {
+        return prevSelected.filter((seat) => seat !== seatNumber); //deselect seat
+      } else if (prevSelected.length < numTickets) {
+        return [...prevSelected, seatNumber]; //adds seat 
+      }
+      return prevSelected; // prevents from selecting more than allowed
+    });
   };
 
   const handleConfirm = () => {

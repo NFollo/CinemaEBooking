@@ -4,8 +4,7 @@ import { useNavigate } from 'react-router-dom';
 function MovieInfoPage() {
     // navigation for BookTickets button
     const navigate = useNavigate();
-    const handleBookTickets = () => {navigate("/buytickets");};
-
+    
     // eventually retrieve from DB
     let title = 'Sonic (R)';
     let status = 'Currently Running';
@@ -17,6 +16,16 @@ function MovieInfoPage() {
     let producers = ["Tobery Ascher", "Nan Morales", "Tim Miller"];
     let reviews = [["Jennifer", "7", "Good"], ["Bob", "2", "I hate Sanic"]];
 
+    const handleBookTickets = () => {
+        navigate("/buytickets", {
+            state: {
+                title,
+                description,
+                image: posterLink, 
+            }
+        });
+    };
+
     return (
         <div className='pageContainer'>
             <p className='title'>{title}</p>
@@ -27,7 +36,7 @@ function MovieInfoPage() {
                 {categories.map((category) => <div>{category}</div>)}
             </div>
 
-            <img className='poster' src={posterLink} alt=""/>
+            <img className='poster' src={posterLink} alt={title} />
 
             <p>{description}</p>
 
@@ -52,17 +61,19 @@ function MovieInfoPage() {
 
             <div className='reviewsContainer'>
                 <p className='label'>Reviews:</p>
-                {reviews.map((review) => <div className='review'>
-                    <div>
-                        {review[0] + ": " + review[1] + "/10"}
-                    </div> 
-                    <div>
-                        {review[2]}
+                {reviews.map((review) => (
+                    <div className='review'>
+                        <div>
+                            {review[0] + ": " + review[1] + "/10"}
+                        </div> 
+                        <div>
+                            {review[2]}
+                        </div>
                     </div>
-                </div>)}
+                ))}
             </div>
         </div>
     );
-} // MovieInfoPage
+}
 
 export default MovieInfoPage;
