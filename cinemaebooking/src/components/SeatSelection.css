@@ -136,6 +136,7 @@
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    max-width: 200px;
 }
 
 .confirmButton:hover {

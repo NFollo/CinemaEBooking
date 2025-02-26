@@ -1,0 +1,74 @@
+.checkoutPage {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: #1b1b2f;
+    padding: 20px;
+    color: rgb(0, 0, 0);
+}
+
+.header {
+    position: fixed; 
+    top: 0; 
+    width: 1000px;
+    background: #1b1b2f;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px;
+    border-bottom: 1px solid white;
+    z-index: 1000; 
+}
+
+.pageContent {
+    margin-top: 80px;
+    text-align: center;
+    padding: 20px;
+}
+
+
+.checkoutContainer {
+    background: #f8f8f8;
+    padding: 20px;
+    border-radius: 10px;
+    width: 400px;
+    max-width: 700px;
+    text-align: center;
+}
+
+.movieTitle {
+    font-size: 24px;
+    margin-bottom: 10px;
+    align-items: center;
+}
+
+.orderDetails {
+    text-align: left;
+    margin-top: 10px;
+}
+
+.detailItem {
+    font-size: 18px;
+    margin: 10px 0;
+    display: flex;
+    justify-content: space-between;
+}
+
+.confirmButton {
+    background: #ff4444;
+    color: white;
+    font-size: 18px;
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.confirmButton:hover {
+    background: #cc0000;
+}

@@ -37,8 +37,14 @@ const SeatSelection = () => {
       alert(`Please select exactly ${numTickets} seats.`);
       return;
     }
-    navigate("/confirmation", {
-      state: { movieTitle, showtime, selectedDate, selectedSeats, totalPrice: selectedSeats.length * ticketPrice }
+    navigate("/checkout", {
+      state: { 
+        movieTitle, 
+        selectedDate, 
+        showtime, 
+        selectedSeats, 
+        totalPrice: selectedSeats.length * ticketPrice 
+      }
     });
   };
 

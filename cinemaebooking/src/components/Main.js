@@ -21,6 +21,8 @@ import ManagePromotions from './AdminViews/ManagePromotions';
 import AdminEditProfile from './AdminViews/AdminEditProfile';
 import EditMovie from './AdminViews/EditMovie';
 import MovieInfoPage from './MovieInfoPage';
+import CheckoutPage from './CheckoutPage';
+import OrderConfirmation from './OrderConfrrmation'
 
 function Main() {
 
@@ -150,6 +152,8 @@ function Main() {
             />            
             <Route exact path='/buytickets' element={<BuyTicketsPage />} />
             <Route exact path='/seatselection' element={<SeatSelection />} />
+            <Route path="/checkout" element={<CheckoutPage />} />
+            <Route path="/orderconfirmation" element={<OrderConfirmation />} />
             <Route exact path='/movieinfo' 
               element={ <div>
                           <NavBar onSearch={onSearch} input={input} clearInput={clearInput}/>
