@@ -4,6 +4,7 @@ import os
 from dotenv import load_dotenv
 from routes import init_routes
 from db import init_db
+from flask_cors import CORS
 
 # Start Flask App
 app = Flask(__name__)
@@ -27,6 +28,7 @@ if __name__ == '__main__':
     app.config['MONGO_URI'] = os.environ['MONGO_URI']
     init_db(app)
     init_routes(app)
+    CORS(app)
     app.run(debug=True)
    
     
