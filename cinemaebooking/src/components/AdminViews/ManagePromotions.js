@@ -10,7 +10,7 @@ function ManagePromotions() {
       <div className="ManageUnit">
         <div className="ManageUnitName">10% off all movies</div>
         <div className="ManageUnitOptions">
-        <Link to={'/admineditcode'} className="ManageEditButton">
+        <Link to={'/editpromotions'} className="ManageEditButton">
           Edit
         </Link>
         <div className="ManageEditButton">Delete</div>
@@ -21,7 +21,7 @@ function ManagePromotions() {
       <div className="ManageUnit">
         <div className="ManageUnitName">10% off Dog Man</div>
         <div className="ManageUnitOptions">
-        <Link to={'/admineditcode'} className="ManageEditButton">
+        <Link to={'/editpromotions'} className="ManageEditButton">
           Edit
         </Link>
         <div className="ManageEditButton">Delete</div>
@@ -32,7 +32,7 @@ function ManagePromotions() {
       <div className="ManageUnit">
         <div className="ManageUnitName">15% off Sonic 3</div>
         <div className="ManageUnitOptions">
-        <Link to={'/admineditcode'} className="ManageEditButton">
+        <Link to={'/editpromotions'} className="ManageEditButton">
           Edit
         </Link>
         <div className="ManageEditButton">Delete</div>
@@ -43,7 +43,7 @@ function ManagePromotions() {
       <div className="ManageUnit">
         <div className="ManageUnitName">20% off all movies</div>
         <div className="ManageUnitOptions">
-        <Link to={'/admineditcode'} className="ManageEditButton">
+        <Link to={'/editpromotions'} className="ManageEditButton">
           Edit
         </Link>
         <div className="ManageEditButton">Delete</div>
@@ -52,7 +52,7 @@ function ManagePromotions() {
        
       </div>
       <div className="ManageUnit">
-        <Link to={'/admineditcode'} className="ManageEditButtonAdd">
+        <Link to={'/editpromotions'} className="ManageEditButtonAdd">
             Add Promotion
         </Link>
       </div>

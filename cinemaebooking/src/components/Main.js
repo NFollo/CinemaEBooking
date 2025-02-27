@@ -23,6 +23,7 @@ import EditMovie from './AdminViews/EditMovie';
 import MovieInfoPage from './MovieInfoPage';
 import CheckoutPage from './CheckoutPage';
 import OrderConfirmation from './OrderConfrrmation'
+import EditPromotions from './AdminViews/EditPromotions';
 
 function Main() {
 
@@ -147,6 +148,14 @@ function Main() {
                 <div>
                   <AdminNavBar onSearch={onSearch} input={input} clearInput={clearInput}/>
                   <ManagePromotions />
+                </div>
+              } 
+            /> 
+            <Route exact path='/editpromotions' 
+              element={
+                <div>
+                  <AdminNavBar onSearch={onSearch} input={input} clearInput={clearInput}/>
+                  <EditPromotions />
                 </div>
               } 
             />            
