@@ -40,3 +40,39 @@
 .EditProfileSave:hover {
     background-color: rgb(233, 35, 35);
 }
+
+
+.cardContainer {
+    display: flex;
+    flex-direction: row;
+    gap: 10em;
+    justify-self: left;
+}
+
+.cardContainer input {
+    width: 69%;
+}
+
+.deleteCardButton{
+    color: white;
+    font-weight: bold;
+    padding: 10px 10px;
+    background-color: rgb(158,22,22);
+    border-radius: 5px;
+    margin: 10px 0px;
+    max-height: fit-content;
+    align-self: center;
+}
+
+.deleteCardButton:hover {
+    background-color: rgb(233, 35, 35);
+}
+
+.addNewCardButton {
+    color: white;
+    font-weight: bold;
+    padding: 10px 10px;
+    background-color: rgb(158,22,22);
+    border-radius: 5px;
+    margin: 10px 0px;
+}
