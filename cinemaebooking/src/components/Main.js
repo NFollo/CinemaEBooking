@@ -27,6 +27,7 @@ import EditPromotions from './AdminViews/EditPromotions';
 import CurrentlyRunning from './CurrentlyRunning';
 import LoginForgotPassword from './LoginForgotPassword';
 
+
 function Main() {
 
   const [input, setInput] = useState("");
@@ -172,6 +173,7 @@ function Main() {
             <Route exact path='/buytickets' element={<BuyTicketsPage />} />
             <Route exact path='/seatselection' element={<SeatSelection />} />
             <Route path="/checkout" element={<CheckoutPage />} />
+            
             <Route path="/orderconfirmation" element={<OrderConfirmation />} />
             <Route exact path='/movieinfo' 
               element={ <div>

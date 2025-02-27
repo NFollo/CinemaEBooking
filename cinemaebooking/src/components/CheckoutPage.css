@@ -72,3 +72,152 @@
 .confirmButton:hover {
     background: #cc0000;
 }
+
+.checkoutContainer {
+    width: 100%;
+    max-width: 600px;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    margin-top: 20px;
+}
+  
+
+.orderSummary {
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+}
+  
+.orderInfo p {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 0;
+}
+  
+.paymentOptions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+  
+.paymentOption {
+    display: flex;
+    align-items: center;
+    background: #fff;
+    border-radius: 10px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    cursor: pointer;
+}
+  
+.paymentOption.selected {
+    border: 2px solid #007aff;
+}
+  
+.paymentCard {
+    display: flex;
+    align-items: center;
+    padding-left: 10px;
+    width: 100%;
+}
+  
+.addNewCard {
+    padding-left: 10px;
+}
+
+.cardLogo {
+    width: 40px;
+    margin-right: 10px;
+}
+  
+.seeMore {
+    color: #007aff;
+    cursor: pointer;
+}
+  
+.cardDetails {
+    background: #fff;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    margin-top: 10px;
+}
+  
+.cardInput {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+  
+.cardRow {
+    display: flex;
+    justify-content: space-between;
+}
+  
+.cardInput.small {
+    width: 30%;
+}
+
+.promoContainer {
+    width: 100%;
+    max-width: 600px;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    margin-top: 20px;
+}
+  
+.payButton {
+    margin-top: 20px;
+    background: #ff4444;
+    color: white;
+    font-size: 18px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    max-width: 200px;
+}
+  
+.payButton:hover {
+    background: #cc0000;
+}
+
+.promoBox {
+    align-items: center;
+    justify-content: center;
+}
+
+.promoInput {
+    padding: 10px;
+    width: 80%;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    color: white;
+    outline: none;
+}
+
+.applyButton {
+    background: #0095ff;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.applyButton:hover {
+    background: #007acc;
+}
