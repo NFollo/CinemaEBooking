@@ -25,6 +25,7 @@ import CheckoutPage from './CheckoutPage';
 import OrderConfirmation from './OrderConfrrmation'
 import EditPromotions from './AdminViews/EditPromotions';
 import CurrentlyRunning from './CurrentlyRunning';
+import LoginForgotPassword from './LoginForgotPassword';
 
 function Main() {
 
@@ -52,6 +53,13 @@ function Main() {
               element={
                 <div>
                   <LoginPage />
+                </div>
+              } 
+            />
+            <Route exact path='/forgotpassword' 
+              element={
+                <div>
+                  <LoginForgotPassword />
                 </div>
               } 
             />

@@ -12,10 +12,7 @@ function LoginForm() {
       <div className="LoginForm">
         <div className="LoginFormTitle">
           Login
-        </div>
-        <Link to={'/signup'} className="LoginFormSignupLinkContainer">
-          <button className="LoginFormSignupLink">Don't have an account? Signup here</button>
-        </Link>  
+        </div>        
         <form className="LoginFormForm">
           <div className="LoginFormSection">
             Username:
@@ -27,6 +24,12 @@ function LoginForm() {
           </div>  
           <input type="submit" value="Login" onClick={onSubmit} className="LoginFormSubmit"></input>  
         </form>
+        <Link to={'/signup'} className="LoginFormSignupLinkContainer">
+          <button className="LoginFormSignupLink">Don't have an account? Signup here</button>
+        </Link>  
+        <Link to={'/forgotpassword'} className="LoginFormSignupLinkContainer">
+          <button className="LoginFormSignupLink">Forgot Password?</button>
+        </Link>  
       </div>
     );
 }

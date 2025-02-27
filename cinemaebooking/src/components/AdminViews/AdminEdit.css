@@ -78,4 +78,22 @@ input[type="checkbox"]:checked {
   left: -9999%;
 }
 
+#currentlyRunningCheckbox {
+    left: auto;
+    position: relative;
+    justify-self: right;
+}
 
+.currentlyRunningContainer {
+    display: flex;
+}
+
+.editForm {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+}
+
+.ratingSelection {
+    width: fit-content;
+}
