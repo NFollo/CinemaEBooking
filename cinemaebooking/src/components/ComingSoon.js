@@ -100,7 +100,7 @@ function ComingSoon() {
   ];*/
 
   const handleClick = (myindex) => {
-    navigate("/buytickets", { state: movies[myindex] });
+    navigate("/movieinfo", { state: movies[myindex] });
   };
   
   const handleBrowseClick = () => {
@@ -117,9 +117,9 @@ function ComingSoon() {
         {sixMovies.length > 0 && sixMovies.map((smallMovieList) => (
           <Carousel.Item>
             <div className="ComingSoonGrid">
-              {smallMovieList.map((movieData, index) => (        
+              {smallMovieList.map((movieData) => (        
                 <div className="SoonMovie">
-                  <div className="SoonMovieImg" onClick={() => handleClick(index)}> 
+                  <div className="SoonMovieImg" onClick={() => handleClick(movies.indexOf(movieData))}> 
                     <img src={movieData.trailer_picture_url} alt={movieData.title} />
                   </div>
                   <div className="SoonMovieTitle">{movieData.title}</div>

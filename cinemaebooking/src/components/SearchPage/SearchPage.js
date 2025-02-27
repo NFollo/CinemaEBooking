@@ -98,7 +98,7 @@ function SearchPage({query}) {
                 viewMovieButton.className = 'button';
                 viewMovieButton.textContent = "View Movie";
                 viewMovieButton.addEventListener("click", () => {
-                    navigate("/movieinfo")
+                    navigate("/movieinfo", {state: movie})
                 })
 
                 movieCard.append(movieImg);

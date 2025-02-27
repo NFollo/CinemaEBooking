@@ -10,7 +10,7 @@ function BuyTicketsPage() {
   const movie = location.state || {
     title: "Unknown Movie",
     description: "No description available",
-    image: "https://via.placeholder.com/150",
+    trailer_picture_url: "https://via.placeholder.com/150",
   };
 
   const [selectedDate, setSelectedDate] = useState("");
