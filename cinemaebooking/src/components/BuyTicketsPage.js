@@ -10,7 +10,7 @@ function BuyTicketsPage() {
   const movie = location.state || {
     title: "Unknown Movie",
     description: "No description available",
-    image: "https://via.placeholder.com/150",
+    trailer_picture_url: "https://via.placeholder.com/150",
   };
 
   const [selectedDate, setSelectedDate] = useState("");
@@ -69,7 +69,7 @@ function BuyTicketsPage() {
       
       <div className="pageBody">
         <div className="movieDetails">
-          <img className="movieImg" src={movie.image} alt={movie.title} /> 
+          <img className="movieImg" src={movie.trailer_picture_url} alt={movie.title} /> 
           <div className="movieInfo">
             <div className="movieTitle">
               <h3>Movie:</h3>

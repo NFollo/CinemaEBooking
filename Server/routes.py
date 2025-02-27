@@ -50,12 +50,12 @@ def init_routes(app):
             except Exception as err:
                 return jsonify({"error": "Failed to fetch movies", "message": str(err)}), 500
             
-    @app.route('/movies/titlesAndPic', methods=['POST', 'GET']) 
+    @app.route('/movies/homepageInfo', methods=['POST', 'GET']) 
     def moviesTitleAndPic(): 
         if request.method == 'GET':
             try:
                 movies = Movie.objects()  # Fetch all movies from the database
-                movies_list = [{"id": str(movie.id), "title": movie.title, "trailer_picture_url": movie.trailer_picture_url} for movie in movies]  
+                movies_list = [{"id": str(movie.id), "title": movie.title, "trailer_picture_url": movie.trailer_picture_url, "currentlyRunning": movie.currentlyRunning} for movie in movies]  
                 return jsonify(movies_list), 200
             except Exception as err:
                 return jsonify({"error": "Failed to fetch movies", "message": str(err)}), 500

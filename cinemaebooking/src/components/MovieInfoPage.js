@@ -1,9 +1,17 @@
 import "./MovieInfoPage.css";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from "react-router-dom"; 
 
-function MovieInfoPage() {
+function MovieInfoPage({movie}) {
     // navigation for BookTickets button
     const navigate = useNavigate();
+    const location = useLocation(); 
+
+    // no movie 
+    const movieInfo = location.state || {
+        title: "Unknown Movie",
+        description: "No description available",
+        trailer_picture_url: "https://via.placeholder.com/150",
+    };
     
     // eventually retrieve from DB
     let title = 'Sonic (R)';
@@ -28,7 +36,7 @@ function MovieInfoPage() {
 
     return (
         <div className='pageContainer'>
-            <p className='title'>{title}</p>
+            <p className='title'>{movieInfo.title}</p>
 
             <p>{status}</p>
 
@@ -36,7 +44,7 @@ function MovieInfoPage() {
                 {categories.map((category) => <div>{category}</div>)}
             </div>
 
-            <img className='poster' src={posterLink} alt={title} />
+            <img className='poster' src={movieInfo.trailer_picture_url} alt={title} />
 
             <p>{description}</p>
 
