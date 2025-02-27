@@ -137,7 +137,7 @@ function SearchPage({query}) {
     return (
       <div className="SearchPage">        
         <div className="SearchPageHeader">
-            Search results for "{query}"
+            {query === "" ? "Browse All Movies" : "Search results for \"" + query + "\""}            
         </div>
         <div id="movies" className="SearchPageMovies">
                       
