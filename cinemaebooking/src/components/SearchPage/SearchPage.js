@@ -8,7 +8,7 @@ function SearchPage({query}) {
 
     const [movies, setMovies] = useState([]); // State for movie list
 
-    var sampleMovies = [
+    /*var sampleMovies = [
         {
             title: "Sonic",
             trailer_picture_url: "https://i.etsystatic.com/12729518/r/il/e19c5f/1989024537/il_1080xN.1989024537_hueq.jpg",
@@ -39,7 +39,7 @@ function SearchPage({query}) {
             trailer_picture_url: "https://i.etsystatic.com/12729518/r/il/e19c5f/1989024537/il_1080xN.1989024537_hueq.jpg",
             desc:  "I'm running out of movies"
         }
-    ]
+    ];*/
 
     var movieContainer = document.getElementById("movies");
 
@@ -135,9 +135,7 @@ function SearchPage({query}) {
       }, [movies, query]);
 
     return (
-      <div className="SearchPage">
-        test
-        
+      <div className="SearchPage">        
         <div className="SearchPageHeader">
             Search results for "{query}"
         </div>

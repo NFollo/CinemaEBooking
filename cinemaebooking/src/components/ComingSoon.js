@@ -8,30 +8,35 @@ function ComingSoon() {
   const navigate = useNavigate(); 
   const [movies, setMovies] = useState([]);
 
-  useEffect(() => {
-    var noError = true;
-    fetch("/movies/homepageInfo") // Fetch from backend API
-      .then((res) => res.json()) // Parse JSON response
-      .then((data) =>
-        setMovies(
-          data.map((movie) => ({
-            title: movie.title,
-            trailer_picture_url: movie.trailer_picture_url,
-            currently_running: movie.currentlyRunning, // Keep same as API
-          }))
-        )
-      )
-      .catch((error) => {
-        console.error("Error fetching movies:", error)
-        noError= false;
-      });
-      if(noError) {
-        
-      }
-  }, []); 
-  console.log(movies)
+  const [sixMovies, setSixMovies] = useState([]);
 
-  const movieList = [
+  useEffect(() => {
+         fetch("http://localhost:5000/movies/homepageInfo") // Fetch from backend API
+           .then((res) => res.json()) // Parse JSON response
+           .then((data) =>{
+             setMovies(
+               data.map((movie) => ({
+                 title: movie.title,
+                 trailer_picture_url: movie.trailer_picture_url,
+                 currently_running: movie.currentlyRunning, // Keep same as API
+               }))
+             );
+             console.log(data);
+         }
+           )
+           .catch((error) => console.error("Error fetching movies:", error));   
+ 
+  }, []); 
+
+  useEffect(() => { 
+    if(movies.length >= 6) {
+      setSixMovies([
+        [movies[2], movies[3], movies[4]]
+      ]);
+    }
+  }, [movies]);
+
+  /*const movieList = [
     {
       title: "Dog Man 1",
       description: "Description of move here",
@@ -92,16 +97,10 @@ function ComingSoon() {
       description: "Description of move here",
       image: "https://connect.gtcmovies.com/CDN/Image/Entity/FilmPosterGraphic/HO00004607",
     }
-  ];
-
-  const nineMovies = [
-    [movieList[0],movieList[1],movieList[2]],
-    [movieList[3],movieList[4],movieList[5]],
-    [movieList[6],movieList[7],movieList[8]]
-  ];
+  ];*/
 
   const handleClick = (myindex) => {
-    navigate("/buytickets", { state: movieList[myindex] });
+    navigate("/buytickets", { state: movies[myindex] });
   };
   
   const handleBrowseClick = () => {
@@ -115,13 +114,13 @@ function ComingSoon() {
         Coming Soon
       </div>
       <Carousel className="ComingSoonCarousel">
-        {nineMovies.map((smallMovieList) => (
+        {sixMovies.length > 0 && sixMovies.map((smallMovieList) => (
           <Carousel.Item>
             <div className="ComingSoonGrid">
               {smallMovieList.map((movieData, index) => (        
                 <div className="SoonMovie">
                   <div className="SoonMovieImg" onClick={() => handleClick(index)}> 
-                    <img src={movieData.image} alt={movieData.title} />
+                    <img src={movieData.trailer_picture_url} alt={movieData.title} />
                   </div>
                   <div className="SoonMovieTitle">{movieData.title}</div>
                   <div className="SoonMovieDesc">{movieData.description}</div>
