@@ -26,11 +26,7 @@ function MovieInfoPage({movie}) {
 
     const handleBookTickets = () => {
         navigate("/buytickets", {
-            state: {
-                title,
-                description,
-                image: posterLink, 
-            }
+            state: movieInfo
         });
     };
 
