@@ -14,18 +14,24 @@ function EditMovie() {
   return (
     <div className="AdminEdit">
       <div className="AdminEditTitle">Edit Movie</div>
-      <form>
+      <form className="editForm">
             <div>Title:</div>
             <input type="text"></input>
+            <div className="currentlyRunningContainer">
+              Currently Running:
+              <input type="checkbox" id="currentlyRunningCheckbox"></input>
+            </div>
             <div>Description:</div>
             <textarea></textarea>
             <div>Poster Image:</div>
+            <input type="text"></input>
+            <div>Link to Trailer:</div>
             <input type="text"></input>
             <div>Genre:</div>
             <input type="text"></input>
 
             <div>Rating:</div>
-            <select name="rating">
+            <select name="rating" className="ratingSelection">
               <option value="none"></option>
               <option value="E">E</option>
               <option value="PG">PG</option>
