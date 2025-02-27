@@ -13,6 +13,12 @@ function ManageUsers() {
                 Edit
             </Link>
             <div className="ManageEditButton">Delete</div>
+            <select name="cardtype">
+                    <option value="none">Update User Class</option>
+                    <option value="user">User</option>
+                    <option value="admin">Admin</option>
+                    <option value="suspended">Suspended</option>
+            </select>
         </div>
       </div>
       <div className="ManageUnit">
@@ -22,6 +28,12 @@ function ManageUsers() {
                 Edit
             </Link>
             <div className="ManageEditButton">Delete</div>
+            <select name="cardtype">
+                    <option value="none">Update User Class</option>
+                    <option value="user">User</option>
+                    <option value="admin">Admin</option>
+                    <option value="suspended">Suspended</option>
+            </select>
         </div>
       </div>
       <div className="ManageUnit">
@@ -31,6 +43,12 @@ function ManageUsers() {
                 Edit
             </Link>
             <div className="ManageEditButton">Delete</div>
+            <select name="cardtype">
+                    <option value="none">Update User Class</option>
+                    <option value="user">User</option>
+                    <option value="admin">Admin</option>
+                    <option value="suspended">Suspended</option>
+            </select>
         </div>
       </div>
       <div className="ManageUnit">
@@ -40,6 +58,12 @@ function ManageUsers() {
                 Edit
             </Link>
             <div className="ManageEditButton">Delete</div>
+            <select name="cardtype">
+                    <option value="none">Update User Class</option>
+                    <option value="user">User</option>
+                    <option value="admin">Admin</option>
+                    <option value="suspended">Suspended</option>
+            </select>
         </div>
       </div>
       <div className="ManageUnit">
@@ -49,9 +73,16 @@ function ManageUsers() {
                 Edit
             </Link>
             <div className="ManageEditButton">Delete</div>
+            <select name="cardtype">
+                    <option value="none">Update User Class</option>
+                    <option value="user">User</option>
+                    <option value="admin">Admin</option>
+                    <option value="suspended">Suspended</option>
+            </select>
         </div>
+        
       </div>
-
+      <button className="ManageEditButton">Save Changes</button>
     </div>
   );
 }
