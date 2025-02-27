@@ -91,6 +91,7 @@ function Main() {
                   <LoggedNavBar onSearch={onSearch} input={input} clearInput={clearInput}/>
                   <TitleBody />
                   <MainFeatured />
+                  <CurrentlyRunning />
                   <ComingSoon />
                 </div>
               } 
@@ -117,6 +118,7 @@ function Main() {
                   <AdminNavBar onSearch={onSearch} input={input} clearInput={clearInput}/>
                   <TitleBody />
                   <MainFeatured />
+                  <CurrentlyRunning />
                   <ComingSoon />
                 </div>
               } 
