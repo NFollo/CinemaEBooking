@@ -1,40 +1,42 @@
 import "./SearchPage.css";
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 //import { Link, useNavigate } from 'react-router-dom';
 
 function SearchPage({query}) {
     const navigate = useNavigate();
 
+    const [movies, setMovies] = useState([]); // State for movie list
+
     var sampleMovies = [
         {
             title: "Sonic",
-            img: "https://i.etsystatic.com/12729518/r/il/e19c5f/1989024537/il_1080xN.1989024537_hueq.jpg",
+            trailer_picture_url: "https://i.etsystatic.com/12729518/r/il/e19c5f/1989024537/il_1080xN.1989024537_hueq.jpg",
             desc: "Sonic is fast"            
         },
         {
             title: "Detective Pikachu",
-            img: "https://i.etsystatic.com/12729518/r/il/e19c5f/1989024537/il_1080xN.1989024537_hueq.jpg",
+            trailer_picture_url: "https://i.etsystatic.com/12729518/r/il/e19c5f/1989024537/il_1080xN.1989024537_hueq.jpg",
             desc:  "Ryan Reynolds is an electric mouse"
         },
         {
             title: "Sonic 3",
-            img: "https://i.etsystatic.com/12729518/r/il/e19c5f/1989024537/il_1080xN.1989024537_hueq.jpg",
+            trailer_picture_url: "https://i.etsystatic.com/12729518/r/il/e19c5f/1989024537/il_1080xN.1989024537_hueq.jpg",
             desc:  "Sonic is three times as fast"
         },
         {
             title: "Sonic 2",
-            img: "https://i.etsystatic.com/12729518/r/il/e19c5f/1989024537/il_1080xN.1989024537_hueq.jpg",
+            trailer_picture_url: "https://i.etsystatic.com/12729518/r/il/e19c5f/1989024537/il_1080xN.1989024537_hueq.jpg",
             desc:  "Sonic is not quite as fast as in Sonic 3"
         },
         {
             title: "Pokemon the First Movie",
-            img: "https://i.etsystatic.com/12729518/r/il/e19c5f/1989024537/il_1080xN.1989024537_hueq.jpg",
+            trailer_picture_url: "https://i.etsystatic.com/12729518/r/il/e19c5f/1989024537/il_1080xN.1989024537_hueq.jpg",
             desc:  "The first movie (for pokemon)"
         },
         {
             title: "Sonic 4",
-            img: "https://i.etsystatic.com/12729518/r/il/e19c5f/1989024537/il_1080xN.1989024537_hueq.jpg",
+            trailer_picture_url: "https://i.etsystatic.com/12729518/r/il/e19c5f/1989024537/il_1080xN.1989024537_hueq.jpg",
             desc:  "I'm running out of movies"
         }
     ]
@@ -75,22 +77,22 @@ function SearchPage({query}) {
 
         };
 
-        sampleMovies.forEach((movie) => {
+        movies.forEach((movie) => {
             
             if (query != null && (query === "" || doesMatch(query, movie.title)) ) {
                 const movieCard = document.createElement("div");
                 movieCard.className = "SearchPageMovieCard";
 
                 const movieImg = document.createElement("img");
-                movieImg.src = movie.img;
+                movieImg.src = movie.trailer_picture_url;
 
                 const movieTitle = document.createElement("div");
                 movieTitle.className = "SearchPageMovieTitle";
                 movieTitle.textContent = movie.title;
 
-                const movieDesc = document.createElement("div");
-                movieDesc.className = "SearchPageMovieDesc";
-                movieDesc.textContent = movie.desc;
+                // const movieDesc = document.createElement("div");
+                // movieDesc.className = "SearchPageMovieDesc";
+                // movieDesc.textContent = movie.desc;
 
                 const viewMovieButton = document.createElement("button");
                 viewMovieButton.className = 'button';
@@ -101,7 +103,7 @@ function SearchPage({query}) {
 
                 movieCard.append(movieImg);
                 movieCard.append(movieTitle);
-                movieCard.append(movieDesc);
+                //movieCard.append(movieDesc);
                 movieCard.append(viewMovieButton);
                 movieContainer.append(movieCard);
             }
@@ -110,12 +112,32 @@ function SearchPage({query}) {
 
     };
 
-    useEffect(() => { // this loads the search once on page startup
+    useEffect(() => {
+        fetch("http://localhost:5000/movies/homepageInfo") // Fetch from backend API
+          .then((res) => res.json()) // Parse JSON response
+          .then((data) =>{
+            setMovies(
+              data.map((movie) => ({
+                title: movie.title,
+                trailer_picture_url: movie.trailer_picture_url,
+                currently_running: movie.currentlyRunning, // Keep same as API
+              }))
+            );
+            console.log(data);
+        }
+          )
+          .catch((error) => console.error("Error fetching movies:", error));   
+
+      }, []); 
+
+      useEffect(() => {
         searchMovies();
-    });
+      }, [movies, query]);
 
     return (
       <div className="SearchPage">
+        test
+        
         <div className="SearchPageHeader">
             Search results for "{query}"
         </div>
