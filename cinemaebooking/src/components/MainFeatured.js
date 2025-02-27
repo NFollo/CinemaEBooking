@@ -1,6 +1,6 @@
 import './MainFeatured.css';
 //import Carousel from './Carousel';
-import Carousel from 'react-bootstrap/Carousel'
+import Carousel from 'react-bootstrap/Carousel';
 
 function MainFeatured() {
   return (

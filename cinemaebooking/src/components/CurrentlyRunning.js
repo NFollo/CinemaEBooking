@@ -1,8 +1,8 @@
-import './ComingSoon.css';
+import './CurrentlyRunning.css';
 import { useNavigate } from "react-router-dom"; 
 import Carousel from 'react-bootstrap/Carousel';
 
-function ComingSoon() {
+function CurrentlyRunning() {
 
   const navigate = useNavigate(); 
 
@@ -85,9 +85,9 @@ function ComingSoon() {
   };
 
   return (
-    <div className="ComingSoon">
+    <div className="CurrentlyRunning">
       <div className="ComingSoonText">
-        Coming Soon
+        Currently Running
       </div>
       <Carousel className="ComingSoonCarousel">
         {nineMovies.map((smallMovieList) => (
@@ -111,4 +111,4 @@ function ComingSoon() {
   );
 }
 
-export default ComingSoon;
+export default CurrentlyRunning;
