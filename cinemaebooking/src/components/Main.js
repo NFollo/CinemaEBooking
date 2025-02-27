@@ -24,6 +24,7 @@ import MovieInfoPage from './MovieInfoPage';
 import CheckoutPage from './CheckoutPage';
 import OrderConfirmation from './OrderConfrrmation'
 import EditPromotions from './AdminViews/EditPromotions';
+import CurrentlyRunning from './CurrentlyRunning';
 
 function Main() {
 
@@ -42,6 +43,7 @@ function Main() {
                   <NavBar onSearch={onSearch} input={input} clearInput={clearInput}/>
                   <TitleBody />
                   <MainFeatured />
+                  <CurrentlyRunning />
                   <ComingSoon />
                 </div>
               } 
