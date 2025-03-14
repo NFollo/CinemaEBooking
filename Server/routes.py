@@ -55,7 +55,12 @@ def init_routes(app):
         if request.method == 'GET':
             try:
                 movies = Movie.objects()  # Fetch all movies from the database
-                movies_list = [{"id": str(movie.id), "title": movie.title, "trailer_picture_url": movie.trailer_picture_url, "currentlyRunning": movie.currentlyRunning} for movie in movies]  
+                movies_list = [
+                        {"id": str(movie.id), 
+                        "title": movie.title, 
+                        "trailer_picture_url": movie.trailer_picture_url, 
+                        "currently_running": movie.currently_running} 
+                    for movie in movies]  
                 return jsonify(movies_list), 200
             except Exception as err:
                 return jsonify({"error": "Failed to fetch movies", "message": str(err)}), 500
