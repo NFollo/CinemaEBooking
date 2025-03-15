@@ -64,4 +64,19 @@ def init_routes(app):
                 return jsonify(movies_list), 200
             except Exception as err:
                 return jsonify({"error": "Failed to fetch movies", "message": str(err)}), 500
+            
+    @app.route('/signUp', methods=['POST']) 
+    def signUp(): 
+        if request.method == 'POST': # Handle POST requests
+            json = request.json 
+            try:
+                user = User(**json)  
+                user.validate()   
+                user.save()   
+            except FieldDoesNotExist as err:
+                return jsonify({"error": "Invalid field in request", "message": str(err)}), 400
+            except ValidationError as err:
+                return jsonify({"error": str(err)}), 400  
+            
+            return jsonify({"message": "Success added!"}), 201
     return

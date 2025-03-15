@@ -62,6 +62,7 @@ class User(me.Document):
     last_name = me.StringField(required=True)
     email = me.StringField(required=True)
     password = me.StringField(required=True)
+    phone_number = me.StringField(required=True) # format '###-###-####'
     privilege = me.StringField(default="customer", required=True) # either customer or admin
     customer_status = me.IntField(default=0, required=True) # 0 = active, 1 = inactive, 2 = suspended
     address = me.ReferenceField(Address)
