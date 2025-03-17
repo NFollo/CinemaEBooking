@@ -18,6 +18,13 @@
     padding-bottom: 5px;
 }
 
+.LoginFormSubtitle {
+    font-size: 200%;
+    font-weight: bolder;
+    justify-self: center;
+    padding-bottom: 5px;
+}
+
 .LoginFormSection {
     display: flex;
     flex-direction: column;
@@ -57,4 +64,8 @@
 .LoginFormSignupLink:hover {
     color: rgb(19, 101, 255);
     text-decoration: underline;
+}
+
+.LoginFormRedText {
+    color: red;
 }
