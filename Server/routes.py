@@ -67,6 +67,9 @@ def init_routes(app):
             
     @app.route('/createUser', methods=['POST']) 
     def newUser(): 
+        '''
+        returns the ObjectId of the created User document as a string upon success
+        '''
         if request.method == 'POST': # Handle POST requests
             json = request.json 
             try:
@@ -78,12 +81,12 @@ def init_routes(app):
             except ValidationError as err:
                 return jsonify({"error": str(err)}), 400  
             
-            return jsonify({"message": "Success added!"}), 201
+            return jsonify({"user_id": str(user.id)}), 201
         
-    @app.route('/createAddress', methods=['POST', 'GET']) 
+    @app.route('/createAddress', methods=['POST']) 
     def newAddress(): 
         '''
-        returns the ObjectId of the created Address document as a string
+        returns the ObjectId of the created Address document as a string upon success
         '''
         if request.method == 'POST': # Handle POST requests
             json = request.json 
@@ -97,4 +100,23 @@ def init_routes(app):
                 return jsonify({"error": str(err)}), 400  
                 
             return jsonify({"address_id": str(address.id)}), 201 # Return DB ObjectId reference
+        
+    @app.route('/createPaymentCard', methods=['POST']) 
+    def newPaymentCard(): 
+        '''
+        returns the ObjectId of the created PaymentCard document as a string upon success
+        '''
+        if request.method == 'POST': # Handle POST requests
+            json = request.json 
+            try:
+                paymentCard = PaymentCard(**json)  
+                paymentCard.validate()   
+                paymentCard.save()
+            except FieldDoesNotExist as err:
+                return jsonify({"error": "Invalid field in request", "message": str(err)}), 400
+            except ValidationError as err:
+                return jsonify({"error": str(err)}), 400  
+                
+            return jsonify({"payment_card_id": str(paymentCard.id)}), 201 # Return DB ObjectId reference
+
     return

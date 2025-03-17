@@ -1,9 +1,18 @@
 import "./SignupForm.css";
 import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import { isValidRequiredForm, isValidAddressForm, isValidPaymentCardForm, 
+    createAddress, createUser, createPaymentCard } 
+    from '../applicationLogic/SignupHandlers';
 
 function SignupForm() {
-    // establish state variables and setters for form fields
+    // for input fields
+    const months = ['January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December']
+    const years = [];
+    for (let i = 0; i < 20; i++) {years.push(2025 + i);}
+
+    // state variables for required user fields
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
@@ -11,139 +20,105 @@ function SignupForm() {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
 
-    //const [card, setCard] = useState(null);
+    //state variables for payment card
+    const [cardType, setCardType] = useState('');
+    const [nameOnCard, setNameOnCard] = useState('');
+    const [cardNumber, setCardNumber] = useState('');
+    const [expirationMonth, setExpirationMonth] = useState('');
+    const [expirationYear, setExpirationYear] = useState('');
+    const [cvc, setCVC] = useState('');
+    const [billingAddress, setBillingAddress] = useState('');
+    const [billingCity, setBillingCity] = useState('');
+    const [billingState, setBillingState] = useState('');
+    const [billingZipCode, setBillingZipCode] = useState('');
 
-    //const [address, setAddress] = useState(null);
+    // state variables for address
     const [streetAddress, setStreetAddress] = useState('');
     const [city, setCity] = useState('');
     const [state, setState] = useState('');
     const [zipCode, setZipCode] = useState('');
 
+    // state variables for displaying payment card and address input fields
+    const [displayCardInput, setDisplayCardInput] = useState(false);
+    const [displayAddressInput, setDisplayAddressInput] = useState(false);
+
     // establish router
     const navigate = useNavigate();
 
-    // is phone number of the form ###-###-####?
-    const isValidPhoneNumber = (phoneNumber.length === 12  // proper length 
-        && !isNaN(phoneNumber.slice(0,3))                  // first three digits is a number
-        && phoneNumber[3] === "-"                          // 4th char is a hyphen
-        && !isNaN(phoneNumber.slice(4,7))                  // second three digits is a number
-        && phoneNumber[7] === "-"                          // 8th char is a hyphen
-        && !isNaN(phoneNumber.slice(8,12)))                 // last four digits is a number
+    const clearInputs = () => {
+        // reset user fields
+        setFirstName('');
+        setLastName('');
+        setEmail('');
+        setPassword('');
+        setConfirmPassword('');
+        setPhoneNumber('');
 
-    // what is the state of address field?
-    const isCompleteAddress = (streetAddress !== "" && city !== ""
-        && state !== "" && zipCode !== "")
-    const isEmptyAddress = (streetAddress === "" && city === ""
-        && state === "" && zipCode === "")
+        // reset payment card fields
+        setCardType('');
+        setNameOnCard('');
+        setCardNumber('');
+        setExpirationMonth('');
+        setExpirationYear('');
+        setCVC('');
+        setBillingAddress('');
+        setBillingCity('');
+        setBillingState('');
+        setBillingZipCode('');
+
+        // reset home address fields
+        setStreetAddress('');
+        setCity('');
+        setState('');
+        setZipCode('');
+    }
     
     // handler for form submit button
     const onSubmit = async (event) => {
-      event.preventDefault();
-
-      // ensure all required fields are complete
-      if (firstName === '' || lastName === '' || email === ''
-            || password === '' || confirmPassword === '' || phoneNumber === ''
-      ) {
-            alert("Please complete all required fields");
-            return;
-      }
-
-      // ensure passwords match
-      else if (password !== confirmPassword) {
-            alert("Passwords do not match");
-            return;
-      }
-
-      // validate phone number is of form ###-###-####
-      else if (!isValidPhoneNumber) {
-            alert("Invalid phone number format");
-            return;
-      }
-
-      // address is partially complete
-      else if (!isEmptyAddress && !isCompleteAddress) {
-            alert("Please fully complete the address field, or leave blank");
-            return;
-      }
-
+        // prevent default action
+        event.preventDefault();
     
-      let newAddress = {
-          street: streetAddress,
-          city: city,
-          state: state,
-          zip_code: zipCode
-      }
+        // ensure all required fields are complete 
+        const isValidRequired = isValidRequiredForm(firstName, lastName, email, password,
+            confirmPassword, phoneNumber);
 
-      // create user object
-      let newUser = {
-          first_name: firstName,
-          last_name: lastName,
-          email: email,
-          password: password,
-          phone_number: phoneNumber,
-          address: null
-      }
-      
-      try {
-          let response;
-          let address_id = null;
-          
-          // if address input, create in database
-          if (isCompleteAddress) {
-              response = await fetch("http://localhost:5000/createAddress", {
-                  method: "POST",
-                  headers: {
-                      "Content-Type": "application/json",
-                  },
-                  body: JSON.stringify(newAddress),
-              })
-              .then((res) => res.json()) // Parse JSON response
-              .then((data) => {
-                address_id = data.address_id;
-                console.log('address_id ' + '(' + typeof(address_id) + ') ' + address_id);
-              })
-              .catch((error) => console.error("Error creating address:", error));   
-          } // if
+        // ensure address is either empty or fullly complete
+        const isValidHomeAddress = isValidAddressForm(streetAddress, city, state, zipCode);
 
-          // create user in database
-          newUser.address = address_id;
-          response = await fetch("http://localhost:5000/createUser", {
-              method: "POST",
-              headers: {
-                  "Content-Type": "application/json",
-              },
-              body: JSON.stringify(newUser),
-          });
+        // ensure payment card is either empty or fully complete with proper formatting
+        const isValidPaymentCard = isValidPaymentCardForm(cardType, nameOnCard, cardNumber, 
+            expirationMonth, expirationYear, cvc, billingAddress, billingCity, billingState, 
+            billingZipCode);
 
-          // error handling
-          if (response.status === 409) {
-              alert("User already exists");
-              return;
-          } else if (response.status !== 201)
-              throw new Error("Network response was not ok");
+        // do not continue if form is invalid; alerts provided in respective validations
+        if (!isValidRequired || !isValidHomeAddress || !isValidPaymentCard)
+            return;
 
-          // reset fields
-          setFirstName('');
-          setLastName('');
-          setEmail('');
-          setPassword('');
-          setConfirmPassword('');
-          setPhoneNumber('');
+        // handle home address document creation (if specified) and exit upon error
+        let homeAddressId = 0;
+        if (displayAddressInput) {
+            homeAddressId = await createAddress('home', streetAddress, city, state, zipCode);
+            if (homeAddressId === -1)
+                return;
+        }
 
-          setStreetAddress('');
-          setCity('');
-          setState('');
-          setZipCode('');
-          
-          // send confirmation email and redirect user
-          /* 
-           * Send confirmation email
-           */
-          navigate("/confirmation");
-      } catch (error) {
-          alert("Error in Signup!");
-          console.error(error);
-      } // try- catch
+        // handle user document creation and exit upon error
+        const userId = await createUser(firstName, lastName, email, password, phoneNumber, homeAddressId);
+        if (userId === -1)
+            return;
+
+        // handle payment card document creation and exit upon error
+        if (displayCardInput) {
+            const paymentCardId = await createPaymentCard(cardType, nameOnCard, cardNumber, expirationMonth, 
+                expirationYear, cvc, billingAddress, billingCity, billingState, billingZipCode, userId)
+            if (paymentCardId === -1)
+                return;
+        }  
+
+        // clear inputs, send confirmation email, and redirect user
+        clearInputs();
+        // sendConfirmationEmail();
+        navigate("/confirmation");
     } // onSubmit
 
     return (
@@ -211,74 +186,156 @@ function SignupForm() {
                     required></input>
             </div>
 
-            <div className="SignupFormSubtitle">
-              Payment Information (optional):
-            </div>
+            {!displayCardInput ? 
+                <button className="SignupFormSubmit" onClick={() => {setDisplayCardInput(true)}}>
+                    Enter Payment Card (optional)
+                </button>
+              : <>
+                <div className="SignupFormSubtitle">
+                Payment Information (optional):
+                </div>
+                    
+                <div className="SignupFormSection">Card Type:
+                    <select name="cardType"
+                        type="text" 
+                        value={cardType} 
+                        onChange={(e) => setCardType(e.target.value)}
+                    >
+                        <option value="none"></option>
+                        <option value="credit">Credit</option>
+                        <option value="debit">Debit</option>
+                    </select>
+                </div>
+
+                <div className="SignupFormSection"> 
+                    Name (as appears on card):
+                    <input name="nameOnCard"
+                        type="text" 
+                        value={nameOnCard} 
+                        onChange={(e) => setNameOnCard(e.target.value)}></input>
+                </div>  
+
+                <div className="SignupFormSection">
+                    Card Number:
+                    <small>Format: 1111-2222-3333-4444</small>
+                    <input name="cardNumber"
+                        type="text" 
+                        value={cardNumber} 
+                        onChange={(e) => setCardNumber(e.target.value)}></input>
+                </div>
+
+                <div className="SignupFormSection">
+                    Expiration Month:
+                    <select name="expirationMonth"
+                        type="text" 
+                        value={expirationMonth} 
+                        onChange={(e) => setExpirationMonth(e.target.value)}>
+                        <option value="none"></option>
+                        {months.map((month) => <option value={month}>
+                            {month}
+                        </option>
+                        )}
+                    </select>
+                </div>
+
+                <div className="SignupFormSection">
+                    Expiration Year:
+                    <select name="expirationYear"
+                        type="text" 
+                        value={expirationYear} 
+                        onChange={(e) => setExpirationYear(e.target.value)}>
+                        <option value="none"></option>
+                        {years.map((year) => <option value={year}>
+                            {year}
+                        </option>
+                        )}
+                    </select>
+                </div>
                 
-            <div className="SignupFormSection">Card Type:
-                <select name="cardtype">
-                    <option value="none"></option>
-                    <option value="credit">Credit</option>
-                    <option value="debit">Debit</option>
-                </select>
-              </div>
+                <div className="SignupFormSection">
+                    CVC:
+                    <input name="cvc"
+                        type="text" 
+                        value={cvc} 
+                        onChange={(e) => setCVC(e.target.value)}></input>
+                </div>
+                
+                <div className="SignupFormSection">
+                    Billing Address:
+                    <input name="billingAddress"
+                        type="text" 
+                        value={billingAddress} 
+                        onChange={(e) => setBillingAddress(e.target.value)}></input>
+                </div>
 
-              <div className="SignupFormSection"> 
-                  Name (as appears on card):
-                  <input type="text"></input>
-              </div>  
+                <div className="SignupFormSection">
+                    City:
+                    <input name="billingCity"
+                        type="text" 
+                        value={billingCity} 
+                        onChange={(e) => setBillingCity(e.target.value)}></input>
+                </div>
 
-              <div className="SignupFormSection">
-                  Card Number:
-                  <input type="number"></input>
-              </div>
+                <div className="SignupFormSection">
+                    State:
+                    <input name="billingState"
+                        type="text" 
+                        value={billingState} 
+                        onChange={(e) => setBillingState(e.target.value)}></input>
+                </div>
 
-              <div className="SignupFormSection">
-                  Expiration Date:
-                  <input type="date"></input>
-              </div>
-              
-              <div className="SignupFormSection">
-                  CVC:
-                  <input type="number"></input>
-              </div>
+                <div className="SignupFormSection">
+                    Zip Code:
+                    <input name="billingZipCode"
+                        type="text" 
+                        value={billingZipCode} 
+                        onChange={(e) => setBillingZipCode(e.target.value)}></input>
+                </div>
+              </>
+              }
 
-              <div className="SignupFormSubtitle">
-                  Home Address (optional):
-              </div>
+              {!displayAddressInput ?
+                <button className="SignupFormSubmit" onClick={() => {setDisplayAddressInput(true)}}>
+                    Enter Home Address (optional)
+                </button>
+              : <>
+                <div className="SignupFormSubtitle">
+                    Home Address (optional):
+                </div>
 
-              <div className="SignupFormSection">
-                  Street Address:
-                  <input name="streetAddress"
-                    type="text" 
-                    value={streetAddress} 
-                    onChange={(e) => setStreetAddress(e.target.value)}></input>
-              </div>
+                <div className="SignupFormSection">
+                    Street Address:
+                    <input name="streetAddress"
+                        type="text" 
+                        value={streetAddress} 
+                        onChange={(e) => setStreetAddress(e.target.value)}></input>
+                </div>
 
-              <div className="SignupFormSection">
-                  City:
-                  <input name="city"
-                    type="text" 
-                    value={city} 
-                    onChange={(e) => setCity(e.target.value)}></input>
-              </div>
+                <div className="SignupFormSection">
+                    City:
+                    <input name="city"
+                        type="text" 
+                        value={city} 
+                        onChange={(e) => setCity(e.target.value)}></input>
+                </div>
 
-              <div className="SignupFormSection">
-                  State:
-                  <input name="state"
-                    type="text" 
-                    value={state} 
-                    onChange={(e) => setState(e.target.value)}></input>
-              </div>
+                <div className="SignupFormSection">
+                    State:
+                    <input name="state"
+                        type="text" 
+                        value={state} 
+                        onChange={(e) => setState(e.target.value)}></input>
+                </div>
 
-              <div className="SignupFormSection">
-                  Zip Code:
-                  <input name="zipCode"
-                    type="text" 
-                    value={zipCode} 
-                    onChange={(e) => setZipCode(e.target.value)}></input>
-              </div>
-
+                <div className="SignupFormSection">
+                    Zip Code:
+                    <input name="zipCode"
+                        type="text" 
+                        value={zipCode} 
+                        onChange={(e) => setZipCode(e.target.value)}></input>
+                </div>
+              </>
+              }
               <input type="submit" value="Signup" onClick={onSubmit} 
                 className="SignupFormSubmit"></input>  
           </form>

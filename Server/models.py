@@ -50,6 +50,7 @@ class Show(me.Document):
     meta = {"collection": "shows"}
 
 class Address(me.Document):
+    type = me.StringField(required=True)
     street = me.StringField(required=True)
     city = me.StringField(required=True)
     state = me.StringField(required=True)
@@ -69,9 +70,12 @@ class User(me.Document):
     meta = {"collection": "users"} # explicitly set the collection name, otherwise the collection will be called user instead of users
 
 class PaymentCard(me.Document):
+    card_type = me.StringField(required=True)
     card_number = me.StringField(required=True)
+    name_on_card = me.StringField(required=True)
     month = me.StringField(required=True)
     year = me.StringField(required=True)
+    cvc = me.StringField(required=True)
     billing_address = me.ReferenceField(Address, required=True)
     customer = me.ReferenceField(User, required=True)
     meta = {"collection": "payment_cards"}
