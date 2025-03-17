@@ -255,7 +255,7 @@ function SignupForm() {
                 <div className="SignupFormSection">
                     CVC:
                     <input name="cvc"
-                        type="text" 
+                        type="password" 
                         value={cvc} 
                         onChange={(e) => setCVC(e.target.value)}></input>
                 </div>

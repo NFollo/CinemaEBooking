@@ -1,6 +1,14 @@
 from flask import request, jsonify
 from mongoengine import ValidationError, FieldDoesNotExist
 from models import *
+import bcrypt
+
+
+def encrypt(value):
+    # encrypt value with bcrypt
+    bytes = value.encode('utf-8')
+    salt = bcrypt.gensalt()
+    return bcrypt.hashpw(bytes, salt)
 
 #Routes
 def init_routes(app):
@@ -74,6 +82,10 @@ def init_routes(app):
             json = request.json 
             try:
                 user = User(**json)  
+                
+                # encrypt password with bcrypt and store the hash as a string
+                user.password = str(encrypt(user.password))
+
                 user.validate()   
                 user.save()   
             except FieldDoesNotExist as err:
@@ -110,6 +122,13 @@ def init_routes(app):
             json = request.json 
             try:
                 paymentCard = PaymentCard(**json)  
+
+                # encrypt card number with bcrypt and store the hash as a string
+                paymentCard.card_number = str(encrypt(paymentCard.card_number))
+
+                # encrypt cvc with bcrypt and store the hash as a string
+                paymentCard.cvc = str(encrypt(paymentCard.cvc))
+
                 paymentCard.validate()   
                 paymentCard.save()
             except FieldDoesNotExist as err:

@@ -210,8 +210,6 @@ export async function createAddress(type, streetAddress, city, state, zipCode) {
  */
 export async function createUser(firstName, lastName, email, password, phoneNumber, homeAddressId) {
     const isValidHomeAddressId = (homeAddressId !== 0 && homeAddressId !== -1);
-    console.log('homeAddressId:');
-    console.log(homeAddressId);
 
     // create user javascript object
     const newUser = {
