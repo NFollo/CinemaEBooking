@@ -65,8 +65,8 @@ def init_routes(app):
             except Exception as err:
                 return jsonify({"error": "Failed to fetch movies", "message": str(err)}), 500
             
-    @app.route('/signUp', methods=['POST']) 
-    def signUp(): 
+    @app.route('/createUser', methods=['POST']) 
+    def newUser(): 
         if request.method == 'POST': # Handle POST requests
             json = request.json 
             try:
@@ -79,4 +79,22 @@ def init_routes(app):
                 return jsonify({"error": str(err)}), 400  
             
             return jsonify({"message": "Success added!"}), 201
+        
+    @app.route('/createAddress', methods=['POST', 'GET']) 
+    def newAddress(): 
+        '''
+        returns the ObjectId of the created Address document as a string
+        '''
+        if request.method == 'POST': # Handle POST requests
+            json = request.json 
+            try:
+                address = Address(**json)  
+                address.validate()   
+                address.save()
+            except FieldDoesNotExist as err:
+                return jsonify({"error": "Invalid field in request", "message": str(err)}), 400
+            except ValidationError as err:
+                return jsonify({"error": str(err)}), 400  
+                
+            return jsonify({"address_id": str(address.id)}), 201 # Return DB ObjectId reference
     return
