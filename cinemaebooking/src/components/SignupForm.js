@@ -1,9 +1,10 @@
 import "./SignupForm.css";
 import { Link, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { isValidRequiredForm, isValidAddressForm, isValidPaymentCardForm, 
     createAddress, createUser, createPaymentCard } 
     from '../applicationLogic/SignupHandlers';
+
 
 function SignupForm() {
     // for input fields
@@ -44,6 +45,54 @@ function SignupForm() {
 
     // establish router
     const navigate = useNavigate();
+    
+    // only allow numbers
+    const disallowNonNumericInput = (evt) => {
+        if (evt.ctrlKey) return;
+        if (evt.key.length > 1) return;
+        if (/[0-9]/.test(evt.key)) return;
+        evt.preventDefault();
+    };
+
+    // format phone number
+    const formatToPhone = (evt) => {
+        const digits = evt.target.value.replace(/\D/g, '').substring(0, 10);
+        const areaCode = digits.substring(0, 3);
+        const prefix = digits.substring(3, 6);
+        const suffix = digits.substring(6, 10);
+
+        let formattedPhone = '';
+        if (digits.length > 6) {
+            formattedPhone = `${areaCode}-${prefix}-${suffix}`;
+        } else if (digits.length > 3) {
+            formattedPhone = `${areaCode}-${prefix}`;
+        } else if (digits.length > 0) {
+            formattedPhone = `${areaCode}`;
+        }
+        setPhoneNumber(formattedPhone);
+    };
+
+    // format phone number
+    const formatToCardNumber = (evt) => {
+        const digits = evt.target.value.replace(/\D/g, '').substring(0, 16);
+        const part1 = digits.substring(0, 4);
+        const part2 = digits.substring(4, 8);
+        const part3 = digits.substring(8, 12);
+        const part4 = digits.substring(12, 16);
+    
+        let formattedCard = '';
+        if (digits.length > 12) {
+            formattedCard = `${part1}-${part2}-${part3}-${part4}`;
+        } else if (digits.length > 8) {
+            formattedCard = `${part1}-${part2}-${part3}`;
+        } else if (digits.length > 4) {
+            formattedCard = `${part1}-${part2}`;
+        } else {
+            formattedCard = part1;
+        }
+    
+        setCardNumber(formattedCard);
+    }
 
     const clearInputs = () => {
         // reset user fields
@@ -160,7 +209,7 @@ function SignupForm() {
             <div className="SignupFormSection">
                 <div>Password:<span>*</span></div>
                 <input name="password"
-                    type="password" 
+                    type="passwored"
                     value={password} 
                     onChange={(e) => setPassword(e.target.value)}
                     required></input>
@@ -177,13 +226,17 @@ function SignupForm() {
               
             <div className="SignupFormSection">
                 <div>Phone Number:<span>*</span></div>
-                <small>Format: 123-456-7890</small>
                 <input name="phoneNumber"
                     type="tel"
                     value={phoneNumber}
                     pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" 
                     onChange={(e) => setPhoneNumber(e.target.value)}
-                    required></input>
+                    required
+                    placeholder="123-456-7890"
+                    maxlength="12"
+                    onKeyDown={disallowNonNumericInput}
+                    onKeyUp={formatToPhone}
+                    ></input>
             </div>
 
             {!displayCardInput ? 
@@ -221,7 +274,12 @@ function SignupForm() {
                     <input name="cardNumber"
                         type="text" 
                         value={cardNumber} 
-                        onChange={(e) => setCardNumber(e.target.value)}></input>
+                        onChange={(e) => setCardNumber(e.target.value)}
+                        placeholder="123-456-7890"
+                        maxlength="19"
+                        onKeyDown={disallowNonNumericInput}
+                        onKeyUp={formatToCardNumber}
+                    ></input>
                 </div>
 
                 <div className="SignupFormSection">
@@ -257,6 +315,7 @@ function SignupForm() {
                     <input name="cvc"
                         type="password" 
                         value={cvc} 
+                        maxLength={4}
                         onChange={(e) => setCVC(e.target.value)}></input>
                 </div>
                 

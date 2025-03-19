@@ -67,6 +67,8 @@ class User(me.Document):
     privilege = me.StringField(default="customer", required=True) # either customer or admin
     customer_status = me.IntField(default=0, required=True) # 0 = active, 1 = inactive, 2 = suspended
     address = me.ReferenceField(Address)
+    verification_code = me.StringField() # verifcation code, xxxxxx
+    code_exp = me.DateTimeField() # time the code expires
     meta = {"collection": "users"} # explicitly set the collection name, otherwise the collection will be called user instead of users
 
 class PaymentCard(me.Document):
