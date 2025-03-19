@@ -34,6 +34,8 @@ function Main() {
   const onSearch = (e) => setInput(e.target.value);
   const clearInput = () => setInput("");
 
+  document.cookie = `name:test; expires=${Date().getDate().toECTString()}; path=/$`;
+
   return (
     <div className="Main">
       <Router>

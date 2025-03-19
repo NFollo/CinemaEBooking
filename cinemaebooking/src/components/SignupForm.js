@@ -1,6 +1,6 @@
 import "./SignupForm.css";
 import { Link, useNavigate } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { isValidRequiredForm, isValidAddressForm, isValidPaymentCardForm, 
     createAddress, createUser, createPaymentCard } 
     from '../applicationLogic/SignupHandlers';
