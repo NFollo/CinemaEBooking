@@ -17,7 +17,7 @@ function MovieInfoPage({movie}) {
     let title = 'Sonic (R)';
     let status = 'Currently Running';
     let categories = ['Action', 'Fantasy', 'Comedy'];
-    let posterLink = "https://i.etsystatic.com/12729518/r/il/e19c5f/1989024537/il_1080xN.1989024537_hueq.jpg";
+    //let posterLink = "https://i.etsystatic.com/12729518/r/il/e19c5f/1989024537/il_1080xN.1989024537_hueq.jpg";
     let description = "Gotta go fast hehehehehhe";
     let directors = ["Jeff Fowler"];
     let castMembers = ["Jim Carrey", "Ben Schwartz", "James Marsden", "Tika Sumpter"];
