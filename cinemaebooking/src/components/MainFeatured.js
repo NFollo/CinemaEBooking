@@ -11,7 +11,7 @@ function MainFeatured() {
       <Carousel className="MainFeaturedCarousel">
         <Carousel.Item>
           <div className="MainFeaturedCarouselItem">
-            <div class="MainFeaturedCarouselVideoContainer">
+            <div className="MainFeaturedCarouselVideoContainer">
               <iframe src="https://www.youtube.com/embed/qSu6i2iFMO0" title="sonic3">              
               </iframe>
             </div>
@@ -25,7 +25,7 @@ function MainFeatured() {
         </Carousel.Item>
         <Carousel.Item>
           <div className="MainFeaturedCarouselItem">
-            <div class="MainFeaturedCarouselVideoContainer">
+            <div className="MainFeaturedCarouselVideoContainer">
               <iframe src="https://www.youtube.com/embed/G5kzUpWAusI" title="sonic3">              
               </iframe>
             </div>
@@ -39,7 +39,7 @@ function MainFeatured() {
         </Carousel.Item>
         <Carousel.Item>
           <div className="MainFeaturedCarouselItem">
-            <div class="MainFeaturedCarouselVideoContainer">
+            <div className="MainFeaturedCarouselVideoContainer">
               <iframe src="https://www.youtube.com/embed/DHR3aHwMe2g" title="sonic3">              
               </iframe>
             </div>

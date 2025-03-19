@@ -1,6 +1,7 @@
 import "./LoginForm.css";
 import { Link} from 'react-router-dom';
 import { useState, useEffect } from 'react';
+import axios from 'axios';
 
 function LoginForgotPassWordForm() {
 
@@ -8,6 +9,9 @@ function LoginForgotPassWordForm() {
     const [PW1, setPW1] = useState("");
     const [PW2, setPW2] = useState("");
     const [isMatch, setIsMatch] = useState(false);
+
+
+    const [email, setEmail] = useState("");
 
     //const navigate = useNavigate();
     const toRecovery = (e) => {
@@ -40,6 +44,32 @@ function LoginForgotPassWordForm() {
       }
     }
 
+    const sendVerificationCode = async (e) => {
+      e.preventDefault();
+      try {
+        if (!email) {
+          alert("Please enter a valid Email");
+          return; 
+        }
+        const response = await axios.post('http://localhost:5000/forgotPassword', { email });
+        console.log("test " + response.status)
+
+        if (response.status == 200) {
+          setHasSent(1); // Move to the "Enter Code" step
+        }
+      } catch (error) {
+        if (error.response.status == 404)  // user not found in db
+          alert("No user found")
+        else {
+          console.error("Error sending verification code:", error);
+          alert("An error occurred. Please try again.");
+        }
+          
+      }
+    }
+
+    //const verifyCode = ();
+
     useEffect(() => {
       setIsMatch(PW1 === PW2);
     }, [PW1, PW2]);
@@ -51,9 +81,18 @@ function LoginForgotPassWordForm() {
         <form className="LoginFormForm">
           <div className="LoginFormSection">
             Enter your email address to receive a verification code
-            <input type="text"></input>
+            <input 
+              type="text"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            ></input>
           </div> 
-          <input type="submit" value="Get Verification Code" onClick={toCode} className="LoginFormSubmit"></input>  
+          <input type="submit" 
+            value="Get Verification Code" 
+            className="LoginFormSubmit"
+            onClick={sendVerificationCode}
+          ></input>  
         </form>
     </div>;
 
