@@ -57,6 +57,16 @@ function LoginForgotPassWordForm() {
 
     const resetPassword = async (e) => {
       e.preventDefault();
+      if (!isMatch) 
+      {
+        alert("Passwords do not match!")
+        return
+      }
+      else if (!isPasswordLength)
+      {
+        alert("Password must be equal or greater than 8 characters")
+        return
+      }
       try {
         await axios.post('http://localhost:5000/resetPassword', { email, new_password: PW1 });
         setHasSent(3)
@@ -70,7 +80,7 @@ function LoginForgotPassWordForm() {
 
     useEffect(() => {
       setIsMatch(PW1 === PW2);
-      setIsPasswordLength(PW1.length >= 8)
+      setIsPasswordLength(PW1.length >= 8 || PW2.length >=8)
     }, [PW1, PW2]);
 
     const recovery = <div>

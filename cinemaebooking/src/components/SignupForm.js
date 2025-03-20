@@ -100,7 +100,7 @@ function SignupForm() {
 
     useEffect(() => { // check password
         setIsMatch(password === confirmPassword);
-        setIsPasswordLength(password.length >= 8)
+        setIsPasswordLength(password.length >= 8 || confirmPassword >= 8)
       }, [password, confirmPassword]);
 
     const clearInputs = () => {
