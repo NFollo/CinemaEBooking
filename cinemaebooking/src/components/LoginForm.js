@@ -15,7 +15,7 @@ function LoginForm() {
         </div>        
         <form className="LoginFormForm">
           <div className="LoginFormSection">
-            Username:
+            Email:
             <input type="text"></input>
           </div>
           <div className="LoginFormSection">
