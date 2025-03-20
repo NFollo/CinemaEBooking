@@ -9,6 +9,7 @@ function LoginForgotPassWordForm() {
     const [PW1, setPW1] = useState("");
     const [PW2, setPW2] = useState("");
     const [isMatch, setIsMatch] = useState(false);
+    const [isPasswordLength, setIsPasswordLength] = useState(false);
 
 
     const [email, setEmail] = useState("");
@@ -37,14 +38,6 @@ function LoginForgotPassWordForm() {
       }
     }
 
-    const checkMatch = (e) => { // ADD PASSWORD VALIDATION HERE (the red text can be changed to a state variable to indicate what is wrong with the password too)
-      if (e.target.name === "PW1") {
-        setPW1(e.target.value);
-      } else if (e.target.name === "PW2") {
-        setPW2(e.target.value);
-      }
-    }
-
     const sendVerificationCode = async (e) => {
       e.preventDefault();
       try {
@@ -68,19 +61,32 @@ function LoginForgotPassWordForm() {
     const verifyCode = async (e) => {
       e.preventDefault();
       try {
-        console.log("test " + email + " " + recoveryCode)
         await axios.post('http://localhost:5000/verifyCode', { email, code: recoveryCode });
         setHasSent(2)
       } catch (error) {
-        console.error("Error verifying code:", error);
-        alert('Error verifying code:', error);
+        if (error.response.status == 400)
+          alert('Invalid or expired code');
+        else 
+          alert('Error verifying code');
       }
     };
 
-    //const verifyCode = ();
+    const resetPassword = async (e) => {
+      e.preventDefault();
+      try {
+        await axios.post('http://localhost:5000/resetPassword', { email, new_password: PW1 });
+        setHasSent(3)
+      } catch (error) {
+        if (error.response.status == 404)
+          alert('User not found');
+        else 
+          alert('Error resetting password') 
+      }
+    }
 
     useEffect(() => {
       setIsMatch(PW1 === PW2);
+      setIsPasswordLength(PW1.length >= 8)
     }, [PW1, PW2]);
 
     const recovery = <div>
@@ -117,7 +123,7 @@ function LoginForgotPassWordForm() {
               value={recoveryCode}
               onChange={(e) => setRecoveryCode(e.target.value)}
               maxLength={6}
-              pattern="\d*"
+              pattern="\d*" // number only
               required
             ></input>
           </div> 
@@ -134,17 +140,35 @@ function LoginForgotPassWordForm() {
         <div className="LoginFormTitle">
             Enter New Password
         </div>   
-        {isMatch ? "" : <div className="LoginFormRedText">Passwords must match</div> }   
+        {isMatch ? "" : <div className="LoginFormRedText">Passwords must match</div> }
+        {isPasswordLength ? "" : <div className="LoginFormRedText">Password must be equal or greater than 8 character</div> }      
         <form className="LoginFormForm">
           <div className="LoginFormSection">
             Enter a new password
-            <input type="text" name="PW1" value={PW1} onChange={checkMatch}></input>
+            <input 
+            type="text" 
+            name="PW1" 
+            minLength={8}
+            value={PW1} 
+            onChange={(e) => setPW1(e.target.value)}>
+            </input>
           </div> 
           <div className="LoginFormSection">
             Confirm Password
-            <input type="text" name="PW2" value={PW2} onChange={checkMatch}></input>
+            <input 
+            type="text" 
+            name="PW2" 
+            minLength={8}
+            value={PW2} 
+            onChange={(e) => setPW2(e.target.value)}
+            ></input>
           </div> 
-          <input type="submit" value="Save Password" onClick={toFinish} className="LoginFormSubmit"></input> 
+          <input 
+            type="submit" 
+            value="Save Password" 
+            onClick={resetPassword} 
+            className="LoginFormSubmit">
+          </input> 
         </form>
     </div>;
 

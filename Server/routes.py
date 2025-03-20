@@ -199,7 +199,7 @@ def init_routes(app, mail):
         else:
             return jsonify({"error": "Invalid or expired code"}), 400
         
-    @app.route('/reset-password', methods=['POST'])
+    @app.route('/resetPassword', methods=['POST'])
     def reset_password():
         '''
         Reset the user's password.
