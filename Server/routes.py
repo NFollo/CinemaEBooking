@@ -199,7 +199,7 @@ def init_routes(app, mail):
         else:
             return jsonify({"error": "Invalid or expired code"}), 400
         
-    @app.route('/resetPassword', methods=['POST'])
+    @app.route('/resetPassword', methods=['POST']) # TODO: add error checking on whether or not the password has been used before? - Angel
     def reset_password():
         '''
         Reset the user's password.

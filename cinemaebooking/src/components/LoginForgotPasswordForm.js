@@ -21,22 +21,6 @@ function LoginForgotPassWordForm() {
       setHasSent(0);
     }
 
-    const toCode = (e) => {
-      e.preventDefault();
-      setHasSent(1);
-    }
-
-    const toNewPassword = (e) => {
-      e.preventDefault();
-      setHasSent(2);
-    }
-
-    const toFinish = (e) => {
-      e.preventDefault();
-      if (isMatch) {
-        setHasSent(3);
-      }
-    }
 
     const sendVerificationCode = async (e) => {
       e.preventDefault();
@@ -172,10 +156,11 @@ function LoginForgotPassWordForm() {
         </form>
     </div>;
 
-    const finish = <div>
-    <div className="LoginFormSubtitle">
-        Your new password has been saved
-    </div>    
+    const finish = 
+    <div>
+      <div className="LoginFormSubtitle">
+          Your password has successfully been resetted!
+      </div>    
     </div>;
 
     const backLink = <div className="LoginFormSignupLinkContainer">
