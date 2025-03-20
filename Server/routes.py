@@ -166,7 +166,7 @@ def init_routes(app, mail):
 
         # save to database
         user.verification_code = verification_code
-        user.code_expiration = expiration_time
+        user.code_exp = expiration_time
         user.save()
 
         # Send verification code to the user
@@ -174,10 +174,10 @@ def init_routes(app, mail):
         msg.body = f'Your verification code is: {verification_code}'
         mail.send(msg)
 
-        return jsonify({"message": "Verification code sent to your email"}), 200
+        return jsonify({ "message": "Verification code sent to your email"}), 200
     
 
-    @app.route('/verify-code', methods=['POST'])
+    @app.route('/verifyCode', methods=['POST'])
     def verify_code():
         '''
         Verify the code entered by the user.
@@ -194,7 +194,7 @@ def init_routes(app, mail):
             return jsonify({"error": "User not found"}), 404
 
         # Check if the code matches and is not expired
-        if user.verification_code == code and user.code_expiration > datetime.now():
+        if user.verification_code == code and user.code_exp > datetime.now():
             return jsonify({"message": "Code verified"}), 200
         else:
             return jsonify({"error": "Invalid or expired code"}), 400

@@ -9,6 +9,8 @@ from flask_mail import Mail
 
 # Start Flask App
 app = Flask(__name__)
+CORS(app)
+
 load_dotenv()
 
 # Run pipreqs to generate requirements.txt
@@ -35,5 +37,4 @@ if __name__ == '__main__':
     mail = Mail(app)
     init_db(app)
     init_routes(app, mail)
-    CORS(app)
     app.run(debug=True)

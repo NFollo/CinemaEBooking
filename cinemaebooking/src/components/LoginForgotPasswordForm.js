@@ -12,7 +12,8 @@ function LoginForgotPassWordForm() {
 
 
     const [email, setEmail] = useState("");
-
+    const [recoveryCode, setRecoveryCode] = useState("");
+    
     //const navigate = useNavigate();
     const toRecovery = (e) => {
       e.preventDefault();
@@ -51,12 +52,9 @@ function LoginForgotPassWordForm() {
           alert("Please enter a valid Email");
           return; 
         }
-        const response = await axios.post('http://localhost:5000/forgotPassword', { email });
-        console.log("test " + response.status)
+        await axios.post('http://localhost:5000/forgotPassword', { email });
+        setHasSent(1); // Move to the "Enter Code" step
 
-        if (response.status == 200) {
-          setHasSent(1); // Move to the "Enter Code" step
-        }
       } catch (error) {
         if (error.response.status == 404)  // user not found in db
           alert("No user found")
@@ -64,9 +62,20 @@ function LoginForgotPassWordForm() {
           console.error("Error sending verification code:", error);
           alert("An error occurred. Please try again.");
         }
-          
       }
     }
+
+    const verifyCode = async (e) => {
+      e.preventDefault();
+      try {
+        console.log("test " + email + " " + recoveryCode)
+        await axios.post('http://localhost:5000/verifyCode', { email, code: recoveryCode });
+        setHasSent(2)
+      } catch (error) {
+        console.error("Error verifying code:", error);
+        alert('Error verifying code:', error);
+      }
+    };
 
     //const verifyCode = ();
 
@@ -82,7 +91,7 @@ function LoginForgotPassWordForm() {
           <div className="LoginFormSection">
             Enter your email address to receive a verification code
             <input 
-              type="text"
+              type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -96,16 +105,28 @@ function LoginForgotPassWordForm() {
         </form>
     </div>;
 
-    const code = <div>
+    const verifyCodeFormat = <div>
         <div className="LoginFormTitle">
             Enter Recovery Code
         </div>        
         <form className="LoginFormForm">
           <div className="LoginFormSection">
             Enter the code sent to your email
-            <input type="number"></input>
+            <input 
+              type="text"
+              value={recoveryCode}
+              onChange={(e) => setRecoveryCode(e.target.value)}
+              maxLength={6}
+              pattern="\d*"
+              required
+            ></input>
           </div> 
-          <input type="submit" value="Enter Code" onClick={toNewPassword} className="LoginFormSubmit"></input>  
+          <input 
+            type="submit" 
+            value="Enter Code" 
+            onClick={verifyCode}
+            className="LoginFormSubmit"
+          ></input>  
         </form>
     </div>;
 
@@ -137,15 +158,25 @@ function LoginForgotPassWordForm() {
       <button className="LoginFormSignupLink" onClick={toRecovery}>Resend email</button>
     </div>;
 
-    return (
-      <div className="LoginForm">
-        {hasSent === 0 ? recovery : (hasSent === 1 ? code : (hasSent === 2 ? newPassword : finish))} 
-        <Link to={'/login'} className="LoginFormSignupLinkContainer">
-          <button className="LoginFormSignupLink">Back to Login</button>
-        </Link>  
-        {hasSent === 1 ? backLink : ""}
-      </div>
-    );
+   return (
+  <div className="LoginForm">
+    {hasSent === 0 ? (
+      <div key={0}>{recovery}</div> // Add a unique key to force re-render when transitioning
+    ) : hasSent === 1 ? (
+      <div key={1}>{verifyCodeFormat}</div>
+    ) : hasSent === 2 ? (
+      <div key={2}>{newPassword}</div>
+    ) : (
+      <div key={3}>{finish}</div>
+    )}
+    
+    <Link to={'/login'} className="LoginFormSignupLinkContainer">
+      <button className="LoginFormSignupLink">Back to Login</button>
+    </Link>  
+    
+    {hasSent === 1 ? backLink : ""}
+  </div>
+);
 }
   
 export default LoginForgotPassWordForm;
