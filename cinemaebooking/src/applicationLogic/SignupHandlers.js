@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 
 /**
  * Returns true if the input with specified length is a valid decimal number.
@@ -208,38 +210,47 @@ export async function createAddress(type, streetAddress, city, state, zipCode) {
  * Returns -1 upon database request error.
  * Returns ObjectId of newly created User document otherwise.
  */
+
 export async function createUser(firstName, lastName, email, password, phoneNumber, homeAddressId) {
     const isValidHomeAddressId = (homeAddressId !== 0 && homeAddressId !== -1);
 
-    // create user javascript object
+    // Create user JavaScript object
     const newUser = {
         first_name: firstName,
         last_name: lastName,
         email: email,
         password: password,
         phone_number: phoneNumber,
-        address: (isValidHomeAddressId ? homeAddressId : null)
+        address: (isValidHomeAddressId ? homeAddressId : null),
+    };
+
+    try {
+        // Add user to database and return ID of newly created document
+        const response = await axios.post("http://localhost:5000/createUser", newUser, {
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+
+        // If the request is successful, return the user ID
+        return response.data.user_id;
+    } catch (error) {
+        if (error.response) {
+            // Handle specific HTTP error statuses
+            if (error.response.status === 409) {
+                alert("Email already exists, please use a different email or login!");
+            } else {
+                console.error("Error creating user: ", error.response.data);
+                alert("Error creating user: " + error.response.data.error);
+            }
+        } else {
+            // Handle network or other errors
+            console.error("Error creating user: ", error);
+            alert("Error creating user");
+        }
+        return -1; // Return -1 to indicate failure
     }
-
-    // add user to database and return id of newly created document
-    let userId = null;
-    await fetch("http://localhost:5000/createUser", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify(newUser),
-    })
-    .then((res) => res.json())                 // parse JSON response
-    .then((data) => {userId = data.user_id;}) // assign return value
-    .catch((error) => {
-        console.error("Error creating user: ", error);
-        alert("Error creating user");
-        return -1;
-    });
-
-    return userId;
-} // createUser
+}
 
 /**
  * Returns 0 if form's payment card field is empty.

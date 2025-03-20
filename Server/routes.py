@@ -83,6 +83,11 @@ def init_routes(app, mail):
         '''
         if request.method == 'POST': # Handle POST requests
             json = request.json 
+
+            existing_user = User.objects(email=json['email']).first()
+            if existing_user:
+                return jsonify({"error": "Email already exists"}), 409  # 409 Conflict, check if user is already in the db
+            
             try:
                 user = User(**json)  
                 
@@ -116,7 +121,7 @@ def init_routes(app, mail):
                 
             return jsonify({"address_id": str(address.id)}), 201 # Return DB ObjectId reference
         
-    @app.route('/createPaymentCard', methods=['POST']) 
+    @app.route('/createPaymentCard', methods=['POST']) # TODO: Users should only be able to add up to three payment cards... - Angel
     def newPaymentCard(): 
         '''
         returns the ObjectId of the created PaymentCard document as a string upon success

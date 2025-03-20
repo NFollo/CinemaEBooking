@@ -270,12 +270,11 @@ function SignupForm() {
 
                 <div className="SignupFormSection">
                     Card Number:
-                    <small>Format: 1111-2222-3333-4444</small>
                     <input name="cardNumber"
                         type="text" 
                         value={cardNumber} 
                         onChange={(e) => setCardNumber(e.target.value)}
-                        placeholder="123-456-7890"
+                        placeholder="1111-2222-3333-4444"
                         maxlength="19"
                         onKeyDown={disallowNonNumericInput}
                         onKeyUp={formatToCardNumber}
