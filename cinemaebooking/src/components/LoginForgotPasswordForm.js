@@ -125,7 +125,7 @@ function LoginForgotPassWordForm() {
             Enter New Password
         </div>   
         {isMatch ? "" : <div className="LoginFormRedText">Passwords must match</div> }
-        {isPasswordLength ? "" : <div className="LoginFormRedText">Password must be equal or greater than 8 character</div> }      
+        {isPasswordLength ? "" : <div className="LoginFormRedText">Password must be equal or greater than 8 characters</div> }      
         <form className="LoginFormForm">
           <div className="LoginFormSection">
             Enter a new password

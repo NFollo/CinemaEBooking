@@ -13,6 +13,9 @@ function isDecimalNumber(input, length) {
     return true;
 } // isDecimalNumber
 
+
+
+
 /**
  * Returns true if required fields complete, passwords match, and phone number is valid.
  * Returns false otherwise.

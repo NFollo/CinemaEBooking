@@ -1,6 +1,6 @@
 import "./SignupForm.css";
 import { Link, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { isValidRequiredForm, isValidAddressForm, isValidPaymentCardForm, 
     createAddress, createUser, createPaymentCard } 
     from '../applicationLogic/SignupHandlers';
@@ -20,6 +20,10 @@ function SignupForm() {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
+
+    // state variables to determine if a password is valid
+    const [isMatch, setIsMatch] = useState(false);
+    const [isPasswordLength, setIsPasswordLength] = useState(false);
 
     //state variables for payment card
     const [cardType, setCardType] = useState('');
@@ -93,6 +97,11 @@ function SignupForm() {
     
         setCardNumber(formattedCard);
     }
+
+    useEffect(() => { // check password
+        setIsMatch(password === confirmPassword);
+        setIsPasswordLength(password.length >= 8)
+      }, [password, confirmPassword]);
 
     const clearInputs = () => {
         // reset user fields
@@ -207,6 +216,9 @@ function SignupForm() {
             </div>
 
             <div className="SignupFormSection">
+                {isMatch ? "" : <div className="LoginFormRedText" style={{ fontSize: '16px' }}>Passwords must match </div> }
+                {isPasswordLength ? "" : <div className="LoginFormRedText" style={{ fontSize: '16px' }}>Password must be equal or greater than 8 characters</div> }   
+
                 <div>Password:<span>*</span></div>
                 <input name="password"
                     type="passwored"
