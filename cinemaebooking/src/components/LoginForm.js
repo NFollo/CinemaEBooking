@@ -11,6 +11,7 @@ function LoginForm() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  // TODO: Get login to work, check if verified and not inactive, email and password is correct, otherwise, give alert
 
     const loginUser = async (e) => {
       e.preventDefault();
