@@ -9,4 +9,9 @@
 
 .SignupPage {
     background-color: rgb(158,22,22);
+    min-height: 100vh;
+}
+
+.SignupPageSpacer {
+    height: 10vh;
 }

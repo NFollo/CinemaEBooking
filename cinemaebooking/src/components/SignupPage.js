@@ -10,7 +10,7 @@ function SignupPage() {
         <button className="SignupPageHome">Home</button>
       </Link>  
       <LoginSignupCard form={<SignupForm />} /> 
-      <div></div>
+      <div className="SignupPageSpacer"></div>
     </div>
   );
 }

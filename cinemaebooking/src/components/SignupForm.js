@@ -13,6 +13,9 @@ function SignupForm() {
     const years = [];
     for (let i = 0; i < 20; i++) {years.push(2025 + i);}
 
+    // state variable for changing from form to verification code
+    const [isForm, setIsForm] = useState(true);
+
     // state variables for required user fields
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
@@ -135,6 +138,10 @@ function SignupForm() {
     const onSubmit = async (event) => {
         // prevent default action
         event.preventDefault();
+
+        // TEMPORARY CHANGE, REMOVE THIS LATER
+        // this is just to test the verification code page
+        setIsForm(false);
     
         // ensure all required fields are complete 
         const isValidRequired = isValidRequiredForm(firstName, lastName, email, password,
@@ -177,238 +184,278 @@ function SignupForm() {
         clearInputs();
         // sendConfirmationEmail();
         navigate("/confirmation");
+        
+        // State change to enter code
+        setIsForm(false);
     } // onSubmit
+
+    // On Verification Code submission
+    const onSubmitCode = (e) => { // enter logic for checking the code here
+        e.preventDefault();
+    }
+
+    // Send back to signup form
+    const onGoBackLink = (e) => {
+        e.preventDefault();
+        setIsForm(true);
+    }
+
+    const SignupFormAll = <div>
+    <div className="SignupFormTitle">Signup</div>
+
+    <Link to={'/login'} className="SignupFormLoginLinkContainer">
+      <button className="SignupFormLoginLink">Already have an account? Login here</button>
+    </Link>  
+
+    <form className="SignupFormForm">
+        <div className="SignupFormSection">
+            <div>First Name:<span>*</span></div>
+            <input name="firstName"
+                type="text" 
+                value={firstName} 
+                onChange={(e) => setFirstName(e.target.value)}
+                required></input>
+        </div>
+
+        <div className="SignupFormSection">
+            <div>Last Name:<span>*</span></div>
+            <input name="lastName"
+                type="text" 
+                value={lastName} 
+                onChange={(e) => setLastName(e.target.value)}
+                required></input>
+        </div>
+
+        <div className="SignupFormSection">
+            <div>Email:<span>*</span></div>
+            <input name="email"
+                type="text" 
+                value={email} 
+                onChange={(e) => setEmail(e.target.value)}
+                required></input>
+        </div>
+
+        <div className="SignupFormSection">
+            {isMatch ? "" : <div className="LoginFormRedText" style={{ fontSize: '16px' }}>Passwords must match </div> }
+            {isPasswordLength ? "" : <div className="LoginFormRedText" style={{ fontSize: '16px' }}>Password must be equal or greater than 8 characters</div> }   
+
+            <div>Password:<span>*</span></div>
+            <input name="password"
+                type="passwored"
+                value={password} 
+                onChange={(e) => setPassword(e.target.value)}
+                required></input>
+        </div> 
+
+        <div className="SignupFormSection">
+            <div>Confirm Password:<span>*</span></div>
+            <input name="confirmPassword"
+                type="password" 
+                value={confirmPassword} 
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                required></input>
+        </div> 
+          
+        <div className="SignupFormSection">
+            <div>Phone Number:<span>*</span></div>
+            <input name="phoneNumber"
+                type="tel"
+                value={phoneNumber}
+                pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" 
+                onChange={(e) => setPhoneNumber(e.target.value)}
+                required
+                placeholder="123-456-7890"
+                maxlength="12"
+                onKeyDown={disallowNonNumericInput}
+                onKeyUp={formatToPhone}
+                ></input>
+        </div>
+
+        {!displayCardInput ? 
+            <button className="SignupFormSubmit" onClick={() => {setDisplayCardInput(true)}}>
+                Enter Payment Card (optional)
+            </button>
+          : <>
+            <div className="SignupFormSubtitle">
+            Payment Information (optional):
+            </div>
+                
+            <div className="SignupFormSection">Card Type:
+                <select name="cardType"
+                    type="text" 
+                    value={cardType} 
+                    onChange={(e) => setCardType(e.target.value)}
+                >
+                    <option value="none"></option>
+                    <option value="credit">Credit</option>
+                    <option value="debit">Debit</option>
+                </select>
+            </div>
+
+            <div className="SignupFormSection"> 
+                Name (as appears on card):
+                <input name="nameOnCard"
+                    type="text" 
+                    value={nameOnCard} 
+                    onChange={(e) => setNameOnCard(e.target.value)}></input>
+            </div>  
+
+            <div className="SignupFormSection">
+                Card Number:
+                <input name="cardNumber"
+                    type="text" 
+                    value={cardNumber} 
+                    onChange={(e) => setCardNumber(e.target.value)}
+                    placeholder="1111-2222-3333-4444"
+                    maxlength="19"
+                    onKeyDown={disallowNonNumericInput}
+                    onKeyUp={formatToCardNumber}
+                ></input>
+            </div>
+
+            <div className="SignupFormSection">
+                Expiration Month:
+                <select name="expirationMonth"
+                    type="text" 
+                    value={expirationMonth} 
+                    onChange={(e) => setExpirationMonth(e.target.value)}>
+                    <option value="none"></option>
+                    {months.map((month) => <option value={month}>
+                        {month}
+                    </option>
+                    )}
+                </select>
+            </div>
+
+            <div className="SignupFormSection">
+                Expiration Year:
+                <select name="expirationYear"
+                    type="text" 
+                    value={expirationYear} 
+                    onChange={(e) => setExpirationYear(e.target.value)}>
+                    <option value="none"></option>
+                    {years.map((year) => <option value={year}>
+                        {year}
+                    </option>
+                    )}
+                </select>
+            </div>
+            
+            <div className="SignupFormSection">
+                CVC:
+                <input name="cvc"
+                    type="password" 
+                    value={cvc} 
+                    maxLength={4}
+                    onChange={(e) => setCVC(e.target.value)}></input>
+            </div>
+            
+            <div className="SignupFormSection">
+                Billing Address:
+                <input name="billingAddress"
+                    type="text" 
+                    value={billingAddress} 
+                    onChange={(e) => setBillingAddress(e.target.value)}></input>
+            </div>
+
+            <div className="SignupFormSection">
+                City:
+                <input name="billingCity"
+                    type="text" 
+                    value={billingCity} 
+                    onChange={(e) => setBillingCity(e.target.value)}></input>
+            </div>
+
+            <div className="SignupFormSection">
+                State:
+                <input name="billingState"
+                    type="text" 
+                    value={billingState} 
+                    onChange={(e) => setBillingState(e.target.value)}></input>
+            </div>
+
+            <div className="SignupFormSection">
+                Zip Code:
+                <input name="billingZipCode"
+                    type="text" 
+                    value={billingZipCode} 
+                    onChange={(e) => setBillingZipCode(e.target.value)}></input>
+            </div>
+          </>
+          }
+
+          {!displayAddressInput ?
+            <button className="SignupFormSubmit" onClick={() => {setDisplayAddressInput(true)}}>
+                Enter Home Address (optional)
+            </button>
+          : <>
+            <div className="SignupFormSubtitle">
+                Home Address (optional):
+            </div>
+
+            <div className="SignupFormSection">
+                Street Address:
+                <input name="streetAddress"
+                    type="text" 
+                    value={streetAddress} 
+                    onChange={(e) => setStreetAddress(e.target.value)}></input>
+            </div>
+
+            <div className="SignupFormSection">
+                City:
+                <input name="city"
+                    type="text" 
+                    value={city} 
+                    onChange={(e) => setCity(e.target.value)}></input>
+            </div>
+
+            <div className="SignupFormSection">
+                State:
+                <input name="state"
+                    type="text" 
+                    value={state} 
+                    onChange={(e) => setState(e.target.value)}></input>
+            </div>
+
+            <div className="SignupFormSection">
+                Zip Code:
+                <input name="zipCode"
+                    type="text" 
+                    value={zipCode} 
+                    onChange={(e) => setZipCode(e.target.value)}></input>
+            </div>
+          </>
+          }
+          <input type="submit" value="Signup" onClick={onSubmit} 
+            className="SignupFormSubmit"></input>  
+      </form>
+      </div>;
+
+    const VerificationFormAll = 
+        <div>
+            <div className="SignupFormTitle">Verification Email Sent</div>  
+            <div className="SignupFormForm">Please check your email and enter the verification code</div>          
+            <br></br>
+            <form className="SignupFormForm">
+                <div className="SignupFormSection">
+                    <input name="firstName"
+                        type="text" 
+                        value={firstName} 
+                        onChange={(e) => setFirstName(e.target.value)}
+                        required></input>
+                </div>
+                <input type="submit" value="Submit Code" onClick={onSubmitCode} 
+            className="SignupFormSubmit"></input>  
+            </form>
+
+            <Link className="SignupFormLoginLinkContainer">
+                <button className="SignupFormLoginLink" onClick={onGoBackLink}>Back to Signup Page</button>
+            </Link>  
+        </div>;
 
     return (
       <div className="SignupForm">
-        <div className="SignupFormTitle">Signup</div>
-
-        <Link to={'/login'} className="SignupFormLoginLinkContainer">
-          <button className="SignupFormLoginLink">Already have an account? Login here</button>
-        </Link>  
-
-        <form className="SignupFormForm">
-            <div className="SignupFormSection">
-                <div>First Name:<span>*</span></div>
-                <input name="firstName"
-                    type="text" 
-                    value={firstName} 
-                    onChange={(e) => setFirstName(e.target.value)}
-                    required></input>
-            </div>
-
-            <div className="SignupFormSection">
-                <div>Last Name:<span>*</span></div>
-                <input name="lastName"
-                    type="text" 
-                    value={lastName} 
-                    onChange={(e) => setLastName(e.target.value)}
-                    required></input>
-            </div>
-
-            <div className="SignupFormSection">
-                <div>Email:<span>*</span></div>
-                <input name="email"
-                    type="text" 
-                    value={email} 
-                    onChange={(e) => setEmail(e.target.value)}
-                    required></input>
-            </div>
-
-            <div className="SignupFormSection">
-                {isMatch ? "" : <div className="LoginFormRedText" style={{ fontSize: '16px' }}>Passwords must match </div> }
-                {isPasswordLength ? "" : <div className="LoginFormRedText" style={{ fontSize: '16px' }}>Password must be equal or greater than 8 characters</div> }   
-
-                <div>Password:<span>*</span></div>
-                <input name="password"
-                    type="passwored"
-                    value={password} 
-                    onChange={(e) => setPassword(e.target.value)}
-                    required></input>
-            </div> 
-
-            <div className="SignupFormSection">
-                <div>Confirm Password:<span>*</span></div>
-                <input name="confirmPassword"
-                    type="password" 
-                    value={confirmPassword} 
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    required></input>
-            </div> 
-              
-            <div className="SignupFormSection">
-                <div>Phone Number:<span>*</span></div>
-                <input name="phoneNumber"
-                    type="tel"
-                    value={phoneNumber}
-                    pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" 
-                    onChange={(e) => setPhoneNumber(e.target.value)}
-                    required
-                    placeholder="123-456-7890"
-                    maxlength="12"
-                    onKeyDown={disallowNonNumericInput}
-                    onKeyUp={formatToPhone}
-                    ></input>
-            </div>
-
-            {!displayCardInput ? 
-                <button className="SignupFormSubmit" onClick={() => {setDisplayCardInput(true)}}>
-                    Enter Payment Card (optional)
-                </button>
-              : <>
-                <div className="SignupFormSubtitle">
-                Payment Information (optional):
-                </div>
-                    
-                <div className="SignupFormSection">Card Type:
-                    <select name="cardType"
-                        type="text" 
-                        value={cardType} 
-                        onChange={(e) => setCardType(e.target.value)}
-                    >
-                        <option value="none"></option>
-                        <option value="credit">Credit</option>
-                        <option value="debit">Debit</option>
-                    </select>
-                </div>
-
-                <div className="SignupFormSection"> 
-                    Name (as appears on card):
-                    <input name="nameOnCard"
-                        type="text" 
-                        value={nameOnCard} 
-                        onChange={(e) => setNameOnCard(e.target.value)}></input>
-                </div>  
-
-                <div className="SignupFormSection">
-                    Card Number:
-                    <input name="cardNumber"
-                        type="text" 
-                        value={cardNumber} 
-                        onChange={(e) => setCardNumber(e.target.value)}
-                        placeholder="1111-2222-3333-4444"
-                        maxlength="19"
-                        onKeyDown={disallowNonNumericInput}
-                        onKeyUp={formatToCardNumber}
-                    ></input>
-                </div>
-
-                <div className="SignupFormSection">
-                    Expiration Month:
-                    <select name="expirationMonth"
-                        type="text" 
-                        value={expirationMonth} 
-                        onChange={(e) => setExpirationMonth(e.target.value)}>
-                        <option value="none"></option>
-                        {months.map((month) => <option value={month}>
-                            {month}
-                        </option>
-                        )}
-                    </select>
-                </div>
-
-                <div className="SignupFormSection">
-                    Expiration Year:
-                    <select name="expirationYear"
-                        type="text" 
-                        value={expirationYear} 
-                        onChange={(e) => setExpirationYear(e.target.value)}>
-                        <option value="none"></option>
-                        {years.map((year) => <option value={year}>
-                            {year}
-                        </option>
-                        )}
-                    </select>
-                </div>
-                
-                <div className="SignupFormSection">
-                    CVC:
-                    <input name="cvc"
-                        type="password" 
-                        value={cvc} 
-                        maxLength={4}
-                        onChange={(e) => setCVC(e.target.value)}></input>
-                </div>
-                
-                <div className="SignupFormSection">
-                    Billing Address:
-                    <input name="billingAddress"
-                        type="text" 
-                        value={billingAddress} 
-                        onChange={(e) => setBillingAddress(e.target.value)}></input>
-                </div>
-
-                <div className="SignupFormSection">
-                    City:
-                    <input name="billingCity"
-                        type="text" 
-                        value={billingCity} 
-                        onChange={(e) => setBillingCity(e.target.value)}></input>
-                </div>
-
-                <div className="SignupFormSection">
-                    State:
-                    <input name="billingState"
-                        type="text" 
-                        value={billingState} 
-                        onChange={(e) => setBillingState(e.target.value)}></input>
-                </div>
-
-                <div className="SignupFormSection">
-                    Zip Code:
-                    <input name="billingZipCode"
-                        type="text" 
-                        value={billingZipCode} 
-                        onChange={(e) => setBillingZipCode(e.target.value)}></input>
-                </div>
-              </>
-              }
-
-              {!displayAddressInput ?
-                <button className="SignupFormSubmit" onClick={() => {setDisplayAddressInput(true)}}>
-                    Enter Home Address (optional)
-                </button>
-              : <>
-                <div className="SignupFormSubtitle">
-                    Home Address (optional):
-                </div>
-
-                <div className="SignupFormSection">
-                    Street Address:
-                    <input name="streetAddress"
-                        type="text" 
-                        value={streetAddress} 
-                        onChange={(e) => setStreetAddress(e.target.value)}></input>
-                </div>
-
-                <div className="SignupFormSection">
-                    City:
-                    <input name="city"
-                        type="text" 
-                        value={city} 
-                        onChange={(e) => setCity(e.target.value)}></input>
-                </div>
-
-                <div className="SignupFormSection">
-                    State:
-                    <input name="state"
-                        type="text" 
-                        value={state} 
-                        onChange={(e) => setState(e.target.value)}></input>
-                </div>
-
-                <div className="SignupFormSection">
-                    Zip Code:
-                    <input name="zipCode"
-                        type="text" 
-                        value={zipCode} 
-                        onChange={(e) => setZipCode(e.target.value)}></input>
-                </div>
-              </>
-              }
-              <input type="submit" value="Signup" onClick={onSubmit} 
-                className="SignupFormSubmit"></input>  
-          </form>
+        {isForm ? SignupFormAll : VerificationFormAll}
       </div>
     );
 }
