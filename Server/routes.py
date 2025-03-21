@@ -15,7 +15,7 @@ def encrypt(value):
 #Routes
 def init_routes(app, mail):
 
-    @app.route('/users', methods=['GET']) 
+    @app.route('/users', methods=['GET', 'POST']) 
     def login(): 
         # if request.method == 'POST': # Handle POST requests
         #     json = request.json 
