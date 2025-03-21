@@ -95,7 +95,7 @@ def init_routes(app, mail):
                 user = User(**json)  
                 
                 # encrypt password with bcrypt and store the hash as a string
-                user.password = str(encrypt(user.password))
+                user.password = str(encrypt(str(user.password)))
 
                 user.validate()   
                 user.save()   
