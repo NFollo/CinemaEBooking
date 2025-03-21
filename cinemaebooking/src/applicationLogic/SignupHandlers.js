@@ -232,7 +232,7 @@ export async function createUser(firstName, lastName, email, password, phoneNumb
 
     try {
         // Add user to database and return ID of newly created document
-        const response = await axios.post("http://localhost:5000/createUser", newUser, {
+        const response = await axios.post("http://localhost:5000/Users", newUser, {
             headers: {
                 "Content-Type": "application/json",
             },

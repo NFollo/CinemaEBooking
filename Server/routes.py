@@ -37,8 +37,44 @@ def init_routes(app, mail):
                 return jsonify(users_list), 200
             except Exception as err:
                     return jsonify({"error": "Failed to fetch movies", "message": str(err)}), 500
+            
+        if request.method == 'POST': # Handle POST requests
+            '''
+            returns the ObjectId of the created User document as a string upon success
+            '''
+            json = request.json 
+
+            existing_user = User.objects(email=json['email']).first()
+            if existing_user:
+                return jsonify({"error": "Email already exists"}), 409  # 409 Conflict, check if user is already in the db
+            
+            try:
+                user = User(**json)  
+                
+                # encrypt password with bcrypt and store the hash as a string
+                user.password = str(encrypt(user.password))
+
+                user.validate()   
+                user.save()   
+            except FieldDoesNotExist as err:
+                return jsonify({"error": "Invalid field in request", "message": str(err)}), 400
+            except ValidationError as err:
+                return jsonify({"error": str(err)}), 400  
+            
+            return jsonify({"user_id": str(user.id)}), 201
     
-    
+    @app.route('/users/<email>', methods=['GET', 'PATCH'])
+    def get_user_by_email(email):
+        ''' Fetch a single user by email '''
+        if request.method == 'GET':  # Handle GET requests
+            try:
+                user = User.objects.get(email=email)  # Fetch the user by email
+                user_dict = user.to_mongo().to_dict()  # Convert to JSON
+                return jsonify(user_dict), 200
+            except User.DoesNotExist:
+                return jsonify({"error": "User not found"}), 404
+            except Exception as err:
+                return jsonify({"error": "Failed to fetch user", "message": str(err)}), 500
     
             
 
@@ -78,33 +114,6 @@ def init_routes(app, mail):
                 return jsonify(movies_list), 200
             except Exception as err:
                 return jsonify({"error": "Failed to fetch movies", "message": str(err)}), 500
-            
-    @app.route('/createUser', methods=['POST']) 
-    def newUser(): 
-        '''
-        returns the ObjectId of the created User document as a string upon success
-        '''
-        if request.method == 'POST': # Handle POST requests
-            json = request.json 
-
-            existing_user = User.objects(email=json['email']).first()
-            if existing_user:
-                return jsonify({"error": "Email already exists"}), 409  # 409 Conflict, check if user is already in the db
-            
-            try:
-                user = User(**json)  
-                
-                # encrypt password with bcrypt and store the hash as a string
-                user.password = str(encrypt(user.password))
-
-                user.validate()   
-                user.save()   
-            except FieldDoesNotExist as err:
-                return jsonify({"error": "Invalid field in request", "message": str(err)}), 400
-            except ValidationError as err:
-                return jsonify({"error": str(err)}), 400  
-            
-            return jsonify({"user_id": str(user.id)}), 201
         
     @app.route('/createAddress', methods=['POST']) 
     def newAddress(): 
