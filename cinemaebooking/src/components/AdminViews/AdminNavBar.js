@@ -6,7 +6,6 @@ import createAcc from "../../img/create-acc.png";
 import login from "../../img/login.png";
 import editFunc from "../../img/edit.png";
 import { Link, useNavigate } from 'react-router-dom';
-import Cookies from "js-cookie";
 // import user from "../img/user.png"; 
 // import edit from "../img/edit.png";
 // import logout from "../img/log-out.png";
@@ -21,7 +20,7 @@ function DropdownItem({ img, text }) {
   );
 }
 
-function AdminNavBar({onSearch, input, clearInput}) {
+function AdminNavBar({onSearch, input, clearInput, logout}) {
   const [openMenu, setOpenMenu] = useState(false);
   
   const navigate = useNavigate();
@@ -89,7 +88,7 @@ function AdminNavBar({onSearch, input, clearInput}) {
               </button>
             </Link>
             <Link to={'/'}>
-              <button className="login" >
+              <button className="login" onClick={logout}>
                 <DropdownItem img={login} text="Sign Out" />
               </button>
             </Link>

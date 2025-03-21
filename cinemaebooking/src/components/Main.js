@@ -41,7 +41,12 @@ function Main() {
       Cookies.set("isLogged", "test", { expires: 1, path: "/" });
     }
   }, []);
-  const isLogged = Cookies.get("isLogged");
+  const [isLogged, setIsLogged] = useState(Cookies.get("isLogged"));
+
+  const logout = () => {
+    Cookies.set("isLogged", "false", { expires: 1, path: "/" });
+    setIsLogged(Cookies.get("isLogged"));
+  };
 
   // This is for the testing header.  Clicking the button pivots from not logged in to logged in to admin-logged in
   const [test, setTest] = useState(1);
@@ -50,12 +55,15 @@ function Main() {
     setTest(test + 1);
     if (isLogged === "false") {
       Cookies.set("isLogged", "true", { expires: 1, path: "/" });
+      setIsLogged(Cookies.get("isLogged"));
     } else if (isLogged === "true") {
       Cookies.set("isLogged", "admin", { expires: 1, path: "/" });
+      setIsLogged(Cookies.get("isLogged"));
     } else if (isLogged === "admin" || isLogged === "test") {
-      Cookies.set("isLogged", "false", { expires: 1, path: "/" });
+      logout();
     } else {
       Cookies.set("isLogged", "error", { expires: 1, path: "/" });
+      setIsLogged(Cookies.get("isLogged"));
     }
   }
 
@@ -69,7 +77,7 @@ function Main() {
             <Route exact path='/' 
               element={
                 <div>
-                  {isLogged === "admin" ? <AdminNavBar onSearch={onSearch} input={input} clearInput={clearInput}/> : (isLogged === "true" ? <LoggedNavBar onSearch={onSearch} input={input} clearInput={clearInput}/> : <NavBar onSearch={onSearch} input={input} clearInput={clearInput}/>)}
+                  {isLogged === "admin" ? <AdminNavBar onSearch={onSearch} input={input} clearInput={clearInput} logout={logout}/> : (isLogged === "true" ? <LoggedNavBar onSearch={onSearch} logout={logout} input={input} clearInput={clearInput}/> : <NavBar onSearch={onSearch} input={input} clearInput={clearInput}/>)}
                   <TitleBody />
                   <MainFeatured />
                   <CurrentlyRunning />
@@ -116,7 +124,7 @@ function Main() {
             <Route exact path='/loggedin' 
               element={
                 <div>
-                  <LoggedNavBar onSearch={onSearch} input={input} clearInput={clearInput}/>
+                  <LoggedNavBar onSearch={onSearch} logout={logout} input={input} clearInput={clearInput}/>
                   <TitleBody />
                   <MainFeatured />
                   <CurrentlyRunning />
@@ -127,7 +135,7 @@ function Main() {
             <Route exact path='/viewprofile' 
               element={
                 <div>
-                  <LoggedNavBar onSearch={onSearch} input={input} clearInput={clearInput}/>
+                  <LoggedNavBar onSearch={onSearch} logout={logout} input={input} clearInput={clearInput}/>
                   <ViewProfile />
                 </div>
               } 
@@ -135,7 +143,7 @@ function Main() {
             <Route exact path='/editprofile' 
               element={
                 <div>
-                  <LoggedNavBar onSearch={onSearch} input={input} clearInput={clearInput}/>
+                  <LoggedNavBar onSearch={onSearch} logout={logout} input={input} clearInput={clearInput}/>
                   <EditProfile />
                 </div>
               } 
@@ -143,7 +151,7 @@ function Main() {
             <Route exact path='/adminhome' 
               element={
                 <div>
-                  <AdminNavBar onSearch={onSearch} input={input} clearInput={clearInput}/>
+                  <AdminNavBar onSearch={onSearch} logout={logout} input={input} clearInput={clearInput}/>
                   <TitleBody />
                   <MainFeatured />
                   <CurrentlyRunning />
@@ -154,7 +162,7 @@ function Main() {
             <Route exact path='/manageusers' 
               element={
                 <div>
-                  <AdminNavBar onSearch={onSearch} input={input} clearInput={clearInput}/>
+                  <AdminNavBar onSearch={onSearch} logout={logout} input={input} clearInput={clearInput}/>
                   <ManageUsers />
                 </div>
               } 
@@ -162,7 +170,7 @@ function Main() {
             <Route exact path='/admineditprofile' 
               element={
                 <div>
-                  <AdminNavBar onSearch={onSearch} input={input} clearInput={clearInput}/>
+                  <AdminNavBar onSearch={onSearch} logout={logout} input={input} clearInput={clearInput}/>
                   <AdminEditProfile />
                 </div>
               } 
@@ -170,7 +178,7 @@ function Main() {
             <Route exact path='/managemovies' 
               element={
                 <div>
-                  <AdminNavBar onSearch={onSearch} input={input} clearInput={clearInput}/>
+                  <AdminNavBar onSearch={onSearch} logout={logout} input={input} clearInput={clearInput}/>
                   <ManageMovies />
                 </div>
               } 
@@ -178,7 +186,7 @@ function Main() {
             <Route exact path='/admineditmovie' 
               element={
                 <div>
-                  <AdminNavBar onSearch={onSearch} input={input} clearInput={clearInput}/>
+                  <AdminNavBar onSearch={onSearch} logout={logout} input={input} clearInput={clearInput}/>
                   <EditMovie />
                 </div>
               } 
@@ -186,7 +194,7 @@ function Main() {
             <Route exact path='/managepromotions' 
               element={
                 <div>
-                  <AdminNavBar onSearch={onSearch} input={input} clearInput={clearInput}/>
+                  <AdminNavBar onSearch={onSearch} logout={logout} input={input} clearInput={clearInput}/>
                   <ManagePromotions />
                 </div>
               } 
@@ -194,7 +202,7 @@ function Main() {
             <Route exact path='/editpromotions' 
               element={
                 <div>
-                  <AdminNavBar onSearch={onSearch} input={input} clearInput={clearInput}/>
+                  <AdminNavBar onSearch={onSearch} logout={logout} input={input} clearInput={clearInput}/>
                   <EditPromotions />
                 </div>
               } 
