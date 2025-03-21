@@ -228,6 +228,7 @@ function Main() {
                           <MovieInfoPage />
                         </div>} 
             />
+            <Route path='/*' element={<div>Error404</div>} />
           </Routes>
         </div>
       </Router>
