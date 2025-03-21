@@ -38,7 +38,7 @@ function Main() {
   // Initialize login cookie as false
   useEffect(() => {
     if (!Cookies.get("isLogged")) {
-      Cookies.set("isLogged", "test", { expires: 100, path: "/" });
+      Cookies.set("isLogged", "test", { expires: 1, path: "/" });
     }
   }, []);
   const isLogged = Cookies.get("isLogged");
@@ -49,13 +49,13 @@ function Main() {
     e.preventDefault();
     setTest(test + 1);
     if (isLogged === "false") {
-      Cookies.set("isLogged", "true", { expires: 100, path: "/" });
+      Cookies.set("isLogged", "true", { expires: 1, path: "/" });
     } else if (isLogged === "true") {
-      Cookies.set("isLogged", "admin", { expires: 100, path: "/" });
+      Cookies.set("isLogged", "admin", { expires: 1, path: "/" });
     } else if (isLogged === "admin" || isLogged === "test") {
-      Cookies.set("isLogged", "false", { expires: 100, path: "/" });
+      Cookies.set("isLogged", "false", { expires: 1, path: "/" });
     } else {
-      Cookies.set("isLogged", "error", { expires: 100, path: "/" });
+      Cookies.set("isLogged", "error", { expires: 1, path: "/" });
     }
   }
 
