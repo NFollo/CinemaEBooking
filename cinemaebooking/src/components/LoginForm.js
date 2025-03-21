@@ -1,5 +1,6 @@
 import "./LoginForm.css";
 import { Link, useNavigate } from 'react-router-dom';
+import { useState } from "react";
 
 function LoginForm() {
 
@@ -8,6 +9,28 @@ function LoginForm() {
       navigate("/loggedin");
     }
 
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+    const loginUser = async (e) => {
+      e.preventDefault();
+      try {
+        if (!email) {
+          alert("Please enter a valid Email");
+          return; 
+        }
+        await axios.get('http://localhost:5000/user', { email, password });
+        setHasSent(1); // Move to the "Enter Code" step
+
+      } catch (error) {
+        if (error.response.status == 404)  // user not found in db
+          alert("No user found")
+        else {
+          console.error("Error sending verification code:", error);
+          alert("An error occurred. Please try again.");
+        }
+      }
+    }
     return (
       <div className="LoginForm">
         <div className="LoginFormTitle">
