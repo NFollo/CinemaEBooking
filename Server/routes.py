@@ -37,7 +37,10 @@ def init_routes(app, mail):
                 return jsonify(users_list), 200
             except Exception as err:
                     return jsonify({"error": "Failed to fetch movies", "message": str(err)}), 500
-        
+    
+    
+    
+            
 
     @app.route('/movies', methods=['POST', 'GET']) 
     def movies(): 

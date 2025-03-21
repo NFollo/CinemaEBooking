@@ -45,7 +45,7 @@ export function isValidRequiredForm(firstName, lastName, email, password,
         alert("Passwords do not match");
         return false;
     }
-    else if (password.length < 8 || confirmPassword.length < 8) {
+    else if (password.length < 8 && confirmPassword.length < 8) {
         alert("Password must be equal or greater than 8 characters")
     }
     // ensure phone number is valid

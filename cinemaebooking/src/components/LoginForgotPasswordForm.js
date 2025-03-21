@@ -80,7 +80,7 @@ function LoginForgotPassWordForm() {
 
     useEffect(() => {
       setIsMatch(PW1 === PW2);
-      setIsPasswordLength(PW1.length >= 8 || PW2.length >=8)
+      setIsPasswordLength(PW1.length >= 8 && PW2.length >=8)
     }, [PW1, PW2]);
 
     const recovery = <div>
