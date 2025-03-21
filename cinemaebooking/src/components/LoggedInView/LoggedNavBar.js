@@ -5,6 +5,7 @@ import { CgProfile } from "react-icons/cg";
 import createAcc from "../../img/create-acc.png";
 import login from "../../img/login.png";
 import { Link, useNavigate } from 'react-router-dom';
+import Cookies from "js-cookie";
 // import user from "../img/user.png"; 
 // import edit from "../img/edit.png";
 // import logout from "../img/log-out.png";
@@ -25,7 +26,7 @@ function LoggedNavBar({onSearch, input, clearInput}) {
   const navigate = useNavigate();
   const navHome = () => {
     clearInput();
-    navigate("/loggedin");
+    navigate("/");
   }
   const onSearchSubmit = (e) => {
     e.preventDefault();

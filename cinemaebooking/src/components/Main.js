@@ -1,6 +1,6 @@
 import './Main.css';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import NavBar from './NavBar';
 import TitleBody from './TitleBody';
 import MainFeatured from './MainFeatured';
@@ -26,6 +26,7 @@ import OrderConfirmation from './OrderConfrrmation'
 import EditPromotions from './AdminViews/EditPromotions';
 import CurrentlyRunning from './CurrentlyRunning';
 import LoginForgotPassword from './LoginForgotPassword';
+import Cookies from "js-cookie";
 
 
 function Main() {
@@ -34,37 +35,41 @@ function Main() {
   const onSearch = (e) => setInput(e.target.value);
   const clearInput = () => setInput("");
 
+  // Initialize login cookie as false
+  useEffect(() => {
+    if (!Cookies.get("isLogged")) {
+      Cookies.set("isLogged", "test", { expires: 100, path: "/" });
+    }
+  }, []);
+  const isLogged = Cookies.get("isLogged");
 
-  //document.cookie = `isLogged=no; path=/`;
-  const getCookie = (name) => {
-    const cookies = document.cookie
-      .split("; ")
-      .find((row) => row.startsWith(`${name}=`));
-   
-    return cookies ? cookies.split("=")[1] : null;
-  };
-  const setCookie = (name, value, days) => {
-    const expirationDate = new Date();
-    expirationDate.setDate(expirationDate.getDate() + days);
-   
-    document.cookie = `${name}=${value}; expires=${expirationDate.toUTCString()}; path=/`;
-   };
-  const deleteCookie = (name) => {
-    document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/`;
-  };
-
-  deleteCookie("name");
+  // This is for the testing header.  Clicking the button pivots from not logged in to logged in to admin-logged in
+  const [test, setTest] = useState(1);
+  const testButton = (e) => {
+    e.preventDefault();
+    setTest(test + 1);
+    if (isLogged === "false") {
+      Cookies.set("isLogged", "true", { expires: 100, path: "/" });
+    } else if (isLogged === "true") {
+      Cookies.set("isLogged", "admin", { expires: 100, path: "/" });
+    } else if (isLogged === "admin" || isLogged === "test") {
+      Cookies.set("isLogged", "false", { expires: 100, path: "/" });
+    } else {
+      Cookies.set("isLogged", "error", { expires: 100, path: "/" });
+    }
+  }
 
   return (
     <div className="Main">
-      Cookies: {document.cookie}
+      Count = {test}, Cookies: {document.cookies} , isLogged = {isLogged}
+      <button onClick={testButton}>testButton</button>
       <Router>
         <div className="AllRoutes">
           <Routes>
             <Route exact path='/' 
               element={
                 <div>
-                  <NavBar onSearch={onSearch} input={input} clearInput={clearInput}/>
+                  {isLogged === "admin" ? <AdminNavBar onSearch={onSearch} input={input} clearInput={clearInput}/> : (isLogged === "true" ? <LoggedNavBar onSearch={onSearch} input={input} clearInput={clearInput}/> : <NavBar onSearch={onSearch} input={input} clearInput={clearInput}/>)}
                   <TitleBody />
                   <MainFeatured />
                   <CurrentlyRunning />
