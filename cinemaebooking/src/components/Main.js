@@ -1,5 +1,5 @@
 import './Main.css';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import NavBar from './NavBar';
 import TitleBody from './TitleBody';
@@ -124,6 +124,7 @@ function Main() {
             <Route exact path='/loggedin' 
               element={
                 <div>
+                  {isLogged === "true" ? "" : <Navigate to="/"></Navigate>}  
                   <LoggedNavBar onSearch={onSearch} logout={logout} input={input} clearInput={clearInput}/>
                   <TitleBody />
                   <MainFeatured />
@@ -135,6 +136,7 @@ function Main() {
             <Route exact path='/viewprofile' 
               element={
                 <div>
+                  {isLogged === "admin" || isLogged === "true" ? "" : <Navigate to="/"></Navigate>}  
                   <LoggedNavBar onSearch={onSearch} logout={logout} input={input} clearInput={clearInput}/>
                   <ViewProfile />
                 </div>
@@ -143,6 +145,7 @@ function Main() {
             <Route exact path='/editprofile' 
               element={
                 <div>
+                  {isLogged === "admin" || isLogged === "true" ? "" : <Navigate to="/"></Navigate>}  
                   <LoggedNavBar onSearch={onSearch} logout={logout} input={input} clearInput={clearInput}/>
                   <EditProfile />
                 </div>
@@ -151,6 +154,7 @@ function Main() {
             <Route exact path='/adminhome' 
               element={
                 <div>
+                  {isLogged === "admin" ? "" : <Navigate to="/"></Navigate>}  
                   <AdminNavBar onSearch={onSearch} logout={logout} input={input} clearInput={clearInput}/>
                   <TitleBody />
                   <MainFeatured />
@@ -162,6 +166,7 @@ function Main() {
             <Route exact path='/manageusers' 
               element={
                 <div>
+                  {isLogged === "admin" ? "" : <Navigate to="/"></Navigate>}  
                   <AdminNavBar onSearch={onSearch} logout={logout} input={input} clearInput={clearInput}/>
                   <ManageUsers />
                 </div>
@@ -170,6 +175,7 @@ function Main() {
             <Route exact path='/admineditprofile' 
               element={
                 <div>
+                  {isLogged === "admin" ? "" : <Navigate to="/"></Navigate>}  
                   <AdminNavBar onSearch={onSearch} logout={logout} input={input} clearInput={clearInput}/>
                   <AdminEditProfile />
                 </div>
@@ -178,6 +184,7 @@ function Main() {
             <Route exact path='/managemovies' 
               element={
                 <div>
+                  {isLogged === "admin" ? "" : <Navigate to="/"></Navigate>}  
                   <AdminNavBar onSearch={onSearch} logout={logout} input={input} clearInput={clearInput}/>
                   <ManageMovies />
                 </div>
@@ -186,6 +193,7 @@ function Main() {
             <Route exact path='/admineditmovie' 
               element={
                 <div>
+                  {isLogged === "admin" ? "" : <Navigate to="/"></Navigate>}  
                   <AdminNavBar onSearch={onSearch} logout={logout} input={input} clearInput={clearInput}/>
                   <EditMovie />
                 </div>
@@ -194,6 +202,7 @@ function Main() {
             <Route exact path='/managepromotions' 
               element={
                 <div>
+                  {isLogged === "admin" ? "" : <Navigate to="/"></Navigate>}  
                   <AdminNavBar onSearch={onSearch} logout={logout} input={input} clearInput={clearInput}/>
                   <ManagePromotions />
                 </div>
@@ -201,7 +210,8 @@ function Main() {
             /> 
             <Route exact path='/editpromotions' 
               element={
-                <div>
+                <div> 
+                  {isLogged === "admin" ? "" : <Navigate to="/"></Navigate>}                 
                   <AdminNavBar onSearch={onSearch} logout={logout} input={input} clearInput={clearInput}/>
                   <EditPromotions />
                 </div>
