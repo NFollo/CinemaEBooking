@@ -11,6 +11,7 @@ function MovieInfoPage({movie}) {
         title: "Unknown Movie",
         description: "No description available",
         trailer_picture_url: "https://via.placeholder.com/150",
+        trailer_video_url: ""
     };
     
     // eventually retrieve from DB
@@ -41,6 +42,9 @@ function MovieInfoPage({movie}) {
             </div>
 
             <img className='poster' src={movieInfo.trailer_picture_url} alt={title} />
+
+            <iframe className='trailer' src={movieInfo.trailer_video_url} title="sonic3" >
+            </iframe>
 
             <p>{description}</p>
 

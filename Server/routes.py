@@ -109,6 +109,7 @@ def init_routes(app, mail):
                         {"id": str(movie.id), 
                         "title": movie.title, 
                         "trailer_picture_url": movie.trailer_picture_url, 
+                        "trailer_video_url": movie.trailer_video_url,
                         "currently_running": movie.currently_running} 
                     for movie in movies]  
                 return jsonify(movies_list), 200

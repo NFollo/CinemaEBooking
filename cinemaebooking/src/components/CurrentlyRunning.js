@@ -18,6 +18,7 @@ function CurrentlyRunning() {
                 data.map((movie) => ({
                   title: movie.title,
                   trailer_picture_url: movie.trailer_picture_url,
+                  trailer_video_url: movie.trailer_video_url,
                   currently_running: movie.currentlyRunning, // Keep same as API
                 }))
               );

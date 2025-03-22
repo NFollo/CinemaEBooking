@@ -1,5 +1,5 @@
 import "./SearchPage.css";
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, } from 'react';
 import { useNavigate } from 'react-router-dom';
 //import { Link, useNavigate } from 'react-router-dom';
 
@@ -98,7 +98,8 @@ function SearchPage({query}) {
                 viewMovieButton.className = 'button';
                 viewMovieButton.textContent = "View Movie";
                 viewMovieButton.addEventListener("click", () => {
-                    navigate("/movieinfo", {state: movie})
+                    navigate(`/movieinfo?movie=${movie.title}`, 
+                        {state: movie})
                 })
 
                 movieCard.append(movieImg);
@@ -120,6 +121,7 @@ function SearchPage({query}) {
               data.map((movie) => ({
                 title: movie.title,
                 trailer_picture_url: movie.trailer_picture_url,
+                trailer_video_url: movie.trailer_video_url,
                 currently_running: movie.currentlyRunning, // Keep same as API
               }))
             );
