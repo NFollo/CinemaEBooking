@@ -33,7 +33,7 @@ function LoginForgotPassWordForm() {
         setHasSent(1); // Move to the "Enter Code" step
 
       } catch (error) {
-        if (error.response.status == 404)  // user not found in db
+        if (error.response.status === 404)  // user not found in db
           alert("No user found")
         else {
           console.error("Error sending verification code:", error);
@@ -48,7 +48,7 @@ function LoginForgotPassWordForm() {
         await axios.post('http://localhost:5000/verifyCode', { email, code: recoveryCode });
         setHasSent(2)
       } catch (error) {
-        if (error.response.status == 400)
+        if (error.response.status === 400)
           alert('Invalid or expired code');
         else 
           alert('Error verifying code');
@@ -71,7 +71,7 @@ function LoginForgotPassWordForm() {
         await axios.post('http://localhost:5000/resetPassword', { email, new_password: PW1 });
         setHasSent(3)
       } catch (error) {
-        if (error.response.status == 404)
+        if (error.response.status === 404)
           alert('User not found');
         else 
           alert('Error resetting password') 
