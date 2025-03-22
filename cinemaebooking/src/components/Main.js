@@ -91,7 +91,7 @@ function Main() {
             <Route exact path='/login' 
               element={
                 <div>
-                  <LoginPage />
+                  <LoginPage setAuthorization={setAuthorization}/>
                 </div>
               } 
             />

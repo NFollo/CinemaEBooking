@@ -240,5 +240,61 @@ def init_routes(app, mail):
         user.save()
 
         return jsonify({"message": "Password reset successfully"}), 200
+        
+
+    @app.route('/getPassword', methods=['POST'])
+    def get_db_password():
+        '''
+        Return the stored password of the specified user.
+        '''
+        json = request.json
+        email = json.get('email')
+
+        if not email:
+            return jsonify({"error": "Email required"}), 400
+
+        user = User.objects(email=email).first()
+        if not user:
+            return jsonify({"error": "User not found"}), 404
+
+        return jsonify({"encrypted_password": user.password}), 200
+    
+
+    @app.route('/compareEncrypted', methods=['POST'])
+    def check_encrypted_match():
+        '''
+        Returns true if plaintext matches ciphertext. Returns false otherwise.
+        '''
+        json = request.json
+        plaintext = json.get('plaintext').encode('utf-8')
+        ciphertext = json.get('ciphertext').encode('utf-8')
+
+        # STRING CORRECTION NEEDED BECAUSE OF STORING STRING IN DB
+        ciphertext = ciphertext[2:-1]
+
+        if not plaintext or not ciphertext:
+            return jsonify({"error": "Plaintext and ciphertext required"}), 400
+
+        result = bcrypt.checkpw(plaintext, ciphertext)
+
+        return jsonify({"result": result}), 200
+    
+
+    @app.route('/getPrivilege', methods=['POST'])
+    def get_privilege():
+        '''
+        Return the privilege of the specified user.
+        '''
+        json = request.json
+        email = json.get('email')
+
+        if not email:
+            return jsonify({"error": "Email required"}), 400
+
+        user = User.objects(email=email).first()
+        if not user:
+            return jsonify({"error": "User not found"}), 404
+
+        return jsonify({"privilege": user.privilege}), 200
 
     return

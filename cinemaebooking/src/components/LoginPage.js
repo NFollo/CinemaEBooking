@@ -3,13 +3,13 @@ import { Link } from 'react-router-dom';
 import LoginSignupCard from './LoginSignupCard';
 import LoginForm from "./LoginForm";
 
-function LoginPage() {
+function LoginPage(props) {
   return (
     <div className="LoginPage">
       <Link to={'/'}>
         <button className="LoginPageHome">Home</button>
       </Link>  
-      <LoginSignupCard form={<LoginForm />} /> 
+      <LoginSignupCard form={<LoginForm setAuthorization={props.setAuthorization}/>} /> 
     </div>
   );
 }
