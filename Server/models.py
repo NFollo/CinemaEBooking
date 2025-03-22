@@ -69,6 +69,7 @@ class User(me.Document):
     address = me.ReferenceField(Address)
     verification_code = me.StringField() # verifcation code, xxxxxx
     code_exp = me.DateTimeField() # time the code expires
+    receive_promotions = me.BooleanField(required=True)
     meta = {"collection": "users"} # explicitly set the collection name, otherwise the collection will be called user instead of users
 
 class PaymentCard(me.Document):

@@ -217,7 +217,9 @@ export async function createAddress(type, streetAddress, city, state, zipCode) {
  * Returns ObjectId of newly created User document otherwise.
  */
 
-export async function createUser(firstName, lastName, email, password, phoneNumber, homeAddressId) {
+export async function createUser(firstName, lastName, email, password, phoneNumber, 
+    receivePromotions, homeAddressId) 
+{
     const isValidHomeAddressId = (homeAddressId !== 0 && homeAddressId !== -1);
 
     // Create user JavaScript object
@@ -227,6 +229,7 @@ export async function createUser(firstName, lastName, email, password, phoneNumb
         email: email,
         password: password,
         phone_number: phoneNumber,
+        receive_promotions: receivePromotions,
         address: (isValidHomeAddressId ? homeAddressId : null),
     };
 

@@ -23,6 +23,7 @@ function SignupForm() {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
+    const [receivePromotions, setReceivePromotions] = useState(true)
 
     // state variables to determine if a password is valid
     const [isMatch, setIsMatch] = useState(false);
@@ -141,7 +142,7 @@ function SignupForm() {
 
         // TEMPORARY CHANGE, REMOVE THIS LATER
         // this is just to test the verification code page
-        setIsForm(false);
+        //setIsForm(false);
     
         // ensure all required fields are complete 
         const isValidRequired = isValidRequiredForm(firstName, lastName, email, password,
@@ -168,7 +169,7 @@ function SignupForm() {
         }
 
         // handle user document creation and exit upon error
-        const userId = await createUser(firstName, lastName, email, password, phoneNumber, homeAddressId);
+        const userId = await createUser(firstName, lastName, email, password, phoneNumber, receivePromotions, homeAddressId);
         if (userId === -1)
             return;
 
@@ -265,7 +266,7 @@ function SignupForm() {
                 onChange={(e) => setPhoneNumber(e.target.value)}
                 required
                 placeholder="123-456-7890"
-                maxlength="12"
+                maxLength="12"
                 onKeyDown={disallowNonNumericInput}
                 onKeyUp={formatToPhone}
                 ></input>
@@ -426,6 +427,19 @@ function SignupForm() {
             </div>
           </>
           }
+
+        <div className="SignupFormSplit">
+            Receive promotions:
+            <input id="receivePromotions"
+                type="checkbox" 
+                name="receivePromotions"
+                checked={receivePromotions}
+                onChange={(e) => {
+                    setReceivePromotions(e.target.checked);
+                }}>
+            </input>
+        </div>
+          
           <input type="submit" value="Signup" onClick={onSubmit} 
             className="SignupFormSubmit"></input>  
       </form>

@@ -72,3 +72,14 @@ input::-webkit-inner-spin-button {
 .SignupForm span {
     color: red;
 }
+
+.SignupFormSplit {
+    display: flex;
+    justify-content: space-between;
+}
+
+.SignupFormSplit input[type="checkbox"]:checked {
+    position: relative;
+    left: auto;
+}
+
