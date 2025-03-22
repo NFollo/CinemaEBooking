@@ -100,7 +100,9 @@ function ComingSoon() {
   ];*/
 
   const handleClick = (myindex) => {
-    navigate("/movieinfo", { state: movies[myindex] });
+    navigate(`/movieinfo?movie=${movies[myindex].title}`, { // added a unique url for each movie
+      state: movies[myindex]
+    });
   };
   
   const handleBrowseClick = () => {

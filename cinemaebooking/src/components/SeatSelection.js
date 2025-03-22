@@ -40,7 +40,7 @@ const SeatSelection = () => {
       alert(`Please select exactly ${numTickets} seats.`);
       return;
     }
-    navigate("/checkout", {
+    navigate(`/checkout?movie=${movieTitle}`, {
       state: { 
         movieTitle, 
         selectedDate, 

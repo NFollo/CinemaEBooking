@@ -56,7 +56,7 @@ function BuyTicketsPage() {
       return;
     }
 
-    navigate(`/seatselection?movie=${movie.title}&date=${selectedDate}&showtime=${selectedShowtime}&tickets=${totalTickets}`);
+    navigate(`/seatselection?movie=${movie.title}`);
   };
 
   return (

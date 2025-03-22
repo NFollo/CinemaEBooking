@@ -108,7 +108,10 @@ function CurrentlyRunning() {
 
   const handleClick = (myindex) => {
     window.scrollTo({ top: 0, behavior: 'instant' });
-    navigate("/movieinfo", { state: movies[myindex] });
+
+    navigate(`/movieinfo?movie=${movies[myindex].title}`, { // added a unique url for each movie
+      state: movies[myindex]
+    });
   };
   
   const handleBrowseClick = () => {

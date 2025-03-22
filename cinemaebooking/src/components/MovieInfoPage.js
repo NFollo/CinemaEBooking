@@ -25,9 +25,9 @@ function MovieInfoPage({movie}) {
     let reviews = [["Jennifer", "7", "Good"], ["Bob", "2", "I hate Sanic"]];
 
     const handleBookTickets = () => {
-        navigate("/buytickets", {
+        navigate(`/buytickets?movie=${movieInfo.title}`, { // unique url for each movie
             state: movieInfo
-        });
+        });   
     };
 
     return (
