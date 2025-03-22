@@ -35,41 +35,44 @@ function Main() {
   const onSearch = (e) => setInput(e.target.value);
   const clearInput = () => setInput("");
 
-  // Initialize login cookie as false
+  // Initialize login cookie as false if not already set
   useEffect(() => {
-    if (!Cookies.get("isLogged")) {
-      Cookies.set("isLogged", "test", { expires: 1, path: "/" });
+    if (!Cookies.get("authorization")) {
+      Cookies.set("authorization", "false", { expires: 1, path: "/" });
     }
   }, []);
-  const [isLogged, setIsLogged] = useState(Cookies.get("isLogged"));
+  const [authorization, setAuthorization] = useState(Cookies.get("authorization"));
 
   const logout = () => {
-    Cookies.set("isLogged", "false", { expires: 1, path: "/" });
-    setIsLogged(Cookies.get("isLogged"));
+    Cookies.set("authorization", "false", { expires: 1, path: "/" });
+    setAuthorization(Cookies.get("authorization"));
   };
 
-  // This is for the testing header.  Clicking the button pivots from not logged in to logged in to admin-logged in
-  const [test, setTest] = useState(1);
+  // This is for the testing header.  Clicking the button cycles between unauthorized, customer, and admin
+  const [test, setTest] = useState(Cookies.get("authorization"));
   const testButton = (e) => {
     e.preventDefault();
-    setTest(test + 1);
-    if (isLogged === "false") {
-      Cookies.set("isLogged", "true", { expires: 1, path: "/" });
-      setIsLogged(Cookies.get("isLogged"));
-    } else if (isLogged === "true") {
-      Cookies.set("isLogged", "admin", { expires: 1, path: "/" });
-      setIsLogged(Cookies.get("isLogged"));
-    } else if (isLogged === "admin" || isLogged === "test") {
+    console.log("test: " + test)
+    console.log("cookie value: " + Cookies.get("authorization"));
+
+    if (test === "false") {
+      Cookies.set("authorization", "customer", { expires: 1, path: "/" });
+      setAuthorization(Cookies.get("authorization"));
+    } else if (test === "customer") {
+      Cookies.set("authorization", "admin", { expires: 1, path: "/" });
+      setAuthorization(Cookies.get("authorization"));
+    } else if (test === "admin") {
       logout();
     } else {
-      Cookies.set("isLogged", "error", { expires: 1, path: "/" });
-      setIsLogged(Cookies.get("isLogged"));
+      Cookies.set("authorization", "error", { expires: 1, path: "/" });
     }
+
+    setTest(Cookies.get("authorization"))
   }
 
   return (
     <div className="Main">
-      Count = {test}, Cookies: {document.cookies} , isLogged = {isLogged}
+      Count = {authorization}, Cookies: {document.cookies}, authorization: {authorization}
       <button onClick={testButton}>testButton</button>
       <Router>
         <div className="AllRoutes">
@@ -77,7 +80,7 @@ function Main() {
             <Route exact path='/' 
               element={
                 <div>
-                  {isLogged === "admin" ? <AdminNavBar onSearch={onSearch} input={input} clearInput={clearInput} logout={logout}/> : (isLogged === "true" ? <LoggedNavBar onSearch={onSearch} logout={logout} input={input} clearInput={clearInput}/> : <NavBar onSearch={onSearch} input={input} clearInput={clearInput}/>)}
+                  {authorization === "admin" ? <AdminNavBar onSearch={onSearch} input={input} clearInput={clearInput} logout={logout}/> : (authorization === "customer" ? <LoggedNavBar onSearch={onSearch} logout={logout} input={input} clearInput={clearInput}/> : <NavBar onSearch={onSearch} input={input} clearInput={clearInput}/>)}
                   <TitleBody />
                   <MainFeatured />
                   <CurrentlyRunning />
@@ -124,7 +127,7 @@ function Main() {
             <Route exact path='/loggedin' 
               element={
                 <div>
-                  {isLogged === "true" ? "" : <Navigate to="/"></Navigate>}  
+                  { (authorization === "customer" || authorization === "admin") ? "" : <Navigate to="/"></Navigate>}  
                   <LoggedNavBar onSearch={onSearch} logout={logout} input={input} clearInput={clearInput}/>
                   <TitleBody />
                   <MainFeatured />
@@ -136,7 +139,7 @@ function Main() {
             <Route exact path='/viewprofile' 
               element={
                 <div>
-                  {isLogged === "admin" || isLogged === "true" ? "" : <Navigate to="/"></Navigate>}  
+                  {(authorization === "admin" || authorization === "customer") ? "" : <Navigate to="/"></Navigate>}  
                   <LoggedNavBar onSearch={onSearch} logout={logout} input={input} clearInput={clearInput}/>
                   <ViewProfile />
                 </div>
@@ -145,7 +148,7 @@ function Main() {
             <Route exact path='/editprofile' 
               element={
                 <div>
-                  {isLogged === "admin" || isLogged === "true" ? "" : <Navigate to="/"></Navigate>}  
+                  {(authorization === "admin" || authorization === "customer") ? "" : <Navigate to="/"></Navigate>}  
                   <LoggedNavBar onSearch={onSearch} logout={logout} input={input} clearInput={clearInput}/>
                   <EditProfile />
                 </div>
@@ -154,7 +157,7 @@ function Main() {
             <Route exact path='/adminhome' 
               element={
                 <div>
-                  {isLogged === "admin" ? "" : <Navigate to="/"></Navigate>}  
+                  {authorization === "admin" ? "" : <Navigate to="/"></Navigate>}  
                   <AdminNavBar onSearch={onSearch} logout={logout} input={input} clearInput={clearInput}/>
                   <TitleBody />
                   <MainFeatured />
@@ -166,7 +169,7 @@ function Main() {
             <Route exact path='/manageusers' 
               element={
                 <div>
-                  {isLogged === "admin" ? "" : <Navigate to="/"></Navigate>}  
+                  {authorization === "admin" ? "" : <Navigate to="/"></Navigate>}  
                   <AdminNavBar onSearch={onSearch} logout={logout} input={input} clearInput={clearInput}/>
                   <ManageUsers />
                 </div>
@@ -175,7 +178,7 @@ function Main() {
             <Route exact path='/admineditprofile' 
               element={
                 <div>
-                  {isLogged === "admin" ? "" : <Navigate to="/"></Navigate>}  
+                  {authorization === "admin" ? "" : <Navigate to="/"></Navigate>}  
                   <AdminNavBar onSearch={onSearch} logout={logout} input={input} clearInput={clearInput}/>
                   <AdminEditProfile />
                 </div>
@@ -184,7 +187,7 @@ function Main() {
             <Route exact path='/managemovies' 
               element={
                 <div>
-                  {isLogged === "admin" ? "" : <Navigate to="/"></Navigate>}  
+                  {authorization === "admin" ? "" : <Navigate to="/"></Navigate>}  
                   <AdminNavBar onSearch={onSearch} logout={logout} input={input} clearInput={clearInput}/>
                   <ManageMovies />
                 </div>
@@ -193,7 +196,7 @@ function Main() {
             <Route exact path='/admineditmovie' 
               element={
                 <div>
-                  {isLogged === "admin" ? "" : <Navigate to="/"></Navigate>}  
+                  {authorization === "admin" ? "" : <Navigate to="/"></Navigate>}  
                   <AdminNavBar onSearch={onSearch} logout={logout} input={input} clearInput={clearInput}/>
                   <EditMovie />
                 </div>
@@ -202,7 +205,7 @@ function Main() {
             <Route exact path='/managepromotions' 
               element={
                 <div>
-                  {isLogged === "admin" ? "" : <Navigate to="/"></Navigate>}  
+                  {authorization === "admin" ? "" : <Navigate to="/"></Navigate>}  
                   <AdminNavBar onSearch={onSearch} logout={logout} input={input} clearInput={clearInput}/>
                   <ManagePromotions />
                 </div>
@@ -211,7 +214,7 @@ function Main() {
             <Route exact path='/editpromotions' 
               element={
                 <div> 
-                  {isLogged === "admin" ? "" : <Navigate to="/"></Navigate>}                 
+                  {authorization === "admin" ? "" : <Navigate to="/"></Navigate>}                 
                   <AdminNavBar onSearch={onSearch} logout={logout} input={input} clearInput={clearInput}/>
                   <EditPromotions />
                 </div>
