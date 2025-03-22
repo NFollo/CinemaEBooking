@@ -58,7 +58,7 @@ class Address(me.Document):
     meta = {"collection": "addresses"}
 
 class User(me.Document):
-    user_id = me.StringField(default="") # assigned upon verification, not upon creation, hence not required
+    #user_id = me.StringField(default="") # assigned upon verification, not upon creation, hence not required
     first_name = me.StringField(required=True)
     last_name = me.StringField(required=True)
     email = me.StringField(required=True)
@@ -70,6 +70,7 @@ class User(me.Document):
     verification_code = me.StringField() # verifcation code, xxxxxx
     code_exp = me.DateTimeField() # time the code expires
     receive_promotions = me.BooleanField(required=True)
+    verified_user = me.BooleanField(default=False)
     meta = {"collection": "users"} # explicitly set the collection name, otherwise the collection will be called user instead of users
 
 class PaymentCard(me.Document):

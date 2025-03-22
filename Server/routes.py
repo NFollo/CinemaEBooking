@@ -76,7 +76,25 @@ def init_routes(app, mail):
             except Exception as err:
                 return jsonify({"error": "Failed to fetch user", "message": str(err)}), 500
     
-            
+        elif request.method == 'PATCH':  # Handle PATCH requests
+            try:
+                user = User.objects.get(email=email)  # Fetch the user by email
+                data = request.get_json()  # Get the JSON data from the request body
+
+                # Update the user's fields with the provided data
+                for key, value in data.items():
+                    if hasattr(user, key):
+                        setattr(user, key, value)
+
+                user.save()
+
+                user_dict = user.to_mongo().to_dict() 
+                return jsonify(user_dict), 200
+
+            except User.DoesNotExist:
+                return jsonify({"error": "User not found"}), 404
+            except Exception as err:
+                return jsonify({"error": "Failed to update user", "message": str(err)}), 500    
 
     @app.route('/movies', methods=['POST', 'GET']) 
     def movies(): 
@@ -189,6 +207,36 @@ def init_routes(app, mail):
 
         # Send verification code to the user
         msg = Message('Password Reset Verification Code', sender=os.environ['MAIL_USERNAME'], recipients=[email])
+        msg.body = f'Your verification code is: {verification_code}'
+        mail.send(msg)
+
+        return jsonify({ "message": "Verification code sent to your email"}), 200
+    
+    @app.route('/sendConfirmation', methods=['POST']) 
+    def sendConfirmation():
+        json = request.json
+        email = json.get('email') 
+
+        # check if there is an email
+        if not email:
+            return jsonify({"error": "Email is required"}), 400
+
+        # check if there is already an email in the database
+        user = User.objects(email=email).first()
+        if not user:
+            return jsonify({"error": "User not found"}), 404
+            # Generate a verification code
+
+        verification_code = generateVerificationCode()
+        expiration_time = datetime.now() + timedelta(minutes=10)  # Code expires in 10 minutes
+
+        # save to database
+        user.verification_code = verification_code
+        user.code_exp = expiration_time
+        user.save()
+
+        # Send verification code to the user
+        msg = Message('Sign Up Verification Code', sender=os.environ['MAIL_USERNAME'], recipients=[email])
         msg.body = f'Your verification code is: {verification_code}'
         mail.send(msg)
 

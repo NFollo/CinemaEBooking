@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { isValidRequiredForm, isValidAddressForm, isValidPaymentCardForm, 
     createAddress, createUser, createPaymentCard } 
     from '../applicationLogic/SignupHandlers';
+import axios from "axios";
 
 
 function SignupForm() {
@@ -51,6 +52,9 @@ function SignupForm() {
     const [displayCardInput, setDisplayCardInput] = useState(false);
     const [displayAddressInput, setDisplayAddressInput] = useState(false);
 
+    // state variables for confirming email
+    const [code, setCode] = useState("");
+    
     // establish router
     const navigate = useNavigate();
     
@@ -111,7 +115,7 @@ function SignupForm() {
         // reset user fields
         setFirstName('');
         setLastName('');
-        setEmail('');
+        //setEmail('');
         setPassword('');
         setConfirmPassword('');
         setPhoneNumber('');
@@ -142,7 +146,7 @@ function SignupForm() {
 
         // TEMPORARY CHANGE, REMOVE THIS LATER
         // this is just to test the verification code page
-        //setIsForm(false);
+        //axios.po
     
         // ensure all required fields are complete 
         const isValidRequired = isValidRequiredForm(firstName, lastName, email, password,
@@ -184,15 +188,32 @@ function SignupForm() {
         // clear inputs, send confirmation email, and redirect user
         clearInputs();
         // sendConfirmationEmail();
-        navigate("/confirmation");
-        
-        // State change to enter code
+        //navigate("/confirmation");
+       
+        // send code
+        await axios.post('http://localhost:5000/sendConfirmation', { email });
         setIsForm(false);
     } // onSubmit
 
     // On Verification Code submission
-    const onSubmitCode = (e) => { // enter logic for checking the code here
+    const onSubmitCode = async (e) => { // enter logic for checking the code here
         e.preventDefault();
+        try {
+            // verify the code
+            var response = await axios.post('http://localhost:5000/verifyCode', { email, code });
+
+            if (response.status == 200) {
+                let verfied_user = true
+                await axios.patch(`http://localhost:5000/users/${email}`, {verfied_user});
+                // Navigate after being confirmed form here
+
+            }
+          } catch (error) {
+            if (error.response.status == 400)
+                alert('Invalid or expired code');
+            else 
+                alert('Error verifying code: ' + error.response.data.error);
+          }
     }
 
     // Send back to signup form
@@ -454,8 +475,8 @@ function SignupForm() {
                 <div className="SignupFormSection">
                     <input name="firstName"
                         type="text" 
-                        value={firstName} 
-                        onChange={(e) => setFirstName(e.target.value)}
+                        value={code} 
+                        onChange={(e) => setCode(e.target.value)}
                         required></input>
                 </div>
                 <input type="submit" value="Submit Code" onClick={onSubmitCode} 
