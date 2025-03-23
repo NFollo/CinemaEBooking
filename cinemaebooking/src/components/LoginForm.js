@@ -32,6 +32,7 @@ function LoginForm(props) {
         const privilege = await getUserPrivilege(email);
         Cookies.set("authorization", privilege, { expires: 1, path: "/" });
         props.setAuthorization(privilege);
+        Cookies.set("email", email, { expires: 1, path: "/" });
         navigate("/");
       }
 
