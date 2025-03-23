@@ -203,8 +203,8 @@ function SignupForm() {
             var response = await axios.post('http://localhost:5000/verifyCode', { email, code });
 
             if (response.status == 200) {
-                let verfied_user = true
-                await axios.patch(`http://localhost:5000/users/${email}`, {verfied_user});
+                let verified_user = true
+                await axios.patch(`http://localhost:5000/users/${email}`, {verified_user});
                 // Navigate after being confirmed form here
 
             }
