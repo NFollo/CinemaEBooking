@@ -188,7 +188,6 @@ function SignupForm() {
         // clear inputs, send confirmation email, and redirect user
         clearInputs();
         // sendConfirmationEmail();
-        //navigate("/confirmation");
        
         // send code
         await axios.post('http://localhost:5000/sendConfirmation', { email });
@@ -206,7 +205,7 @@ function SignupForm() {
                 let verified_user = true
                 await axios.patch(`http://localhost:5000/users/${email}`, {verified_user});
                 // Navigate after being confirmed form here
-
+                navigate("/login");
             }
           } catch (error) {
             if (error.response.status == 400)
