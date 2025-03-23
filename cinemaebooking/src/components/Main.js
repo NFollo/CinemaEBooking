@@ -55,13 +55,13 @@ function Main() {
     console.log("test: " + test)
     console.log("cookie value: " + Cookies.get("authorization"));
 
-    if (test === "false") {
+    if (authorization === "false") {
       Cookies.set("authorization", "customer", { expires: 1, path: "/" });
       setAuthorization(Cookies.get("authorization"));
-    } else if (test === "customer") {
+    } else if (authorization === "customer") {
       Cookies.set("authorization", "admin", { expires: 1, path: "/" });
       setAuthorization(Cookies.get("authorization"));
-    } else if (test === "admin") {
+    } else if (authorization === "admin" || authorization === "error") {
       logout();
     } else {
       Cookies.set("authorization", "error", { expires: 1, path: "/" });
@@ -72,7 +72,7 @@ function Main() {
 
   return (
     <div className="Main">
-      Count = {authorization}, Cookies: {document.cookies}, authorization: {authorization}
+      authorization: {authorization}
       <button onClick={testButton}>testButton</button>
       <Router>
         <div className="AllRoutes">
