@@ -160,7 +160,7 @@ def init_routes(app, mail):
                 return jsonify({"error": "Payment card not found"}), 404
             except Exception as err:
                 return jsonify({"error": "Failed to update payment card", "message": str(err)}), 500    
-            
+    
 
     @app.route('/movies', methods=['POST', 'GET']) 
     def movies(): 
@@ -410,5 +410,21 @@ def init_routes(app, mail):
             return jsonify({"error": "User not found"}), 404
 
         return jsonify({"privilege": user.privilege}), 200
+    
+    @app.route('/sendProfileChangedEmail', methods=['POST'])
+    def send_profile_changed_email():
+        json = request.json
+        email = json.get('email') 
+
+        # Check if there is an email
+        if not email:
+            return jsonify({"error": "Email is required"}), 400
+
+        # Send verification code to the user
+        msg = Message('Profile Changed!', sender=os.environ['MAIL_USERNAME'], recipients=[email])
+        msg.body = 'Your profile has been changed!'
+        mail.send(msg)
+
+        return jsonify({"message": "Profile updated email has been successfully sent!"}), 200
 
     return
