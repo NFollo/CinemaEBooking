@@ -169,7 +169,7 @@ function LoginForgotPassWordForm() {
     const finish = 
     <div>
       <div className="LoginFormSubtitle">
-          Your password has successfully been resetted!
+          Your password has successfully been reset!
       </div>    
     </div>;
 
