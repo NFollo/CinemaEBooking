@@ -41,6 +41,21 @@ function ViewProfile() {
     const [address, setAddress] = useState("");
     const [zipcode, setZipcode] = useState("");
 
+    var temporaryCard = [];
+    const [numberOfCards, setNumberOfCards] = useState(0);
+
+    //const [cardNum, setCardNum] = useState(temporaryCard);
+    //const [cardCVC, setCardCVC] = useState(temporaryCard);
+    const [cardType1, setCardType1] = useState("");
+    const [cardName1, setCardName1] = useState("");
+    const [cardMonth1, setCardMonth1] = useState("");
+    const [cardYear1, setCardYear1] = useState("");    
+    const [cardCountry1, setCardCountry1] = useState("");
+    const [cardState1, setCardState1] = useState("");
+    const [cardCity1, setCardCity1] = useState("");
+    const [cardAddress1, setCardAddress1] = useState("");
+    const [cardZipcode1, setCardZipcode1] = useState("");
+
     // Include all requests and set values here
     useEffect(() => {
     const getAllData = async() => {
@@ -62,6 +77,23 @@ function ViewProfile() {
           setCity(getaddr.data.city);
           setHasAddress(true);
         } 
+
+        var getCards = await axios.get('http://localhost:5000/paymentCards/' + response.data._id.$oid);
+        console.log(getCards.data); // remove this later
+        setNumberOfCards(getCards.data.length);
+        if (getCards.data.length >= 0) {
+          setCardType1(getCards.data[0].card_type);
+          setCardName1(getCards.data[0].name_on_card);
+          setCardMonth1(getCards.data[0].month);
+          setCardYear1(getCards.data[0].year);
+          let cardAddr = await axios.get('http://localhost:5000/addresses/' + getCards.data[0].billing_address.$oid);
+          setCardCountry1(cardAddr.data.country);
+          setCardState1(cardAddr.data.state);
+          setCardCity1(cardAddr.data.city);
+          setCardAddress1(cardAddr.data.street);
+          setCardZipcode1(cardAddr.data.zip_code);
+        }
+
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
@@ -103,19 +135,21 @@ function ViewProfile() {
             <div className="ViewProfileSubtitle">Home Address</div>
             {hasAddress ? addressField : noAddressField}
 
-            <div className="ViewProfileSubtitle">Card 1 Information</div>
-            <div>Card Type: <span>{user.cardtype}</span></div>
-            <div>Name on Card: <span>{user.nameoncard}</span></div>
-            <div>Card Number: <span>************{user.lastfour}</span></div>
-            <div>Expiration Date: <span>{user.expdate}</span></div>
-            <div>CVC: <span>***</span></div>
-
-            <div className="ViewProfileSubtitle">Card 1 Billing Address</div>
-            <div>Country: <span>{user.Country}</span></div>
-            <div>State: <span>{user.state}</span></div>
-            <div>City: <span>************{user.city}</span></div>
-            <div>Address: <span>{user.addr}</span></div>
-            <div>ZIP Code: <span>{user.zipcode}</span></div>
+            {numberOfCards >= 1 ? 
+            <div>
+              <div className="ViewProfileSubtitle">Card 1 Information</div>
+              <div>Card Type: <span>{cardType1}</span></div>
+              <div>Name on Card: <span>{cardName1}</span></div>
+              <div>Card Number: <span>****************</span></div>
+              <div>Expiration Date: <span>{cardMonth1 + " " +  cardYear1}</span></div>
+              <div>CVC: <span>***</span></div>
+              <div className="ViewProfileSubtitle">Card 1 Billing Address</div>
+              <div>Country: <span>{cardCountry1}</span></div>
+              <div>State: <span>{cardState1}</span></div>
+              <div>City: <span>{cardCity1}</span></div>
+              <div>Address: <span>{cardAddress1}</span></div>
+              <div>ZIP Code: <span>{cardZipcode1}</span></div>
+            </div> : ""}
 
             <button onClick={navEditProfile} className="ViewProfileEdit">Edit Profile</button>            
 
