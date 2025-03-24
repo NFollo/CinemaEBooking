@@ -5,13 +5,11 @@
  */
 export async function checkPasswordMatch(email, password) {
     const cipherPassword = await getStoredPassword(email);
-    console.log("first call: " + cipherPassword)
     if (cipherPassword === -1) {
         return -1;
     }
 
     const match = await checkEncryptedMatch(password, cipherPassword);
-    console.log("second call: " + match)
     return match;
 } // getStoredPassword
 
@@ -85,7 +83,7 @@ export async function getUserPrivilege(email) {
     .catch((error) => {
         console.error("Error retrieving user privilege: ", error);
         alert("Error validating password");
-        return -1;
+        privilege = -1;
     });
     return privilege;
 }

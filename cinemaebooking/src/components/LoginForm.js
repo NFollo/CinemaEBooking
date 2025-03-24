@@ -20,7 +20,6 @@ function LoginForm(props) {
       }
        
       const passwordsMatch = await checkPasswordMatch(email, password);
-      console.log("main form: " + passwordsMatch)
 
       // error handling
       if (passwordsMatch === -1) {

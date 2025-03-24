@@ -22,7 +22,6 @@ function CurrentlyRunning() {
                   currently_running: movie.currentlyRunning, // Keep same as API
                 }))
               );
-              console.log(data);
           }
             )
             .catch((error) => console.error("Error fetching movies:", error));   
