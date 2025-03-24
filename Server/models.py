@@ -77,6 +77,7 @@ class User(me.Document):
 class PaymentCard(me.Document):
     card_type = me.StringField(required=True)
     card_number = me.StringField(required=True)
+    last_four = me.StringField(required=True)
     name_on_card = me.StringField(required=True)
     month = me.StringField(required=True)
     year = me.StringField(required=True)

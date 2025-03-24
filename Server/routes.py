@@ -228,6 +228,8 @@ def init_routes(app, mail):
             try:
                 paymentCard = PaymentCard(**json)  
 
+                paymentCard.last_four = paymentCard.card_number[-4:]
+
                 # encrypt card number with bcrypt and store the hash as a string
                 paymentCard.card_number = str(encrypt(paymentCard.card_number))
 
