@@ -366,6 +366,9 @@ function EditProfile() {
             }
 
             await fetchData();
+            await axios.post("http://localhost:5000/sendProfileChangedEmail", {
+                email: user.email,
+            });
 
         } catch (err) {
         console.error("Failed to update profile:", err);
