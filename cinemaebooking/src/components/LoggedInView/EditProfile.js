@@ -13,11 +13,13 @@ function EditProfile() {
     // const [newPassword, setNewPassword] = useState("");
 
     // general info
+
     const [user, setUser] = useState({
         email: "",
         first_name: "",
         last_name: "",
         phone_number: "",
+        receivePromotions: false
     });
 
     // home address
@@ -134,6 +136,7 @@ function EditProfile() {
             first_name: data.first_name,
             last_name: data.last_name,
             phone_number: data.phone_number,
+            receivePromotions: data.receive_promotions
         });
 
         // gets home address 
@@ -308,6 +311,7 @@ function EditProfile() {
                 first_name: user.first_name,
                 last_name: user.last_name,
                 phone_number: user.phone_number,
+                receive_promotions: user.receivePromotions
             });
 
             // rest password
@@ -335,7 +339,7 @@ function EditProfile() {
                 console.log("Created new address:", newAddressId);
 
                 await axios.patch(`http://localhost:5000/users/${user.email}`, {
-                address: newAddressId,
+                    address: newAddressId,
                 });
 
                 setAddress((prev) => ({ ...prev, id: newAddressId }));
@@ -372,6 +376,7 @@ function EditProfile() {
         console.error("Failed to update profile:", err);
         setError("Failed to save changes.");
         }
+        navigate("/viewprofile")
     };
 
     const handleAddCard = async () => {
@@ -504,7 +509,7 @@ function EditProfile() {
             <input type="text" name="country" value={address.country} onChange={handleAddressChange} />
 
             {/* card information */}
-            <div className="EditProfileSubtitle">Card Information</div>
+            <div className="EditProfileSubtitle">Card 1 Information</div>
             <div>Card Type:</div>
             <select name="card_type" value={card.card_type} onChange={handleCardChange}>
             <option value="">Select</option>
@@ -724,6 +729,23 @@ function EditProfile() {
                 Add New Card
                 </button>
             </div>
+            
+            <div className="SignupFormSplit">
+            Receive promotions:
+            <input id="receivePromotions"
+                type="checkbox" 
+                name="receivePromotions"
+                checked={user.receivePromotions}
+                onChange={(e) => {setUser({
+                    email: user.email,
+                    first_name: user.first_name,
+                    last_name: user.last_name,
+                    phone_number: user.phone_number,
+                    receivePromotions: e.target.checked
+                })}}>
+            </input>
+        </div>
+
             <input type="submit" value="Save Changes" className="EditProfileSave" />
         </form>
         </div>

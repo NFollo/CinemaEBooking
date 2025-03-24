@@ -152,7 +152,7 @@ def init_routes(app, mail):
                 data = request.get_json() 
 
                 if 'card_number' in data:
-                    payment_card.card_number = str(encrypt(json['card_number']))
+                    payment_card.card_number = str(encrypt(data['card_number']))
                     payment_card.last_four = data['card_number'][-4:]
                 if 'cvc' in data:
                     payment_card.cvc = str(encrypt(data['cvc']))

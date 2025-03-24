@@ -32,6 +32,7 @@ function ViewProfile() {
     const [first_name, setFirst_name] = useState("");
     const [last_name, setLast_name] = useState("");
     const [phone_number, setPhone_number] = useState("");
+    const [receivePromotions, setReceivePromotions] = useState(false);
 
     // Home Address Info
     const [hasAddress, setHasAddress] = useState(false);
@@ -88,6 +89,8 @@ function ViewProfile() {
         setFirst_name(response.data.first_name);
         setLast_name(response.data.last_name);
         setPhone_number(response.data.phone_number);
+        setReceivePromotions(response.data.receive_promotions);
+        console.log("receivePromotions: " + receivePromotions);
 
         if (response.data.address != null) {
           //console.log(response.data.address.$oid);
@@ -237,6 +240,7 @@ function ViewProfile() {
               <div>ZIP Code: <span>{card3Zipcode}</span></div>
             </div> : ""}
 
+            <p>Receive Promotions: {receivePromotions ? "Yes" : "No"}</p>
             <button onClick={navEditProfile} className="ViewProfileEdit">Edit Profile</button>            
 
         </div>
