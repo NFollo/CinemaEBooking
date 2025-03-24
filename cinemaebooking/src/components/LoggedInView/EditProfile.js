@@ -447,7 +447,23 @@ function EditProfile() {
           },
         }));
     };
-      
+    
+    const handleDeleteCard = async (cardId, billingAddressId) => {
+        if (!window.confirm("Are you sure you want to delete this card?")) return;
+    
+        try {
+            // Delete the card (the backend will also delete billing address)
+            await axios.delete(`http://localhost:5000/paymentCards/${cardId}`);
+            console.log("Deleted card:", cardId);
+    
+            // Refresh data after deletion
+            await fetchData();
+        } catch (err) {
+            console.error("Error deleting card:", err);
+            setError("Failed to delete card.");
+        }
+    };
+    
     
 
     return (
@@ -528,6 +544,23 @@ function EditProfile() {
             <div>Country:</div>
             <input type="text" name="country" value={card.billing_address.country} onChange={handleBillingChange} />
 
+            <div style={{ marginTop: "10px" }}>
+                <button
+                    type="button"
+                    className="deleteCardButton"
+                    onClick={() =>
+                    handleDeleteCard(
+                        card.id?.$oid || card.id,
+                        card.billing_address.id?.$oid || card.billing_address.id
+                    )
+                    }
+                >
+                    Delete Card
+                </button>
+            </div>
+
+
+
 
             {card2.card_type && (
             <>
@@ -556,6 +589,22 @@ function EditProfile() {
                 <input type="text" value={card2.billing_address.zip_code} disabled />
                 <div>Country:</div>
                 <input type="text" value={card2.billing_address.country} disabled />
+
+                <div style={{ marginTop: "10px" }}>
+                <button
+                    type="button"
+                    className="deleteCardButton"
+                    onClick={() =>
+                    handleDeleteCard(
+                        card.id?.$oid || card.id,
+                        card.billing_address.id?.$oid || card.billing_address.id
+                    )
+                    }
+                >
+                    Delete Card
+                </button>
+            </div>
+
             </>
             )}
 
@@ -586,6 +635,22 @@ function EditProfile() {
                 <input type="text" value={card3.billing_address.zip_code} disabled />
                 <div>Country:</div>
                 <input type="text" value={card3.billing_address.country} disabled />
+
+                <div style={{ marginTop: "10px" }}>
+                <button
+                    type="button"
+                    className="deleteCardButton"
+                    onClick={() =>
+                    handleDeleteCard(
+                        card.id?.$oid || card.id,
+                        card.billing_address.id?.$oid || card.billing_address.id
+                    )
+                    }
+                >
+                    Delete Card
+                </button>
+                </div>
+
             </>
             )}
 
@@ -668,10 +733,11 @@ function EditProfile() {
             })}
             />
 
-            <button type="button" className="addNewCardButton" onClick={handleAddCard}>
-            Add New Card
-            </button>
-
+            <div style={{ marginTop: "10px" }}>
+                <button type="button" className="addNewCardButton" onClick={handleAddCard}>
+                Add New Card
+                </button>
+            </div>
             <input type="submit" value="Save Changes" className="EditProfileSave" />
         </form>
         </div>
