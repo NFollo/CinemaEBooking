@@ -96,7 +96,7 @@ def init_routes(app, mail):
             except Exception as err:
                 return jsonify({"error": "Failed to update user", "message": str(err)}), 500    
 
-    @app.route('/addresses/<id>', methods=['GET', 'PATCH'])
+    @app.route('/addresses/<id>', methods=['GET', 'PATCH']) # shouldn't be able to delete
     def get_address_by_id(id):
         ''' Fetch or update address by ID '''
         if request.method == 'GET':  
@@ -128,7 +128,7 @@ def init_routes(app, mail):
             except Exception as err:
                 return jsonify({"error": "Failed to update address", "message": str(err)}), 500
             
-    @app.route('/paymentCards/<id>', methods=['GET', 'PATCH'])
+    @app.route('/paymentCards/<id>', methods=['GET', 'PATCH', 'DELETE'])
     def get_payment_cards_by_customer(id):
         ''' Fetch all payment cards related to customer by customerID '''
         if request.method == 'GET': 
@@ -147,9 +147,15 @@ def init_routes(app, mail):
                 payment_card = PaymentCard.objects.get(id=id)  
                 data = request.get_json() 
 
-                for key, value in data.items():
-                    if hasattr(payment_card, key):
-                        setattr(payment_card, key, value)
+                if 'card_number' in data:
+                    payment_card.card_number = str(encrypt(json['card_number']))
+                    payment_card.last_four = data['card_number'][-4:]
+                if 'cvc' in data:
+                    payment_card.cvc = str(encrypt(data['cvc']))
+                if 'expiration_date' in data:
+                    payment_card.expiration_date = data['expiration_date']
+                if 'cardholder_name' in data:
+                    payment_card.cardholder_name = data['cardholder_name']
 
                 payment_card.save()  
 
@@ -159,7 +165,26 @@ def init_routes(app, mail):
             except PaymentCard.DoesNotExist:
                 return jsonify({"error": "Payment card not found"}), 404
             except Exception as err:
-                return jsonify({"error": "Failed to update payment card", "message": str(err)}), 500    
+                return jsonify({"error": "Failed to update payment card", "message": str(err)}), 500
+            
+        elif request.method == 'DELETE':  # Handle DELETE requests
+            '''Delete the specific payment card'''
+            try:
+                # Fetch the payment card by ID
+                payment_card = PaymentCard.objects.get(id=id)  
+                
+                # delete billing address along with payment
+                if payment_card.billing_address:
+                    billing_address = Address.object.get(id=payment_card.billing_address)
+                    billing_address.delete()
+
+                payment_card.delete()
+                return jsonify({"message": "Payment card deleted successfully"}), 200
+
+            except PaymentCard.DoesNotExist:
+                return jsonify({"error": "Payment card not found"}), 404
+            except Exception as err:
+                return jsonify({"error": "Failed to delete payment card", "message": str(err)}), 500
     
 
     @app.route('/movies', methods=['POST', 'GET']) 
