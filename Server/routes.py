@@ -132,12 +132,7 @@ def init_routes(app, mail):
             except Exception as err:
                 return jsonify({"error": "Failed to update address", "message": str(err)}), 500
             
-<<<<<<< HEAD
-    @app.route('/paymentCards/<id>', methods=['GET', 'PATCH'])
-
-=======
     @app.route('/paymentCards/<id>', methods=['GET', 'PATCH', 'DELETE'])
->>>>>>> cca24439f1c83059163bd72bb0af5614c7822936
     def get_payment_cards_by_customer(id):
         ''' Fetch all payment cards related to customer by customerID '''
         if request.method == 'GET': 
