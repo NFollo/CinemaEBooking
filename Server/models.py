@@ -54,6 +54,7 @@ class Address(me.Document):
     street = me.StringField(required=True)
     city = me.StringField(required=True)
     state = me.StringField(required=True)
+    country = me.StringField(required=True)
     zip_code = me.StringField(required=True)
     meta = {"collection": "addresses"}
 

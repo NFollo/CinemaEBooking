@@ -62,25 +62,25 @@ export function isValidRequiredForm(firstName, lastName, email, password,
  * Returns true if all address fields are complete. 
  * Returns false otherwise.
  */
-function isCompleteAddress(streetAddress, city, state, zipCode) {
-    return (streetAddress !== "" && city !== "" && state !== "" && zipCode !== "");
+function isCompleteAddress(streetAddress, city, state, country, zipCode) {
+    return (streetAddress !== "" && city !== "" && state !== "" && country !== "" && zipCode !== "");
 } // isCompleteAddress
 
 /**
  * Returns true if all address fields are empty.
  * Returns false otherwise.
  */
-function isEmptyAddress(streetAddress, city, state, zipCode) {
-    return (streetAddress === "" && city === "" && state === "" && zipCode === "");
+function isEmptyAddress(streetAddress, city, state, country, zipCode) {
+    return (streetAddress === "" && city === "" && state === "" && country === "" && zipCode === "");
 } // isEmptyAddress
 
 /**
  * Returns true if the address field is empty or is fully complete.
  * Returns false otherwise.
  */
-export function isValidAddressForm(streetAddress, city, state, zipCode) {
-    if (!isEmptyAddress(streetAddress, city, state, zipCode)
-        && !isCompleteAddress(streetAddress, city, state, zipCode))
+export function isValidAddressForm(streetAddress, city, state, country, zipCode) {
+    if (!isEmptyAddress(streetAddress, city, state, country, zipCode)
+        && !isCompleteAddress(streetAddress, city, state, country, zipCode))
     {
         alert("Please fully complete the address field, or leave blank");
         return false;
@@ -118,13 +118,13 @@ function isEmptyPaymentCard(cardType, nameOnCard, cardNumber, expirationMonth, e
  */
 export function isValidPaymentCardForm(cardType, nameOnCard, cardNumber, 
     expirationMonth, expirationYear, cvc, billingAddress, billingCity, billingState, 
-    billingZipCode) 
+    billingCountry, billingZipCode) 
 {
     // determine state of billing address fields
     const isCompleteBillingAddress = isCompleteAddress(billingAddress, billingCity, 
-        billingState, billingZipCode);
+        billingState, billingCountry, billingZipCode);
     const isEmptyBillingAddress = isEmptyAddress(billingAddress, billingCity, 
-        billingState, billingZipCode);
+        billingState, billingCountry, billingZipCode);
     
     // determine state of payment card input
     const isCompleteCard = isCompletePaymentCard(cardType, nameOnCard, cardNumber,
@@ -174,9 +174,9 @@ export function isValidPaymentCardForm(cardType, nameOnCard, cardNumber,
  * Returns -1 upon database request error.
  * Returns ObjectId of newly created Address document otherwise.
  */
-export async function createAddress(type, streetAddress, city, state, zipCode) {
+export async function createAddress(type, streetAddress, city, state, country, zipCode) {
     // determine state of address
-    const isEmpty = isEmptyAddress(streetAddress, city, state, zipCode);
+    const isEmpty = isEmptyAddress(streetAddress, city, state, country, zipCode);
 
     // return without error if form fields all empty
     if (isEmpty)
@@ -188,6 +188,7 @@ export async function createAddress(type, streetAddress, city, state, zipCode) {
         street: streetAddress,
         city: city,
         state: state,
+        country: country,
         zip_code: zipCode
     }
 
@@ -267,16 +268,16 @@ export async function createUser(firstName, lastName, email, password, phoneNumb
  * Returns ObjectId of newly created PaymentCard document otherwise.
  */
 export async function createPaymentCard(cardType, nameOnCard, cardNumber, expirationMonth, 
-    expirationYear, cvc, billingAddress, billingCity, billingState, billingZipCode, userId) 
+    expirationYear, cvc, billingAddress, billingCity, billingState, billingCountry, billingZipCode, userId) 
 {
-    const isEmptyCard = isEmptyPaymentCard(billingAddress, billingCity, billingState,
+    const isEmptyCard = isEmptyPaymentCard(billingAddress, billingCity, billingState, billingCountry,
         billingZipCode);
     // return without error if form fields all empty
     if (isEmptyCard)
         return 0;
 
     // create billing address in database and exit if error occurs
-    const billingAddressId = await createAddress('billing', billingAddress, billingCity, billingState, billingZipCode);
+    const billingAddressId = await createAddress('billing', billingAddress, billingCity, billingState, billingCountry, billingZipCode);
     if (billingAddressId === -1)
         return -1;
 

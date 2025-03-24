@@ -40,12 +40,14 @@ function SignupForm() {
     const [billingAddress, setBillingAddress] = useState('');
     const [billingCity, setBillingCity] = useState('');
     const [billingState, setBillingState] = useState('');
+    const [billingCountry, setBillingCountry] = useState('');
     const [billingZipCode, setBillingZipCode] = useState('');
 
     // state variables for address
     const [streetAddress, setStreetAddress] = useState('');
     const [city, setCity] = useState('');
     const [state, setState] = useState('');
+    const [country, setCountry] = useState('');
     const [zipCode, setZipCode] = useState('');
 
     // state variables for displaying payment card and address input fields
@@ -84,7 +86,7 @@ function SignupForm() {
         setPhoneNumber(formattedPhone);
     };
 
-    // format phone number
+    // format card number
     const formatToCardNumber = (evt) => {
         const digits = evt.target.value.replace(/\D/g, '').substring(0, 16);
         const part1 = digits.substring(0, 4);
@@ -130,12 +132,14 @@ function SignupForm() {
         setBillingAddress('');
         setBillingCity('');
         setBillingState('');
+        setBillingCountry('');
         setBillingZipCode('');
 
         // reset home address fields
         setStreetAddress('');
         setCity('');
         setState('');
+        setCountry('');
         setZipCode('');
     }
     
@@ -153,12 +157,12 @@ function SignupForm() {
             confirmPassword, phoneNumber);
 
         // ensure address is either empty or fullly complete
-        const isValidHomeAddress = isValidAddressForm(streetAddress, city, state, zipCode);
+        const isValidHomeAddress = isValidAddressForm(streetAddress, city, state, country, zipCode);
 
         // ensure payment card is either empty or fully complete with proper formatting
         const isValidPaymentCard = isValidPaymentCardForm(cardType, nameOnCard, cardNumber, 
             expirationMonth, expirationYear, cvc, billingAddress, billingCity, billingState, 
-            billingZipCode);
+            billingCountry, billingZipCode);
 
         // do not continue if form is invalid; alerts provided in respective validations
         if (!isValidRequired || !isValidHomeAddress || !isValidPaymentCard)
@@ -167,7 +171,7 @@ function SignupForm() {
         // handle home address document creation (if specified) and exit upon error
         let homeAddressId = 0;
         if (displayAddressInput) {
-            homeAddressId = await createAddress('home', streetAddress, city, state, zipCode);
+            homeAddressId = await createAddress('home', streetAddress, city, state, country, zipCode);
             if (homeAddressId === -1)
                 return;
         }
@@ -180,7 +184,7 @@ function SignupForm() {
         // handle payment card document creation and exit upon error
         if (displayCardInput) {
             const paymentCardId = await createPaymentCard(cardType, nameOnCard, cardNumber, expirationMonth, 
-                expirationYear, cvc, billingAddress, billingCity, billingState, billingZipCode, userId)
+                expirationYear, cvc, billingAddress, billingCity, billingState, billingCountry, billingZipCode, userId)
             if (paymentCardId === -1)
                 return;
         }  
@@ -396,6 +400,14 @@ function SignupForm() {
             </div>
 
             <div className="SignupFormSection">
+                Country:
+                <input name="billingCountry"
+                    type="text" 
+                    value={billingCountry} 
+                    onChange={(e) => setBillingCountry(e.target.value)}></input>
+            </div>
+
+            <div className="SignupFormSection">
                 Zip Code:
                 <input name="billingZipCode"
                     type="text" 
@@ -436,6 +448,14 @@ function SignupForm() {
                     type="text" 
                     value={state} 
                     onChange={(e) => setState(e.target.value)}></input>
+            </div>
+
+            <div className="SignupFormSection">
+                Country:
+                <input name="country"
+                    type="text" 
+                    value={country} 
+                    onChange={(e) => setCountry(e.target.value)}></input>
             </div>
 
             <div className="SignupFormSection">
