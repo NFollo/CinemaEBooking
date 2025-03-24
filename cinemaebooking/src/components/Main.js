@@ -75,8 +75,6 @@ function Main() {
 
   return (
     <div className="Main">
-      authorization: {authorization}
-      <button onClick={testButton}>testButton</button>
       <Router>
         <div className="AllRoutes">
           <Routes>
