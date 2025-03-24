@@ -79,7 +79,7 @@ function LoginForm(props) {
           <div className="LoginFormSection">
             Password:
             <input name="password"
-                type="passwored"
+                type="password"
                 value={password} 
                 onChange={(e) => setPassword(e.target.value)}
                 required></input>
