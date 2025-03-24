@@ -25,6 +25,28 @@ function EditProfile() {
             <div>Phone Number:</div>
             <input type="text"></input>
 
+            <div className="EditProfileSubtitle">Home Address</div>
+            <div className="SignupFormSection">
+                Country:
+            <input type="text"></input>
+            </div>
+            <div className="SignupFormSection">
+                State:
+            <input type="text"></input>
+            </div>
+            <div className="SignupFormSection">
+                City:
+            <input type="text"></input>
+            </div>
+            <div className="SignupFormSection">
+                Address:
+            <input type="text"></input>
+            </div>
+            <div className="SignupFormSection">
+                Zip Code:
+            <input type="number"></input>
+            </div>
+
             <div className="cardContainer">
                 <div className="cardInformationContainer">
                     <div className="EditProfileSubtitle">Card 1 Information</div>
@@ -34,7 +56,6 @@ function EditProfile() {
                     <option value="credit">Credit</option>
                     <option value="debit">Debit</option>
                     </select>
-
                     
                     <div className="SignupFormSection">
                     
@@ -90,26 +111,7 @@ function EditProfile() {
 
             </div>
 
-        <div className="SignupFormSection">
-            Country:
-          <input type="text"></input>
-          </div>
-          <div className="SignupFormSection">
-            State:
-          <input type="text"></input>
-          </div>
-          <div className="SignupFormSection">
-            City:
-          <input type="text"></input>
-          </div>
-          <div className="SignupFormSection">
-            Address:
-          <input type="text"></input>
-          </div>
-          <div className="SignupFormSection">
-            Zip Code:
-          <input type="number"></input>
-          </div>
+        
 
           <input type="submit" value="Save Changes" onClick={navViewProfile} className="EditProfileSave"></input>
             

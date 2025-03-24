@@ -1,13 +1,15 @@
 import "./ViewProfile.css";
 import { useNavigate } from 'react-router-dom';
+import { useState } from "react";
+import Cookies from "js-cookie";
 
 function ViewProfile() {
 
     // do not use this data as a reference please change the names of all the variables as necessary
-    const user = {
+    const baseUser = {
       username: "Spongebob Squarepants",
       phone: "111-222-3333",
-      email: "sample@domain.com",
+      email: Cookies.get("email"),
       password: "myPassword454",
 
       cardtype: "Credit",
@@ -24,6 +26,8 @@ function ViewProfile() {
       zipcode: 12345
     };
 
+    const [user, setUser] = useState(baseUser);
+
     const navigate = useNavigate();
     const navEditProfile = () => {
         navigate("/editprofile");
@@ -39,7 +43,14 @@ function ViewProfile() {
             <div>Email: <span>{user.email}</span></div>
             <div>Username: <span>{user.username}</span></div>
             <div>Phone Number: <span>{user.phone}</span></div>            
-            <div>Phone Number: <span>********</span></div>
+            <div>Password: <span>********</span></div>
+
+            <div className="ViewProfileSubtitle">Home Address</div>
+            <div>Country: <span>{user.Country}</span></div>
+            <div>State: <span>{user.state}</span></div>
+            <div>City: <span>************{user.city}</span></div>
+            <div>Address: <span>{user.addr}</span></div>
+            <div>ZIP Code: <span>{user.zipcode}</span></div>
 
             <div className="ViewProfileSubtitle">Card 1 Information</div>
             <div>Card Type: <span>{user.cardtype}</span></div>
