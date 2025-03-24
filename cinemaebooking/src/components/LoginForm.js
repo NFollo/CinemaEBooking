@@ -20,7 +20,7 @@ function LoginForm(props) {
       }
        
       const passwordsMatch = await checkPasswordMatch(email, password);
-      
+
       // error handling
       if (passwordsMatch === -1) {
         return;
