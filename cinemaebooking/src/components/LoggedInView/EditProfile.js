@@ -348,7 +348,7 @@ function EditProfile() {
 
             // updates cards
             if (card.id) {
-                await axios.patch(`http://localhost:5000/paymentCards/${card.id.$oid}`, {
+                await axios.patch(`http://localhost:5000/paymentCards/${card.id}`, {
                     card_type: card.card_type,
                     name_on_card: card.name_on_card,
                     card_number: card.card_number,
@@ -361,8 +361,10 @@ function EditProfile() {
 
             
 
+            
             await fetchData();
-            await axios.post("http://localhost:5000/sendProfileChangedEmail", {
+            
+            await axios.post('http://localhost:5000/sendProfileChangedEmail', {
                 email: user.email,
             });
 
