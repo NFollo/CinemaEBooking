@@ -36,7 +36,7 @@ def init_routes(app, mail):
                 users_list = [user.to_mongo().to_dict() for user in users]  # Convert to JSON
                 return jsonify(users_list), 200
             except Exception as err:
-                    return jsonify({"error": "Failed to fetch movies", "message": str(err)}), 500
+                return jsonify({"error": "Failed to fetch users", "message": str(err)}), 500
             
         if request.method == 'POST': # Handle POST requests
             '''
@@ -95,6 +95,72 @@ def init_routes(app, mail):
                 return jsonify({"error": "User not found"}), 404
             except Exception as err:
                 return jsonify({"error": "Failed to update user", "message": str(err)}), 500    
+
+    @app.route('/addresses/<id>', methods=['GET', 'PATCH'])
+    def get_address_by_id(id):
+        ''' Fetch or update address by ID '''
+        if request.method == 'GET':  
+            try:
+                address = Address.objects.get(id=id)  
+                address_dict = address.to_mongo().to_dict()  
+                return jsonify(address_dict), 200
+            except Address.DoesNotExist:
+                return jsonify({"error": "Address not found"}), 404
+            except Exception as err:
+                return jsonify({"error": "Failed to fetch address", "message": str(err)}), 500
+
+        elif request.method == 'PATCH':  # Handle PATCH requests
+            try:
+                address = Address.objects.get(id=id)  
+                data = request.get_json()  
+
+                for key, value in data.items():
+                    if hasattr(address, key):
+                        setattr(address, key, value)
+
+                address.save()  # Save the updated address
+
+                address_dict = address.to_mongo().to_dict()  # Convert to JSON
+                return jsonify(address_dict), 200
+
+            except Address.DoesNotExist:
+                return jsonify({"error": "Address not found"}), 404
+            except Exception as err:
+                return jsonify({"error": "Failed to update address", "message": str(err)}), 500
+            
+    @app.route('/paymentCards/<id>', methods=['GET', 'PATCH'])
+    def get_payment_cards_by_customer(id):
+        ''' Fetch all payment cards related to customer by customerID '''
+        if request.method == 'GET': 
+            try:
+                # Fetch all payment cards for the customerid
+                payment_cards = PaymentCard.objects(customer=id)  # Fetch all cards for the customer
+                payment_cards_list = [card.to_mongo().to_dict() for card in payment_cards] 
+                return jsonify(payment_cards_list), 200
+            except Exception as err:
+                return jsonify({"error": "Failed to fetch payment cards", "message": str(err)}), 500
+
+        elif request.method == 'PATCH':  # Handle PATCH requests
+            '''Update the specific payment card'''
+            try:
+                # Fetch the payment card by ID
+                payment_card = PaymentCard.objects.get(id=id)  
+                data = request.get_json() 
+
+                for key, value in data.items():
+                    if hasattr(payment_card, key):
+                        setattr(payment_card, key, value)
+
+                payment_card.save()  
+
+                payment_card_dict = payment_card.to_mongo().to_dict()  # Convert to JSON
+                return jsonify(payment_card_dict), 200 #
+
+            except PaymentCard.DoesNotExist:
+                return jsonify({"error": "Payment card not found"}), 404
+            except Exception as err:
+                return jsonify({"error": "Failed to update payment card", "message": str(err)}), 500    
+            
 
     @app.route('/movies', methods=['POST', 'GET']) 
     def movies(): 
