@@ -55,6 +55,7 @@ function ViewProfile() {
     const [cardCity1, setCardCity1] = useState("");
     const [cardAddress1, setCardAddress1] = useState("");
     const [cardZipcode1, setCardZipcode1] = useState("");
+    const [cardLast4, setCardLast4] = useState("");
 
     // Include all requests and set values here
     useEffect(() => {
@@ -86,6 +87,7 @@ function ViewProfile() {
           setCardName1(getCards.data[0].name_on_card);
           setCardMonth1(getCards.data[0].month);
           setCardYear1(getCards.data[0].year);
+          setCardLast4(getCards.data[0].last_four)
           let cardAddr = await axios.get('http://localhost:5000/addresses/' + getCards.data[0].billing_address.$oid);
           setCardCountry1(cardAddr.data.country);
           setCardState1(cardAddr.data.state);
@@ -108,10 +110,10 @@ function ViewProfile() {
 
     const addressField = 
     <div>
-      <div>Country: <span>{country}</span></div>
-      <div>State: <span>{state}</span></div>
-      <div>City: <span>{city}</span></div>
       <div>Address: <span>{address}</span></div>
+      <div>City: <span>{city}</span></div>
+      <div>State: <span>{state}</span></div>
+      <div>Country: <span>{country}</span></div>
       <div>ZIP Code: <span>{zipcode}</span></div>
     </div>;
     const noAddressField = 
@@ -140,7 +142,7 @@ function ViewProfile() {
               <div className="ViewProfileSubtitle">Card 1 Information</div>
               <div>Card Type: <span>{cardType1}</span></div>
               <div>Name on Card: <span>{cardName1}</span></div>
-              <div>Card Number: <span>****************</span></div>
+              <div>Card Number: <span>**** **** **** {cardLast4}</span></div>
               <div>Expiration Date: <span>{cardMonth1 + " " +  cardYear1}</span></div>
               <div>CVC: <span>***</span></div>
               <div className="ViewProfileSubtitle">Card 1 Billing Address</div>
