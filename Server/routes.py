@@ -129,6 +129,7 @@ def init_routes(app, mail):
                 return jsonify({"error": "Failed to update address", "message": str(err)}), 500
             
     @app.route('/paymentCards/<id>', methods=['GET', 'PATCH'])
+
     def get_payment_cards_by_customer(id):
         ''' Fetch all payment cards related to customer by customerID '''
         if request.method == 'GET': 
