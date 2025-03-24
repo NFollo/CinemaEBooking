@@ -84,8 +84,12 @@ def init_routes(app, mail):
                 # Update the user's fields with the provided data
                 for key, value in data.items():
                     if hasattr(user, key):
-                        setattr(user, key, value)
-
+                        if key == 'password':  # Encrypt the password if it's being updated
+                            hashed_password = encrypt(value)  # Use the encrypt function
+                            setattr(user, key, str(hashed_password))  # Store the hashed password as a string
+                        else:
+                            setattr(user, key, value)
+                            
                 user.save()
 
                 user_dict = user.to_mongo().to_dict() 
