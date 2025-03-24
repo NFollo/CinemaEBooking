@@ -47,6 +47,7 @@ export function isValidRequiredForm(firstName, lastName, email, password,
     }
     else if (password.length < 8 && confirmPassword.length < 8) {
         alert("Password must be equal or greater than 8 characters")
+        return false;
     }
     // ensure phone number is valid
     else if (!isValidPhoneNumber) {
@@ -137,7 +138,7 @@ export function isValidPaymentCardForm(cardType, nameOnCard, cardNumber,
         return true;
 
     // partilly complete form rejected
-    if (!isCompleteCard || cardType === 'none') {
+    if (!isCompleteCard || cardType === 'none' || expirationMonth === 'none' || expirationYear === 'none') {
         alert("Please fully complete the payment card field, or leave blank");
         return false;
     }

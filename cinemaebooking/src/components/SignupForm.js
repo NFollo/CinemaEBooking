@@ -155,18 +155,20 @@ function SignupForm() {
         // ensure all required fields are complete 
         const isValidRequired = isValidRequiredForm(firstName, lastName, email, password,
             confirmPassword, phoneNumber);
+        if (!isValidRequired)
+            return;
 
         // ensure address is either empty or fullly complete
         const isValidHomeAddress = isValidAddressForm(streetAddress, city, state, country, zipCode);
+        if (!isValidHomeAddress)
+            return;
 
         // ensure payment card is either empty or fully complete with proper formatting
         const isValidPaymentCard = isValidPaymentCardForm(cardType, nameOnCard, cardNumber, 
             expirationMonth, expirationYear, cvc, billingAddress, billingCity, billingState, 
             billingCountry, billingZipCode);
-
-        // do not continue if form is invalid; alerts provided in respective validations
-        if (!isValidRequired || !isValidHomeAddress || !isValidPaymentCard)
-            return;
+        if (!isValidPaymentCard)
+            return
 
         // handle home address document creation (if specified) and exit upon error
         let homeAddressId = 0;
@@ -266,7 +268,7 @@ function SignupForm() {
 
             <div>Password:<span>*</span></div>
             <input name="password"
-                type="passwored"
+                type="password"
                 value={password} 
                 onChange={(e) => setPassword(e.target.value)}
                 required></input>
@@ -371,7 +373,7 @@ function SignupForm() {
                 <input name="cvc"
                     type="password" 
                     value={cvc} 
-                    maxLength={4}
+                    maxLength={3}
                     onChange={(e) => setCVC(e.target.value)}></input>
             </div>
             
