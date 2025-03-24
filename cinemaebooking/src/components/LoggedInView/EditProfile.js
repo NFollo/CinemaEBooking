@@ -9,8 +9,8 @@ function EditProfile() {
     const navigate = useNavigate();
     const [error, setError] = useState(null);
     const [cards, setCards] = useState([]);
-    // const [oldPassword, setOldPassword] = useState("");
-    // const [newPassword, setNewPassword] = useState("");
+     const [oldPassword, setOldPassword] = useState("");
+     const [newPassword, setNewPassword] = useState("");
 
     // general info
 
@@ -304,23 +304,24 @@ function EditProfile() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
+        
         try {
             // updates user
             await axios.patch(`http://localhost:5000/users/${user.email}`, {
                 first_name: user.first_name,
                 last_name: user.last_name,
                 phone_number: user.phone_number,
-                receive_promotions: user.receivePromotions
+                receive_promotions: user.receivePromotions,
+                password: newPassword,
             });
-
+            /*
             // rest password
-            // await axios.post('http://localhost:5000/resetPassword', {
-            //     email: user.email,
-            //     old_password: oldPassword,
-            //     new_password: newPassword,
-            //   });              
-
+             await axios.post('http://localhost:5000/resetPassword', {
+                 email: user.email,
+                 old_password: oldPassword,
+                 new_password: newPassword,
+               });              
+            */
             // updates home address
             if (address.id) {
                 await axios.patch(`http://localhost:5000/addresses/${address.id.$oid}`, address);
@@ -479,7 +480,7 @@ function EditProfile() {
             <input type="text" name="phone_number" value={user.phone_number} onChange={handleUserChange} />
 
             {/* change password */}
-            {/* <div className="EditProfileSubtitle">Change Password</div>
+             <div className="EditProfileSubtitle">Change Password</div>
             <div>Current Password:</div>
             <input
             type="password"
@@ -493,7 +494,7 @@ function EditProfile() {
             name="newPassword"
             value={newPassword}
             onChange={(e) => setNewPassword(e.target.value)}
-            /> */}
+            />
 
             {/* home address */}
             <div className="EditProfileSubtitle">Home Address</div>
