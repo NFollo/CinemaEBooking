@@ -46,6 +46,9 @@ function Main() {
   const logout = () => {
     Cookies.set("authorization", "false", { expires: 1, path: "/" });
     setAuthorization(Cookies.get("authorization"));
+    if (Cookies.get("email")) {
+      Cookies.set("email", "0", { expires: 0, path: "/" });
+    }
   };
 
   // This is for the testing header.  Clicking the button cycles between unauthorized, customer, and admin

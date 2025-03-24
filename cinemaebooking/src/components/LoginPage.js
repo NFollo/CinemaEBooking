@@ -9,7 +9,7 @@ function LoginPage(props) {
       <Link to={'/'}>
         <button className="LoginPageHome">Home</button>
       </Link>  
-      <LoginSignupCard form={<LoginForm setAuthorization={props.setAuthorization}/>} /> 
+      <LoginSignupCard form={<LoginForm setAuthorization={props.setAuthorization} />} /> 
     </div>
   );
 }
