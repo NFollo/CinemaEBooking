@@ -5,11 +5,13 @@
  */
 export async function checkPasswordMatch(email, password) {
     const cipherPassword = await getStoredPassword(email);
+    console.log("first call: " + cipherPassword)
     if (cipherPassword === -1) {
         return -1;
     }
 
-    const match = checkEncryptedMatch(password, cipherPassword);
+    const match = await checkEncryptedMatch(password, cipherPassword);
+    console.log("second call: " + match)
     return match;
 } // getStoredPassword
 
@@ -26,11 +28,16 @@ async function getStoredPassword(email) {
         body: JSON.stringify({email: email}),
     })
     .then((res) => res.json())                                    // parse JSON response
-    .then((data) => {cipherPassword = data.encrypted_password;})  // assign return value
+    .then((data) => {cipherPassword = data.encrypted_password;
+        if (cipherPassword === undefined) {
+            alert("User not found. Are you sure you have an account?")
+            cipherPassword = -1;
+        }
+    })  // assign return value
     .catch((error) => {
         console.error("Error retrieving password: ", error);
         alert("Error validating password");
-        return -1;
+        cipherPassword = -1;
     });
 
     return cipherPassword;
@@ -55,7 +62,7 @@ async function checkEncryptedMatch(plaintext, ciphertext) {
     .catch((error) => {
         console.error("Error validating password match: ", error);
         alert("Error validating password");
-        return -1;
+        result = -1;
     });
 
     return result;
