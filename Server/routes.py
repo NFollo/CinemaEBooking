@@ -175,7 +175,7 @@ def init_routes(app, mail):
                 
                 # delete billing address along with payment
                 if payment_card.billing_address:
-                    billing_address = Address.object.get(id=payment_card.billing_address)
+                    billing_address = Address.objects.get(id=payment_card.billing_address.id)
                     billing_address.delete()
 
                 payment_card.delete()
