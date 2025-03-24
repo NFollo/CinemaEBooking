@@ -201,14 +201,14 @@ function SignupForm() {
             // verify the code
             var response = await axios.post('http://localhost:5000/verifyCode', { email, code });
 
-            if (response.status == 200) {
+            if (response.status === 200) {
                 let verified_user = true
                 await axios.patch(`http://localhost:5000/users/${email}`, {verified_user});
                 // Navigate after being confirmed form here
                 navigate("/login");
             }
           } catch (error) {
-            if (error.response.status == 400)
+            if (error.response.status === 400)
                 alert('Invalid or expired code');
             else 
                 alert('Error verifying code: ' + error.response.data.error);
