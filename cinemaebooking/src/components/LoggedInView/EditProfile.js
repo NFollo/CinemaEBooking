@@ -51,6 +51,8 @@ function EditProfile() {
             type: "billing",
         },
     });
+    const [card2, setCard2] = useState(null);
+    const [card3, setCard3] = useState(null);
 
   
 
@@ -155,34 +157,80 @@ function EditProfile() {
         const getCards = await axios.get('http://localhost:5000/paymentCards/' + (data._id.$oid || data._id));
         const cards = getCards.data;
         setCards(cards);
-            if (cards.length >= 1) {
-                const firstCard = cards[0];
-                const billingAddrRes = await axios.get('http://localhost:5000/addresses/' + (firstCard.billing_address.$oid || firstCard.billing_address._id));
-                const billingAddr = billingAddrRes.data;
-
-                setCard({
-                    id: firstCard._id || firstCard.id,
-                    card_type: firstCard.card_type,
-                    name_on_card: firstCard.name_on_card,
+        if (cards.length >= 1) {
+            const getBillingAddress = async (cardObj) => {
+                const res = await axios.get('http://localhost:5000/addresses/' + (cardObj.billing_address.$oid || cardObj.billing_address._id));
+                return res.data;
+            };
+        
+            const firstCard = cards[0];
+            const billing1 = await getBillingAddress(firstCard);
+            setCard({
+                id: firstCard._id || firstCard.id,
+                card_type: firstCard.card_type,
+                name_on_card: firstCard.name_on_card,
+                card_number: "",
+                month: firstCard.month,
+                year: firstCard.year,
+                cvc: "",
+                billing_address: {
+                    id: billing1._id,
+                    street: billing1.street,
+                    city: billing1.city,
+                    state: billing1.state,
+                    zip_code: billing1.zip_code,
+                    country: billing1.country,
+                    type: billing1.type,
+                },
+            });
+        
+            if (cards.length >= 2) {
+                const secondCard = cards[1];
+                const billing2 = await getBillingAddress(secondCard);
+                setCard2({
+                    id: secondCard._id,
+                    card_type: secondCard.card_type,
+                    name_on_card: secondCard.name_on_card,
                     card_number: "",
-                    month: firstCard.month,
-                    year: firstCard.year,
+                    month: secondCard.month,
+                    year: secondCard.year,
                     cvc: "",
                     billing_address: {
-                        id: billingAddr._id,
-                        street: billingAddr.street || "",
-                        city: billingAddr.city || "",
-                        state: billingAddr.state || "",
-                        zip_code: billingAddr.zip_code || "",
-                        country: billingAddr.country || "",
-                        type: billingAddr.type || "billing",
+                        id: billing2._id,
+                        street: billing2.street,
+                        city: billing2.city,
+                        state: billing2.state,
+                        zip_code: billing2.zip_code,
+                        country: billing2.country,
+                        type: billing2.type,
                     },
                 });
             }
-
-            
-
-            
+        
+            if (cards.length >= 3) {
+                const thirdCard = cards[2];
+                const billing3 = await getBillingAddress(thirdCard);
+                setCard3({
+                    id: thirdCard._id,
+                    card_type: thirdCard.card_type,
+                    name_on_card: thirdCard.name_on_card,
+                    card_number: "",
+                    month: thirdCard.month,
+                    year: thirdCard.year,
+                    cvc: "",
+                    billing_address: {
+                        id: billing3._id,
+                        street: billing3.street,
+                        city: billing3.city,
+                        state: billing3.state,
+                        zip_code: billing3.zip_code,
+                        country: billing3.country,
+                        type: billing3.type,
+                    },
+                });
+            }
+        }
+          
         } catch (err) {
         console.error("Failed to fetch user data:", err);
         setError("Failed to fetch user data.");
@@ -218,6 +266,38 @@ function EditProfile() {
         },
         }));
     };
+
+    const handleCard2Change = (e) => {
+        const { name, value } = e.target;
+        setCard2((prev) => ({ ...prev, [name]: value }));
+    };
+    
+    const handleBilling2Change = (e) => {
+        const { name, value } = e.target;
+        setCard2((prev) => ({
+            ...prev,
+            billing_address: {
+                ...prev.billing_address,
+                [name]: value,
+            },
+        }));
+    };
+    
+    const handleCard3Change = (e) => {
+        const { name, value } = e.target;
+        setCard3((prev) => ({ ...prev, [name]: value }));
+    };
+    
+    const handleBilling3Change = (e) => {
+        const { name, value } = e.target;
+        setCard3((prev) => ({
+            ...prev,
+            billing_address: {
+                ...prev.billing_address,
+                [name]: value,
+            },
+        }));
+    };    
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -468,6 +548,104 @@ function EditProfile() {
                 </button>
             </div>
 
+            {card2 && (
+            <>
+                <div className="EditProfileSubtitle">Card 2 Information</div>
+                <div>Card Type:</div>
+                <select name="card_type" value={card2.card_type} onChange={handleCard2Change}>
+                <option value="">Select</option>
+                <option value="credit">Credit</option>
+                <option value="debit">Debit</option>
+                </select>
+
+                <div>Name on Card:</div>
+                <input type="text" name="name_on_card" value={card2.name_on_card} onChange={handleCard2Change} />
+                <div>Card Number:</div>
+                <input type="text" name="card_number" value={card2.card_number} onChange={handleCard2Change} />
+                <div>Expiration Month:</div>
+                <input type="text" name="month" value={card2.month} onChange={handleCard2Change} />
+                <div>Expiration Year:</div>
+                <input type="text" name="year" value={card2.year} onChange={handleCard2Change} />
+                <div>CVC:</div>
+                <input type="text" name="cvc" value={card2.cvc} onChange={handleCard2Change} />
+
+                <div className="EditProfileSubtitle">Billing Address (Card 2)</div>
+                <div>Street:</div>
+                <input type="text" name="street" value={card2.billing_address.street} onChange={handleBilling2Change} />
+                <div>City:</div>
+                <input type="text" name="city" value={card2.billing_address.city} onChange={handleBilling2Change} />
+                <div>State:</div>
+                <input type="text" name="state" value={card2.billing_address.state} onChange={handleBilling2Change} />
+                <div>Zip Code:</div>
+                <input type="text" name="zip_code" value={card2.billing_address.zip_code} onChange={handleBilling2Change} />
+                <div>Country:</div>
+                <input type="text" name="country" value={card2.billing_address.country} onChange={handleBilling2Change} />
+
+                <div style={{ marginTop: "10px" }}>
+                <button
+                    type="button"
+                    className="deleteCardButton"
+                    onClick={() =>
+                    handleDeleteCard(
+                        card2.id?.$oid || card2.id,
+                        card2.billing_address.id?.$oid || card2.billing_address.id
+                    )
+                    }
+                >
+                    Delete Card 2
+                </button>
+                </div>
+            </>
+            )}
+            {card3 && (
+            <>
+                <div className="EditProfileSubtitle">Card 3 Information</div>
+                <div>Card Type:</div>
+                <select name="card_type" value={card3.card_type} onChange={handleCard3Change}>
+                <option value="">Select</option>
+                <option value="credit">Credit</option>
+                <option value="debit">Debit</option>
+                </select>
+
+                <div>Name on Card:</div>
+                <input type="text" name="name_on_card" value={card3.name_on_card} onChange={handleCard3Change} />
+                <div>Card Number:</div>
+                <input type="text" name="card_number" value={card3.card_number} onChange={handleCard3Change} />
+                <div>Expiration Month:</div>
+                <input type="text" name="month" value={card3.month} onChange={handleCard3Change} />
+                <div>Expiration Year:</div>
+                <input type="text" name="year" value={card3.year} onChange={handleCard3Change} />
+                <div>CVC:</div>
+                <input type="text" name="cvc" value={card3.cvc} onChange={handleCard3Change} />
+
+                <div className="EditProfileSubtitle">Billing Address (Card 3)</div>
+                <div>Street:</div>
+                <input type="text" name="street" value={card3.billing_address.street} onChange={handleBilling3Change} />
+                <div>City:</div>
+                <input type="text" name="city" value={card3.billing_address.city} onChange={handleBilling3Change} />
+                <div>State:</div>
+                <input type="text" name="state" value={card3.billing_address.state} onChange={handleBilling3Change} />
+                <div>Zip Code:</div>
+                <input type="text" name="zip_code" value={card3.billing_address.zip_code} onChange={handleBilling3Change} />
+                <div>Country:</div>
+                <input type="text" name="country" value={card3.billing_address.country} onChange={handleBilling3Change} />
+
+                <div style={{ marginTop: "10px" }}>
+                <button
+                    type="button"
+                    className="deleteCardButton"
+                    onClick={() =>
+                    handleDeleteCard(
+                        card3.id?.$oid || card3.id,
+                        card3.billing_address.id?.$oid || card3.billing_address.id
+                    )
+                    }
+                >
+                    Delete Card 3
+                </button>
+                </div>
+            </>
+            )}
 
             <div className="EditProfileSubtitle">Add New Card</div>
 
