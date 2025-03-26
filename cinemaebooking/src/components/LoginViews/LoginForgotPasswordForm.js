@@ -3,7 +3,7 @@ import { Link} from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-function LoginForgotPassWordForm() {
+function LoginForgotPasswordForm() {
 
     const [hasSent, setHasSent] = useState(0);
     const [PW1, setPW1] = useState("");
@@ -198,4 +198,4 @@ function LoginForgotPassWordForm() {
 );
 }
   
-export default LoginForgotPassWordForm;
+export default LoginForgotPasswordForm;

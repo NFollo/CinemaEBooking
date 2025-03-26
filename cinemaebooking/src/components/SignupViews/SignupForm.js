@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { isValidRequiredForm, isValidAddressForm, isValidPaymentCardForm, 
     createAddress, createUser, createPaymentCard } 
-    from '../applicationLogic/SignupHandlers';
+    from '../../applicationLogic/SignupHandlers';
 import axios from "axios";
 
 

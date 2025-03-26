@@ -1,6 +1,6 @@
 import "./ConfirmationPage.css";
 import { Link } from 'react-router-dom';
-import LoginSignupCard from "./LoginSignupCard";
+import LoginSignupCard from "../LoginViews/LoginSignupCard";
 import ConfirmationForm from "./ConfirmationForm";
 
 function ConfirmationPage() {

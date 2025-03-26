@@ -1,31 +1,40 @@
 import './Main.css';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import NavBar from './NavBar';
-import TitleBody from './TitleBody';
-import MainFeatured from './MainFeatured';
-import ComingSoon from './ComingSoon';
-import LoginPage from './LoginPage';
-import SignupPage from './SignupPage';
-import ConfirmationPage from './ConfirmationPage';
-import SearchPage from './SearchPage/SearchPage';
-import EditProfile from './LoggedInView/EditProfile';
-import LoggedNavBar from './LoggedInView/LoggedNavBar';
-import ViewProfile from './LoggedInView/ViewProfile';
-import BuyTicketsPage from './BuyTicketsPage';
-import SeatSelection from './SeatSelection';
-import AdminNavBar from './AdminViews/AdminNavBar';
-import ManageUsers from './AdminViews/ManageUsers';
-import ManageMovies from './AdminViews/ManageMovies';
-import ManagePromotions from './AdminViews/ManagePromotions';
-import AdminEditProfile from './AdminViews/AdminEditProfile';
-import EditMovie from './AdminViews/EditMovie';
-import MovieInfoPage from './MovieInfoPage';
-import CheckoutPage from './CheckoutPage';
-import OrderConfirmation from './OrderConfrrmation'
-import EditPromotions from './AdminViews/EditPromotions';
-import CurrentlyRunning from './CurrentlyRunning';
-import LoginForgotPassword from './LoginForgotPassword';
+
+import AdminEditProfile from "./AdminViews/AdminEditProfile";
+import EditMovie from "./AdminViews/EditMovie";
+import EditPromotions from "./AdminViews/EditPromotions";
+import ManageMovies from "./AdminViews/ManageMovies";
+import ManagePromotions from "./AdminViews/ManagePromotions";
+import ManageUsers from "./AdminViews/ManageUsers";
+
+import BuyTicketsPage from "./BookingViews/BuyTicketsPage";
+import CheckoutPage from "./BookingViews/CheckoutPage";
+import OrderConfirmation from "./BookingViews/OrderConfirmation";
+import SeatSelection from "./BookingViews/SeatSelection";
+
+import ComingSoon from "./HomePageViews/ComingSoon";
+import CurrentlyRunning from "./HomePageViews/CurrentlyRunning";
+import MainFeatured from "./HomePageViews/MainFeatured";
+import TitleBody from "./HomePageViews/TitleBody";
+
+import EditProfile from "./LoggedInViews/EditProfile";
+import ViewProfile from "./LoggedInViews/ViewProfile";
+
+import LoginForgotPassword from "./LoginViews/LoginForgotPassword";
+import LoginPage from "./LoginViews/LoginPage";
+
+import AdminNavBar from "./NavBarViews/AdminNavBar";
+import LoggedNavBar from "./NavBarViews/LoggedNavBar";
+import NavBar from "./NavBarViews/NavBar";
+
+import MovieInfoPage from "./SearchViews/MovieInfoPage";
+import SearchPage from "./SearchViews/SearchPage";
+
+import ConfirmationPage from "./SignupViews/ConfirmationPage";
+import SignupPage from "./SignupViews/SignupPage";
+
 import Cookies from "js-cookie";
 
 
@@ -81,7 +90,9 @@ function Main() {
             <Route exact path='/' 
               element={
                 <div>
-                  {authorization === "admin" ? <AdminNavBar onSearch={onSearch} input={input} clearInput={clearInput} logout={logout}/> : (authorization === "customer" ? <LoggedNavBar onSearch={onSearch} logout={logout} input={input} clearInput={clearInput}/> : <NavBar onSearch={onSearch} input={input} clearInput={clearInput}/>)}
+                  {authorization === "admin" ? <AdminNavBar onSearch={onSearch} input={input} clearInput={clearInput} logout={logout}/> 
+                    : (authorization === "customer" ? <LoggedNavBar onSearch={onSearch} logout={logout} input={input} clearInput={clearInput}/> 
+                    : <NavBar onSearch={onSearch} input={input} clearInput={clearInput}/>)}
                   <TitleBody />
                   <MainFeatured />
                   <CurrentlyRunning />
@@ -125,18 +136,6 @@ function Main() {
                 </div>
               } 
             />
-            <Route exact path='/loggedin' 
-              element={
-                <div>
-                  { (authorization === "customer" || authorization === "admin") ? "" : <Navigate to="/"></Navigate>}  
-                  <LoggedNavBar onSearch={onSearch} logout={logout} input={input} clearInput={clearInput}/>
-                  <TitleBody />
-                  <MainFeatured />
-                  <CurrentlyRunning />
-                  <ComingSoon />
-                </div>
-              } 
-            />
             <Route exact path='/viewprofile' 
               element={
                 <div>
@@ -152,18 +151,6 @@ function Main() {
                   {(authorization === "admin" || authorization === "customer") ? "" : <Navigate to="/"></Navigate>}  
                   <LoggedNavBar onSearch={onSearch} logout={logout} input={input} clearInput={clearInput}/>
                   <EditProfile />
-                </div>
-              } 
-            />
-            <Route exact path='/adminhome' 
-              element={
-                <div>
-                  {authorization === "admin" ? "" : <Navigate to="/"></Navigate>}  
-                  <AdminNavBar onSearch={onSearch} logout={logout} input={input} clearInput={clearInput}/>
-                  <TitleBody />
-                  <MainFeatured />
-                  <CurrentlyRunning />
-                  <ComingSoon />
                 </div>
               } 
             />

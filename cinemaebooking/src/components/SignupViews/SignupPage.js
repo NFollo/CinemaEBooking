@@ -1,6 +1,6 @@
 import "./SignupPage.css";
 import { Link } from 'react-router-dom';
-import LoginSignupCard from './LoginSignupCard';
+import LoginSignupCard from '../LoginViews/LoginSignupCard';
 import SignupForm from "./SignupForm";
 
 function SignupPage() {

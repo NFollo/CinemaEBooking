@@ -1,9 +1,10 @@
-import "../NavBar.css";
+import "./NavBar.css";
 import { useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import { CgProfile } from "react-icons/cg";
 import createAcc from "../../img/create-acc.png";
 import login from "../../img/login.png";
+import editFunc from "../../img/edit.png";
 import { Link, useNavigate } from 'react-router-dom';
 // import user from "../img/user.png"; 
 // import edit from "../img/edit.png";
@@ -19,7 +20,7 @@ function DropdownItem({ img, text }) {
   );
 }
 
-function LoggedNavBar({onSearch, input, clearInput, logout}) {
+function AdminNavBar({onSearch, input, clearInput, logout}) {
   const [openMenu, setOpenMenu] = useState(false);
   
   const navigate = useNavigate();
@@ -61,6 +62,21 @@ function LoggedNavBar({onSearch, input, clearInput, logout}) {
             <CgProfile size={28} className="profileIcon" />
           </div>
           <ul className={`dropdown-menu ${openMenu ? "active" : ""}`}>
+            <Link to={'/manageusers'}>
+              <button className="signUp">
+                <DropdownItem img={editFunc} text="Manage Users" />
+              </button>
+            </Link>
+            <Link to={'/managemovies'}>
+              <button className="signUp">
+                <DropdownItem img={editFunc} text="Manage Movies" />
+              </button>
+            </Link>
+            <Link to={'/managepromotions'}>
+              <button className="signUp">
+                <DropdownItem img={editFunc} text="Manage Promotions" />
+              </button>
+            </Link>
             <Link to={'/viewprofile'}>
               <button className="signUp">
                 <DropdownItem img={createAcc} text="View Profile" />
@@ -88,4 +104,4 @@ function LoggedNavBar({onSearch, input, clearInput, logout}) {
   );
 }
 
-export default LoggedNavBar;
+export default AdminNavBar;

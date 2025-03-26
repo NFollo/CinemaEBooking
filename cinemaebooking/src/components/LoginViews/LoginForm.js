@@ -1,7 +1,7 @@
 import "./LoginForm.css";
 import { Link, useNavigate } from 'react-router-dom';
 import { useState } from "react";
-import { checkPasswordMatch, getUserPrivilege } from "../applicationLogic/LoginHandlers"
+import { checkPasswordMatch, getUserPrivilege } from "../../applicationLogic/LoginHandlers"
 import Cookies from "js-cookie";
 
 function LoginForm(props) {

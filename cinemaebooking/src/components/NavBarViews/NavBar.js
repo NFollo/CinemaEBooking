@@ -1,10 +1,9 @@
-import "../NavBar.css";
+import "./NavBar.css";
 import { useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import { CgProfile } from "react-icons/cg";
 import createAcc from "../../img/create-acc.png";
 import login from "../../img/login.png";
-import editFunc from "../../img/edit.png";
 import { Link, useNavigate } from 'react-router-dom';
 // import user from "../img/user.png"; 
 // import edit from "../img/edit.png";
@@ -20,7 +19,7 @@ function DropdownItem({ img, text }) {
   );
 }
 
-function AdminNavBar({onSearch, input, clearInput, logout}) {
+function NavBar({onSearch, input, clearInput}) {
   const [openMenu, setOpenMenu] = useState(false);
   
   const navigate = useNavigate();
@@ -62,34 +61,15 @@ function AdminNavBar({onSearch, input, clearInput, logout}) {
             <CgProfile size={28} className="profileIcon" />
           </div>
           <ul className={`dropdown-menu ${openMenu ? "active" : ""}`}>
-            <Link to={'/manageusers'}>
+            
+            <Link to={'/signUp'}>
               <button className="signUp">
-                <DropdownItem img={editFunc} text="Manage Users" />
+                <DropdownItem img={createAcc} text="Sign Up" />
               </button>
             </Link>
-            <Link to={'/managemovies'}>
-              <button className="signUp">
-                <DropdownItem img={editFunc} text="Manage Movies" />
-              </button>
-            </Link>
-            <Link to={'/managepromotions'}>
-              <button className="signUp">
-                <DropdownItem img={editFunc} text="Manage Promotions" />
-              </button>
-            </Link>
-            <Link to={'/viewprofile'}>
-              <button className="signUp">
-                <DropdownItem img={createAcc} text="View Profile" />
-              </button>
-            </Link>
-            <Link to={'/editprofile'}>
-              <button className="signUp">
-                <DropdownItem img={createAcc} text="Edit Profile" />
-              </button>
-            </Link>
-            <Link to={'/'}>
-              <button className="login" onClick={logout}>
-                <DropdownItem img={login} text="Sign Out" />
+            <Link to={'/login'}>
+              <button className="login">
+                <DropdownItem img={login} text="Login" />
               </button>
             </Link>
             
@@ -104,4 +84,4 @@ function AdminNavBar({onSearch, input, clearInput, logout}) {
   );
 }
 
-export default AdminNavBar;
+export default NavBar;
