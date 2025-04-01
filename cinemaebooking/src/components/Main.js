@@ -177,7 +177,7 @@ function Main() {
                 <div>
                   {authorization === "admin" ? "" : <Navigate to="/"></Navigate>}  
                   <AdminNavBar onSearch={onSearch} logout={logout} input={input} clearInput={clearInput}/>
-                  <ManageMovies />
+                  <ManageMovies query={input}/>
                 </div>
               } 
             /> 
