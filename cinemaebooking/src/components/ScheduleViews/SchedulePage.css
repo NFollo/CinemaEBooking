@@ -1,0 +1,80 @@
+.PageContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1em;
+    margin: 1em auto;
+}
+
+.Title {
+    font-weight: bold;
+}
+
+.Image {
+    max-width: 30%;
+}
+
+.FormContainer {
+    display: flex;
+    flex-direction: column;
+    width: 33%;
+
+    gap: 2em;
+    padding: 15px;
+    border: solid black 1px;
+    border-radius: 5%;
+    margin: 0px 0px 1em 0px;
+}
+
+.DateSelection {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+#spacer {
+    justify-self: center;
+    flex-grow: 1;
+}
+
+.TimeSelection {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+.ShowroomSelection {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+.ButtonsContainer {
+    display: flex;
+    gap: 1em;
+}
+
+.ScheduleButton {
+    color: white;
+    font-weight: bold;
+    padding: 10px 10px;
+    background-color: rgb(158,22,22);
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+.ScheduleButton:hover {
+    background-color: rgb(233, 35, 35);
+}
+
+.Disabled {
+    font-weight: bold;
+    padding: 10px 10px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+
+    pointer-events: none;
+    background-color: gray;
+}
+
+

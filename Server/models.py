@@ -45,7 +45,8 @@ class Review(me.Document):
 class Show(me.Document):
     movie = me.ReferenceField(Movie, required=True)
     showroom = me.ReferenceField(Showroom, required=True)
-    date = me.StringField(required=True) # format "YYYY-MM-DDTHH:MM:SS"
+    date = me.StringField(required=True) # format "YYYY-MM-DD"
+    time = me.IntField(required=True)
     duration = me.IntField(required=True)
     meta = {"collection": "shows"}
 

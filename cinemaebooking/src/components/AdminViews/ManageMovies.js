@@ -67,6 +67,10 @@ function ManageMovies({query}) {
                 const scheduleButton = document.createElement("button");
                 scheduleButton.className = "ManageEditButton";
                 scheduleButton.textContent = "Schedule";
+                scheduleButton.addEventListener("click", () => {
+                    navigate(`/schedule?movie=${movie.title}`, 
+                        {state: movie})
+                });
 
                 bottomButtons.append(editButton);
                 bottomButtons.append(deleteButton);

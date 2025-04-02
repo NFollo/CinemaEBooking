@@ -29,11 +29,14 @@ import AdminNavBar from "./NavBarViews/AdminNavBar";
 import LoggedNavBar from "./NavBarViews/LoggedNavBar";
 import NavBar from "./NavBarViews/NavBar";
 
+import SchedulePage from "./ScheduleViews/SchedulePage";
+
 import MovieInfoPage from "./SearchViews/MovieInfoPage";
 import SearchPage from "./SearchViews/SearchPage";
 
 import ConfirmationPage from "./SignupViews/ConfirmationPage";
 import SignupPage from "./SignupViews/SignupPage";
+
 
 import Cookies from "js-cookie";
 
@@ -133,6 +136,14 @@ function Main() {
                 <div>
                   <NavBar onSearch={onSearch} input={input} clearInput={clearInput}/>
                   <SearchPage query={input}/>
+                </div>
+              } 
+            />
+            <Route exact path='/schedule' 
+              element={
+                <div>
+                  <NavBar onSearch={onSearch} input={input} clearInput={clearInput}/>
+                  <SchedulePage />
                 </div>
               } 
             />

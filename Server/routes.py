@@ -457,5 +457,17 @@ def init_routes(app, mail):
         mail.send(msg)
 
         return jsonify({"message": "Profile updated email has been successfully sent!"}), 200
+    
+    @app.route('/shows/<targetDate>', methods=['GET'])
+    def get_shows_by_date(targetDate):
+        ''' Fetch all shows with date as targetDate '''
+        if request.method == 'GET': 
+            try:
+                # Fetch all shows for the targetDate
+                shows = Show.objects(date=targetDate)
+                shows_list = [show.to_mongo().to_dict() for show in shows] 
+                return jsonify(shows_list), 200
+            except Exception as err:
+                return jsonify({"error": "Failed to fetch payment cards", "message": str(err)}), 500
 
     return
