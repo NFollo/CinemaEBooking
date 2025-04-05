@@ -37,7 +37,6 @@ import SearchPage from "./SearchViews/SearchPage";
 import ConfirmationPage from "./SignupViews/ConfirmationPage";
 import SignupPage from "./SignupViews/SignupPage";
 
-
 import Cookies from "js-cookie";
 
 
@@ -142,7 +141,8 @@ function Main() {
             <Route exact path='/schedule' 
               element={
                 <div>
-                  <NavBar onSearch={onSearch} input={input} clearInput={clearInput}/>
+                  {authorization === "admin" ? "" : <Navigate to="/"></Navigate>}
+                  <AdminNavBar onSearch={onSearch} logout={logout} input={input} clearInput={clearInput}/>
                   <SchedulePage />
                 </div>
               } 

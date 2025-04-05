@@ -1,13 +1,14 @@
 import "./SchedulePage.css"
-import {useState} from "react";
+import {useState, useEffect} from "react";
 import {useLocation} from 'react-router-dom';
 
 const NUM_SHOWROOMS = 3;
 
 function SchedulePage() {
     const location = useLocation(); 
-    const [showTime, setShowTime] = useState(false);
-    const [showShowroom, setShowShowroom] = useState(false);
+    const [displayTime, setDisplayTime] = useState(false);
+
+    const [displayShowroom, setDisplayShowroom] = useState(false);
 
     const [showsOnDate, setShowsOnDate] = useState([]);
 
@@ -32,45 +33,68 @@ function SchedulePage() {
              headers: {"Content-Type": "application/json"}})
         .then( (res) => res.json() )
         .then( (data) => {
-            setShowsOnDate(
-                data.map( (show) => ({
-                    date: show.date,
-                    duration: show.duration
-                }))
-            );
-        });
+            // reset prior time counts
+            setNum12(0);
+            setNum3(0);
+            setNum6(0);
+            setNum9(0);
 
-        // calculate the number of showings at each time slot
-        showsOnDate.forEach( (show) => {
-            if (show.time === 12)
-                setNum12((prev) => prev + 1);
-            else if (show.time === 3)
-                setNum3((prev) => prev + 1);
-            else if (show.time === 6)
-                setNum6((prev) => prev + 1);
-            else if (show.time === 9)
-                setNum9((prev) => prev + 1);
-        });
+            // condense data and update new time counts
+            data = data.map((show) => ({
+                date: show.date,
+                time: show.time,
+                showroom: show.showroom,
+            }))
+            data.forEach( (show) => {
+                if (show.time === 12)
+                    setNum12((prev) => prev + 1);
+                else if (show.time === 3)
+                    setNum3((prev) => prev + 1);
+                else if (show.time === 6)
+                    setNum6((prev) => prev + 1);
+                else if (show.time === 9)
+                    setNum9((prev) => prev + 1);
+            });
 
+            // update data and display times
+            setShowsOnDate(data);
+            setDisplayTime(true);
+            console.log(data);
+        })
+        .catch((error) => console.error("Error fetching movies:", error));
+    } // onDateChangeHandler
+
+    useEffect( () => {
         // every showroom booked at all times
         if (num12 === NUM_SHOWROOMS && num3 === NUM_SHOWROOMS 
             && num6 === NUM_SHOWROOMS && num9 === NUM_SHOWROOMS) {
                 alert("There are no times available for this date")
                 return;
-        } // if
+        }
 
         // disable any buttons which correspond to full times
+        let button;
         if (num12 === NUM_SHOWROOMS)
             document.getElementById("button12").className = "Disabled";
+        else if ((button = document.getElementById("button12")) != null)
+            button.className = "ScheduleButton";
+        
         if (num3 === NUM_SHOWROOMS)
             document.getElementById("button3").className = "Disabled";
+        else if ((button = document.getElementById("button3")) != null)
+            button.className = "ScheduleButton";
+
         if (num6 === NUM_SHOWROOMS)
             document.getElementById("button6").className = "Disabled";
+        else if ((button = document.getElementById("button6")) != null)
+            button.className = "ScheduleButton";
+
         if (num9 === NUM_SHOWROOMS)
             document.getElementById("button9").className = "Disabled";
+        else if ((button = document.getElementById("button9")) != null)
+            button.className = "ScheduleButton";
 
-        setShowTime(true);
-    } // onDateChangeHandler
+    }, [showsOnDate, num12, num3, num6, num9])
 
     return (
     <div className="PageContainer">
@@ -86,7 +110,7 @@ function SchedulePage() {
 
             <div className="TimeSelection">
                 <div>Select a Movie Time: </div>
-                {showTime ? <div className="ButtonsContainer">
+                {displayTime ? <div className="ButtonsContainer">
                     
                     <button id="button12" className="ScheduleButton">12:00 pm</button>
                     <button id="button3" className="ScheduleButton">3:00 pm</button>
@@ -98,7 +122,7 @@ function SchedulePage() {
 
             <div className="ShowroomSelection">
                 <div>Select a Showroom: </div>
-                {showShowroom ? <div className="ButtonsContainer">
+                {displayShowroom ? <div className="ButtonsContainer">
                     <button className="ScheduleButton">Showroom 1</button>
                     <button className="ScheduleButton">Showroom 2</button>
                     <button className="ScheduleButton">Showroom 3</button>
