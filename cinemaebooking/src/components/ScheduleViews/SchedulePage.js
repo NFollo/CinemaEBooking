@@ -1,6 +1,6 @@
 import "./SchedulePage.css"
 import {useState, useEffect} from "react";
-import {useLocation} from 'react-router-dom';
+import {useLocation, useNavigate} from 'react-router-dom';
 
 const NUM_SHOWROOMS = 3;
 
@@ -8,6 +8,11 @@ function SchedulePage() {
     const location = useLocation(); 
     const [displayTime, setDisplayTime] = useState(false);
     const [displayShowroom, setDisplayShowroom] = useState(false);
+    const [displaySubmitButton, setDisplaySubmitButton] = useState(false);
+
+    const [selectedDate, setSelectedDate] = useState("");
+    const [selectedTime, setSelectedTime] = useState(-1);
+    const [selectedShowroom, setSelectedShowroom] = useState(-1);
 
     const [showsOnDate, setShowsOnDate] = useState([]);
     const [showsAtTime, setShowsAtTime] = useState([]);
@@ -17,6 +22,8 @@ function SchedulePage() {
     const [num3, setNum3] = useState(0);
     const [num6, setNum6] = useState(0);
     const [num9, setNum9] = useState(0);
+
+    const navigate = useNavigate();
 
     // what to display if no movie 
     const movieInfo = location.state || {
@@ -28,12 +35,16 @@ function SchedulePage() {
 
     const onDateChangeHandler = async (event) => {
         // retrieve all shows that are showing on targetDate
-        const targetDate= event.target.value;
+        const targetDate = event.target.value;
+        setSelectedDate(targetDate);
         if (targetDate === "") {
             setDisplayTime(false);
-            setDisplayShowroom(false);
-            return;
+            setSelectedTime(-1);
         }
+        setDisplayShowroom(false);
+        setSelectedShowroom(-1);
+        setDisplaySubmitButton(false);
+        
 
         await fetch(`http://localhost:5000/shows/${targetDate}`,
             {method: "GET", 
@@ -45,8 +56,6 @@ function SchedulePage() {
             setNum3(0);
             setNum6(0);
             setNum9(0);
-            setShowsAtTime([]);
-            setOccupiedShowrooms([]);
 
             // condense data and update new time counts
             data = data.map((show) => ({
@@ -122,23 +131,32 @@ function SchedulePage() {
                 break;
         }
 
+        setOccupiedShowrooms([]);
         setShowsAtTime(showsOnDate.filter((show) => show.time === time));
+        setSelectedTime(time);
     } // onTimeChangeHandler
 
     useEffect( () => {
-        showsAtTime.forEach( async (show) => {
-            await fetch(`http://localhost:5000/showrooms/${show.showroom.$oid}`,
-                {method: "GET",
-                 headers: {"Content-Type": "application/json"}}
-            )
-            .then( (res) => res.json())
-            .then( (data) => {
-                setOccupiedShowrooms( oldArray => [...oldArray, data.showroom_number]);
-                setDisplayShowroom(true);
-            })
-            .catch((error) => console.error("Error fetching showrooms:", error));
-        })
+        showsAtTime.forEach( (show) => 
+            getShowroomByShow(show)
+            .then( (showroom) => {
+                setOccupiedShowrooms( oldArray => [...oldArray, showroom.showroom_number]);
+            }))
+        if (displayTime)
+            setDisplayShowroom(true);
     }, [showsAtTime])
+
+    const getShowroomByShow = async (show) => {
+        let showroom;
+        await fetch(`http://localhost:5000/showrooms/${show.showroom.$oid}`,
+            {method: "GET",
+             headers: {"Content-Type": "application/json"}}
+        )
+        .then( (res) => res.json())
+        .then( (data) => showroom = data)
+        .catch((error) => console.error("Error fetching showrooms:", error));
+        return showroom;
+    }
 
     useEffect( () => {
         // disable any buttons which correspond to full times
@@ -158,6 +176,71 @@ function SchedulePage() {
         else if ((button = document.getElementById("showroom3")) != null)
             button.className = "ScheduleButton";
     }, [occupiedShowrooms])
+
+    const getMovieByTitle = async (title) => {
+        let movieId;
+        await fetch(`http://localhost:5000/movies/${title}`,
+            {method: "GET",
+             headers: {"Content-Type": "application/json"}}
+        )
+        .then( (res) => res.json() )
+        .then( (data) => {movieId = data._id})
+        return movieId;
+    }
+
+    const getShowroomByNumber = async (number) => {
+        let showroomId;
+        await fetch(`http://localhost:5000/showrooms/number/${number}`,
+            {method: "GET",
+             headers: {"Content-Type": "application/json"}}
+        )
+        .then( (res) => res.json())
+        .then( (data) => showroomId = data._id)
+        return showroomId;
+    }
+
+    const onShowroomChangeHandler = async (event) => {
+        let number;
+        switch (event.target.id) {
+            case "showroom1":
+                number = 1;
+                break;
+            case "showroom2":
+                number = 2;
+                break;
+            case "showroom3":
+                number = 3;
+                break;
+        }
+        setSelectedShowroom(number);
+        setDisplaySubmitButton(true);
+    }
+
+    const onFormSubmit = async (event) => {
+        let movieId;
+        let showroomId;
+
+        movieId = await getMovieByTitle(movieInfo.title);
+        showroomId = await getShowroomByNumber(selectedShowroom);
+
+        let newShowroom = {
+            movie: movieId,
+            showroom: showroomId,
+            date: selectedDate,
+            time: selectedTime,
+            duration: 3
+        } 
+
+        await fetch("http://localhost:5000/shows",
+            {method: "POST",
+             headers: {"Content-Type": "application/json"},
+             body: JSON.stringify(newShowroom),
+            }
+        )
+        .then(() => navigate("/managemovies"))
+
+        
+    }
 
     return (
     <div className="PageContainer">
@@ -190,12 +273,18 @@ function SchedulePage() {
             <div className="ShowroomSelection">
                 <div>Select a Showroom: </div>
                 {displayShowroom ? <div className="ButtonsContainer">
-                    <button id="showroom1" className="ScheduleButton">Showroom 1</button>
-                    <button id="showroom2" className="ScheduleButton">Showroom 2</button>
-                    <button id="showroom3" className="ScheduleButton">Showroom 3</button>
+                    <button id="showroom1" className="ScheduleButton"
+                            onClick={onShowroomChangeHandler}>Showroom 1</button>
+                    <button id="showroom2" className="ScheduleButton"
+                            onClick={onShowroomChangeHandler}>Showroom 2</button>
+                    <button id="showroom3" className="ScheduleButton"
+                            onClick={onShowroomChangeHandler}>Showroom 3</button>
                     </div> : <></>
                 }
             </div>
+
+            {displaySubmitButton ? 
+                <button className="ScheduleButton" onClick={onFormSubmit}>Schedule Movie</button> : <></>}
         </div>
     </div>
     );

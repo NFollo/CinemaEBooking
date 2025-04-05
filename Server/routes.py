@@ -212,7 +212,17 @@ def init_routes(app, mail):
                 return jsonify(movies_list), 200
             except Exception as err:
                 return jsonify({"error": "Failed to fetch movies", "message": str(err)}), 500
-            
+    
+    @app.route('/movies/<targetTitle>', methods=['GET'])
+    def get_movie_by_title(targetTitle):
+        '''Fetch the movie with id as title'''
+        try:
+            movie = Movie.objects.get(title=targetTitle)
+            movie_dict = movie.to_mongo().to_dict()
+            return jsonify(movie_dict), 200
+        except Exception as err:
+            return jsonify({"error": "Failed to fetch movie", "message": str(err)}), 500
+
     @app.route('/movies/homepageInfo', methods=['POST', 'GET']) 
     def moviesTitleAndPic(): 
         if request.method == 'GET':
@@ -472,7 +482,7 @@ def init_routes(app, mail):
             
     @app.route('/showrooms/<targetId>', methods=['GET'])
     def get_showrooms_by_id(targetId):
-        ''' Fetch all showrooms with id as targetId '''
+        ''' Fetch the showroom with id as targetId '''
         if request.method == 'GET': 
             try:
                 # Fetch all shows for the targetDate
@@ -481,5 +491,35 @@ def init_routes(app, mail):
                 return jsonify(showroom_dict), 200
             except Exception as err:
                 return jsonify({"error": "Failed to fetch showroom", "message": str(err)}), 500
+            
+    @app.route('/showrooms/number/<targetNumber>', methods=['GET'])
+    def get_showroom_by_number(targetNumber):
+        ''' Fetch the showroom with number as targetNumber '''
+        if request.method == 'GET': 
+            try:
+                # Fetch all shows for the targetDate
+                showroom = Showroom.objects.get(showroom_number=targetNumber)
+                showroom_dict = showroom.to_mongo().to_dict()
+                return jsonify(showroom_dict), 200
+            except Exception as err:
+                return jsonify({"error": "Failed to fetch showroom", "message": str(err)}), 500
+            
+    @app.route('/shows', methods=['POST']) 
+    def newShow(): 
+        '''
+        returns the ObjectId of the created Show document as a string upon success
+        '''
+        if request.method == 'POST': # Handle POST requests
+            json = request.json 
+            try:
+                show = Show(**json)  
+                show.validate()   
+                show.save()
+            except FieldDoesNotExist as err:
+                return jsonify({"error": "Invalid field in request", "message": str(err)}), 400
+            except ValidationError as err:
+                return jsonify({"error": str(err)}), 400  
+                
+            return jsonify({"show_id": str(show.id)}), 201 # Return DB ObjectId reference
 
     return
