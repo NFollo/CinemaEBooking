@@ -468,6 +468,18 @@ def init_routes(app, mail):
                 shows_list = [show.to_mongo().to_dict() for show in shows] 
                 return jsonify(shows_list), 200
             except Exception as err:
-                return jsonify({"error": "Failed to fetch payment cards", "message": str(err)}), 500
+                return jsonify({"error": "Failed to fetch shows", "message": str(err)}), 500
+            
+    @app.route('/showrooms/<targetId>', methods=['GET'])
+    def get_showrooms_by_id(targetId):
+        ''' Fetch all showrooms with id as targetId '''
+        if request.method == 'GET': 
+            try:
+                # Fetch all shows for the targetDate
+                showroom = Showroom.objects.get(id=targetId)
+                showroom_dict = showroom.to_mongo().to_dict()
+                return jsonify(showroom_dict), 200
+            except Exception as err:
+                return jsonify({"error": "Failed to fetch showroom", "message": str(err)}), 500
 
     return

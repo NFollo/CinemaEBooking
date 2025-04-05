@@ -7,10 +7,11 @@ const NUM_SHOWROOMS = 3;
 function SchedulePage() {
     const location = useLocation(); 
     const [displayTime, setDisplayTime] = useState(false);
-
     const [displayShowroom, setDisplayShowroom] = useState(false);
 
     const [showsOnDate, setShowsOnDate] = useState([]);
+    const [showsAtTime, setShowsAtTime] = useState([]);
+    const [occupiedShowrooms, setOccupiedShowrooms] = useState([]);
 
     const [num12, setNum12] = useState(0);
     const [num3, setNum3] = useState(0);
@@ -28,6 +29,12 @@ function SchedulePage() {
     const onDateChangeHandler = async (event) => {
         // retrieve all shows that are showing on targetDate
         const targetDate= event.target.value;
+        if (targetDate === "") {
+            setDisplayTime(false);
+            setDisplayShowroom(false);
+            return;
+        }
+
         await fetch(`http://localhost:5000/shows/${targetDate}`,
             {method: "GET", 
              headers: {"Content-Type": "application/json"}})
@@ -38,6 +45,8 @@ function SchedulePage() {
             setNum3(0);
             setNum6(0);
             setNum9(0);
+            setShowsAtTime([]);
+            setOccupiedShowrooms([]);
 
             // condense data and update new time counts
             data = data.map((show) => ({
@@ -61,7 +70,7 @@ function SchedulePage() {
             setDisplayTime(true);
             console.log(data);
         })
-        .catch((error) => console.error("Error fetching movies:", error));
+        .catch((error) => console.error("Error fetching dates:", error));
     } // onDateChangeHandler
 
     useEffect( () => {
@@ -96,6 +105,60 @@ function SchedulePage() {
 
     }, [showsOnDate, num12, num3, num6, num9])
 
+    const onTimeChangeHandler = (event) => {
+        let time;
+        switch (event.target.id) {
+            case "button12":
+                time=12;
+                break;
+            case "button3":
+                time=3;
+                break;
+            case "button6":
+                time=6;
+                break;
+            case "button9":
+                time=9;
+                break;
+        }
+
+        setShowsAtTime(showsOnDate.filter((show) => show.time === time));
+    } // onTimeChangeHandler
+
+    useEffect( () => {
+        showsAtTime.forEach( async (show) => {
+            await fetch(`http://localhost:5000/showrooms/${show.showroom.$oid}`,
+                {method: "GET",
+                 headers: {"Content-Type": "application/json"}}
+            )
+            .then( (res) => res.json())
+            .then( (data) => {
+                setOccupiedShowrooms( oldArray => [...oldArray, data.showroom_number]);
+                setDisplayShowroom(true);
+            })
+            .catch((error) => console.error("Error fetching showrooms:", error));
+        })
+    }, [showsAtTime])
+
+    useEffect( () => {
+        // disable any buttons which correspond to full times
+        let button;
+        if (occupiedShowrooms.includes(1))
+            document.getElementById("showroom1").className = "Disabled";
+        else if ((button = document.getElementById("showroom1")) != null)
+            button.className = "ScheduleButton";
+        
+        if (occupiedShowrooms.includes(2))
+            document.getElementById("showroom2").className = "Disabled";
+        else if ((button = document.getElementById("showroom2")) != null)
+            button.className = "ScheduleButton";
+
+        if (occupiedShowrooms.includes(3))
+            document.getElementById("showroom3").className = "Disabled";
+        else if ((button = document.getElementById("showroom3")) != null)
+            button.className = "ScheduleButton";
+    }, [occupiedShowrooms])
+
     return (
     <div className="PageContainer">
         <div className="Title">{movieInfo.title}</div>
@@ -112,10 +175,14 @@ function SchedulePage() {
                 <div>Select a Movie Time: </div>
                 {displayTime ? <div className="ButtonsContainer">
                     
-                    <button id="button12" className="ScheduleButton">12:00 pm</button>
-                    <button id="button3" className="ScheduleButton">3:00 pm</button>
-                    <button id="button6" className="ScheduleButton">6:00 pm</button>
-                    <button id="button9" className="ScheduleButton">9:00 pm</button>
+                    <button id="button12" className="ScheduleButton"
+                            onClick={onTimeChangeHandler}>12:00 pm</button>
+                    <button id="button3" className="ScheduleButton"
+                            onClick={onTimeChangeHandler}>3:00 pm</button>
+                    <button id="button6" className="ScheduleButton"
+                            onClick={onTimeChangeHandler}>6:00 pm</button>
+                    <button id="button9" className="ScheduleButton"
+                            onClick={onTimeChangeHandler}>9:00 pm</button>
                     
                 </div> : <></>}
             </div>
@@ -123,9 +190,9 @@ function SchedulePage() {
             <div className="ShowroomSelection">
                 <div>Select a Showroom: </div>
                 {displayShowroom ? <div className="ButtonsContainer">
-                    <button className="ScheduleButton">Showroom 1</button>
-                    <button className="ScheduleButton">Showroom 2</button>
-                    <button className="ScheduleButton">Showroom 3</button>
+                    <button id="showroom1" className="ScheduleButton">Showroom 1</button>
+                    <button id="showroom2" className="ScheduleButton">Showroom 2</button>
+                    <button id="showroom3" className="ScheduleButton">Showroom 3</button>
                     </div> : <></>
                 }
             </div>

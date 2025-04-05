@@ -18,8 +18,8 @@ class Theatre(me.Document):
 
 class Showroom(me.Document):
     showroom_number = me.IntField(required=True)
-    seat_count = me.IntField(required=True)
-    theatre = me.ReferenceField(Theatre, required=True)
+    seatcount = me.IntField(required=True)
+    theater = me.ReferenceField(Theatre, required=True)
     meta = {"collection": "showrooms"}
 
 class Movie(me.Document):
