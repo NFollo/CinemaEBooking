@@ -6,6 +6,11 @@ function ManageMovies({query}) {
     const navigate = useNavigate();
     const [movies, setMovies] = useState([]);
 
+    // navigated to the create movie page
+    const navCreateMovie = () => {
+        navigate("/admincreatemovie"); 
+    }
+
     var movieContainer = document.getElementById("movies");
     const searchMovies = () => {
         // clear current movie container
@@ -107,9 +112,12 @@ function ManageMovies({query}) {
     }, [movies, query]);
   
     return (
-        <div className="SearchPage">        
+        <div className="SearchPage">      
             <div className="SearchPageHeader">
                 {query === "" ? "Browse All Movies" : "Search results for \"" + query + "\""}            
+            </div>
+            <div className="ManageMoviesAddButton">
+                <button className="ManageEditButton" onClick={navCreateMovie}>Add Movie</button>  
             </div>
             <div id="movies" className="MoviesContainer"></div>
         </div>
