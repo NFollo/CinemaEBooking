@@ -6,7 +6,6 @@ function PromotionForm({ initialData, movies, onSubmit, isEdit }) {
 
   const [errors, setErrors] = useState({});
 
-// TODO: VALIDATE FORM FIELDS
 
   const [formData, setFormData] = useState({
     promo_code: "",
