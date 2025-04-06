@@ -43,7 +43,6 @@ function SchedulePage() {
     // retrieves all shows that are showing on targetDate upon date selection
     const dateSelectionHandler = async (event) => {
         const targetDate = event.target.value;
-        console.log(targetDate)
         setSelectedDate(targetDate);
 
         // hide showroom options and submit button upon date change
@@ -115,7 +114,8 @@ function SchedulePage() {
     const timeSelectionHandler = (event) => {
         const time = event.target.id; // string form of time number
         setSelectedTime(time);
-        setShowsAtTime(showsOnDate.filter((show) => show.time === time));
+        setDisplaySubmitButton(false);
+        setShowsAtTime(showsOnDate.filter((show) => show.time == time));
     } // timeSelectionHandler
 
 
