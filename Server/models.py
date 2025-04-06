@@ -90,6 +90,9 @@ class PaymentCard(me.Document):
 class Promotion(me.Document):
     promo_code = me.StringField(required=True)
     discount = me.DecimalField(required=True)
+    expiration_date = me.DateTimeField(required=True)
+    movie_id = me.ReferenceField(Movie, required=True)
+    email_send = me.BooleanField(default=False)
     meta = {"collection": "promotions"}
 
 class Booking(me.Document):

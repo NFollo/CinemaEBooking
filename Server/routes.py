@@ -5,6 +5,7 @@ import bcrypt
 import random
 from datetime import datetime, timedelta
 from flask_mail import Message
+from bson import ObjectId
 
 def encrypt(value):
     # encrypt value with bcrypt
@@ -521,5 +522,78 @@ def init_routes(app, mail):
                 return jsonify({"error": str(err)}), 400  
                 
             return jsonify({"show_id": str(show.id)}), 201 # Return DB ObjectId reference
+        
+    @app.route('/promotions', methods=['GET', 'POST'])
+    def promotions():
+        '''
+        Fetches all promotions from the database, including the movie_id reference.
+        '''
+        if request.method == 'GET':
+            try:
+                promotions = Promotion.objects().select_related()
+                
+                promotions_list = []
+                for promotion in promotions:
+                        promo_data = {
+                            "_id": str(promotion.id),
+                            "promo_code": promotion.promo_code,
+                            "discount": float(promotion.discount),
+                            "expiration_date": promotion.expiration_date.isoformat(),
+                            "movie_id": str(promotion.movie_id.id),
+                            "movie_title": promotion.movie_id.title,
+                            "email_send": promotion.email_send 
+                        }
+                        promotions_list.append(promo_data)
+                return jsonify(promotions_list), 200
+            except Exception as err:
+                return jsonify({"error": "Failed to fetch promotions","message": str(err) }), 500
+            
+        elif request.method == 'POST':
+            json = request.json 
+            try:
+                json["expiration_date"] = datetime.fromisoformat(json["expiration_date"].replace("Z", "+00:00"))
+                promotion = Promotion(**json)
+                promotion.validate()
+                promotion.save()
+                return jsonify({"message": "Promotion created successfully", "promotion_id": str(promotion.id)}), 201
+            except Exception as err:
+                return jsonify({"error": "Failed to add promotion", "message": str(err)}), 500
+    @app.route('/promotions/<promotion_id>', methods=['PUT'])
+    def promotion(promotion_id):
+        '''
+        Updates an existing promotion based on the provided promotion ID.
+        '''
+        try:
+            promotion = Promotion.objects(id=promotion_id).first()
+            
+            if not promotion:
+                return jsonify({"error": "Promotion not found"}), 404
+            
+            json = request.json
+            
+            if "expiration_date" in json:
+                json["expiration_date"] = datetime.fromisoformat(json["expiration_date"].replace("Z", "+00:00"))
+            
+            if "movie_id" in json:
+                movie_id = json["movie_id"]
+                # Check if the movie_id is a valid ObjectId string
+                if not ObjectId.is_valid(movie_id):
+                    return jsonify({"error": "Invalid movie_id"}), 400
+                json["movie_id"] = ObjectId(movie_id)
+            
+            # Update the promotion with the new data
+            for key, value in json.items():
+                if hasattr(promotion, key):
+                    setattr(promotion, key, value)
+            
+            # Validate and save the updated promotion
+            promotion.validate()
+            promotion.save()
+            
+            return jsonify({"message": "Promotion updated successfully", "promotion_id": str(promotion.id)}), 200
+        except Exception as err:
+            return jsonify({"error": "Failed to update promotion", "message": str(err)}), 500
 
     return
+
+    
