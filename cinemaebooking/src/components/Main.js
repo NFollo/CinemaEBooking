@@ -30,6 +30,7 @@ import LoggedNavBar from "./NavBarViews/LoggedNavBar";
 import NavBar from "./NavBarViews/NavBar";
 
 import SchedulePage from "./ScheduleViews/SchedulePage";
+import CreateMovie from './AdminViews/CreateMovie';
 
 import MovieInfoPage from "./SearchViews/MovieInfoPage";
 import SearchPage from "./SearchViews/SearchPage";
@@ -151,7 +152,9 @@ function Main() {
               element={
                 <div>
                   {(authorization === "admin" || authorization === "customer") ? "" : <Navigate to="/"></Navigate>}  
-                  <LoggedNavBar onSearch={onSearch} logout={logout} input={input} clearInput={clearInput}/>
+                  {authorization === "admin" ? <AdminNavBar onSearch={onSearch} input={input} clearInput={clearInput} logout={logout}/> 
+                    : (authorization === "customer" ? <LoggedNavBar onSearch={onSearch} logout={logout} input={input} clearInput={clearInput}/> 
+                    : <NavBar onSearch={onSearch} input={input} clearInput={clearInput}/>)}
                   <ViewProfile />
                 </div>
               } 
@@ -160,7 +163,9 @@ function Main() {
               element={
                 <div>
                   {(authorization === "admin" || authorization === "customer") ? "" : <Navigate to="/"></Navigate>}  
-                  <LoggedNavBar onSearch={onSearch} logout={logout} input={input} clearInput={clearInput}/>
+                  {authorization === "admin" ? <AdminNavBar onSearch={onSearch} input={input} clearInput={clearInput} logout={logout}/> 
+                    : (authorization === "customer" ? <LoggedNavBar onSearch={onSearch} logout={logout} input={input} clearInput={clearInput}/> 
+                    : <NavBar onSearch={onSearch} input={input} clearInput={clearInput}/>)}
                   <EditProfile />
                 </div>
               } 
@@ -198,6 +203,15 @@ function Main() {
                   {authorization === "admin" ? "" : <Navigate to="/"></Navigate>}  
                   <AdminNavBar onSearch={onSearch} logout={logout} input={input} clearInput={clearInput}/>
                   <EditMovie />
+                </div>
+              } 
+            /> 
+            <Route exact path='/admincreatemovie' 
+              element={
+                <div>
+                  {authorization === "admin" ? "" : <Navigate to="/"></Navigate>}  
+                  <AdminNavBar onSearch={onSearch} logout={logout} input={input} clearInput={clearInput}/>
+                  <CreateMovie />
                 </div>
               } 
             /> 

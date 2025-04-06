@@ -5,6 +5,10 @@ import "./BuyTicketsPage.css";
 function BuyTicketsPage() {
   const location = useLocation(); 
   const navigate = useNavigate();
+  const [selectedDate, setSelectedDate] = useState("");
+  const [selectedShowtime, setSelectedShowtime] = useState("");
+  const [tickets, setTickets] = useState({ adult: 0, child: 0, senior: 0 });
+  const today = new Date().toISOString().split("T")[0];
   
   // no movie 
   const movie = location.state || {
@@ -13,17 +17,11 @@ function BuyTicketsPage() {
     trailer_picture_url: "https://via.placeholder.com/150",
   };
 
-  const [selectedDate, setSelectedDate] = useState("");
-  const [selectedShowtime, setSelectedShowtime] = useState("");
-  const [tickets, setTickets] = useState({ adult: 0, child: 0, senior: 0 });
-
   const ticketPrices = {
     adult: 15.99,
     child: 12.99,
     senior: 14.49,
   };
-
-  const today = new Date().toISOString().split("T")[0];
 
   const handleDateChange = (e) => {
     const chosenDate = e.target.value;
@@ -56,7 +54,19 @@ function BuyTicketsPage() {
       return;
     }
 
-    navigate(`/seatselection?movie=${movie.title}`);
+    navigate(
+      `/seatselection?movie=${encodeURIComponent(movie.title)}&date=${selectedDate}&showtime=${selectedShowtime}&tickets=${totalTickets}`,
+      {
+        state: {
+          movie,
+          selectedDate,
+          selectedShowtime,
+          tickets
+        }
+      }
+    );
+    
+    
   };
 
   return (
@@ -97,7 +107,7 @@ function BuyTicketsPage() {
           <>
             <h3>Select Showtime:</h3>
             <div className="showtimeButtons">
-              {["10:00 AM", "1:00 PM", "4:00 PM", "7:00 PM", "10:00 PM"].map((time) => (
+              {["12:00 AM", "3:00 PM", "6:00 PM", "9:00 PM"].map((time) => (
                 <button 
                   key={time}
                   className={`showtimeButton ${selectedShowtime === time ? "selected" : ""}`}

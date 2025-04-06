@@ -86,3 +86,8 @@
 .ManageUnitBottom {
     display: flex;
 }
+
+.ManageMoviesAddButton {
+    margin-top: 20px;
+    margin-left: 20px;
+}

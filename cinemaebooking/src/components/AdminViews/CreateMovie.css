@@ -1,0 +1,61 @@
+.CreateMovie {
+    margin: 30px 50px;
+}
+
+.CreateMovieTitle {
+    font-size: 300%;
+    font-weight: bold;
+    margin-bottom: 2%;
+}
+
+.CreateMovieSubtitle {
+    font-size: 150%;
+    font-weight: bold;
+    margin-bottom: 1%;
+    grid-column-start: 1;
+}
+.CreateMovieSubtitleTwo {
+    font-size: 120%;
+    font-weight: bold;
+    grid-column-start: 1;
+    padding-bottom: 0;
+    margin-bottom: 0;
+    margin-top: 1%;
+}
+
+.CreateMovieEntry {
+    display: grid;
+    grid-template-columns: 25% 75%;    
+}
+
+.CreateMovieInput {
+    grid-column-start: 2;
+}
+
+.CreateMovie form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.CreateMovie select {
+    width: 50px;
+}
+
+.CreateMovieButton {
+    color: white;
+    font-weight: bold;
+    padding: 10px 0px;
+    background-color: rgb(158,22,22);
+    border-radius: 5px;
+    border-color: black;
+    border-style: outset;
+    padding: 10px 10px;
+    margin: 0% 30%;
+    text-decoration: none;
+    text-align: center;
+}
+
+.CreateMovieButton:hover {
+    background-color: rgb(233, 35, 35);
+}

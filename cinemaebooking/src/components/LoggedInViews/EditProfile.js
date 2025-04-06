@@ -455,6 +455,8 @@ function EditProfile() {
     
             // Refresh data after deletion
             await fetchData();
+            alert("Card deleted successfully!");
+            window.location.reload(); // reload the page after a card is deleted 
         } catch (err) {
             console.error("Error deleting card:", err);
             setError("Failed to delete card.");
