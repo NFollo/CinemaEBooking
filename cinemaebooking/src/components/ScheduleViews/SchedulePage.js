@@ -1,31 +1,16 @@
 import "./SchedulePage.css"
 import {useState, useEffect} from "react";
 import {useLocation, useNavigate} from 'react-router-dom';
+import {updateTimeButtonStatus, updateShowroomButtonStatus, getShowsByDate, getShowroomByShow, 
+    handleFormSubmit} from '../../applicationLogic/ScheduleMovieHandlers';
 
 const NUM_SHOWROOMS = 3;
 
 function SchedulePage() {
     const location = useLocation(); 
-    const [displayTime, setDisplayTime] = useState(false);
-    const [displayShowroom, setDisplayShowroom] = useState(false);
-    const [displaySubmitButton, setDisplaySubmitButton] = useState(false);
-
-    const [selectedDate, setSelectedDate] = useState("");
-    const [selectedTime, setSelectedTime] = useState(-1);
-    const [selectedShowroom, setSelectedShowroom] = useState(-1);
-
-    const [showsOnDate, setShowsOnDate] = useState([]);
-    const [showsAtTime, setShowsAtTime] = useState([]);
-    const [occupiedShowrooms, setOccupiedShowrooms] = useState([]);
-
-    const [num12, setNum12] = useState(0);
-    const [num3, setNum3] = useState(0);
-    const [num6, setNum6] = useState(0);
-    const [num9, setNum9] = useState(0);
-
     const navigate = useNavigate();
 
-    // what to display if no movie 
+    // movieInfo is movie or default data if website fails to locate state 
     const movieInfo = location.state || {
         title: "Unknown Movie",
         description: "No description available",
@@ -33,173 +18,133 @@ function SchedulePage() {
         trailer_video_url: ""
     };
 
-    const onDateChangeHandler = async (event) => {
-        // retrieve all shows that are showing on targetDate
+    // state booleans for displaying form selection buttons
+    const [displayTime, setDisplayTime] = useState(false);
+    const [displayShowroom, setDisplayShowroom] = useState(false);
+    const [displaySubmitButton, setDisplaySubmitButton] = useState(false);
+
+    // state variables for storing selected inputs
+    const [selectedDate, setSelectedDate] = useState("");
+    const [selectedTime, setSelectedTime] = useState(-1);
+    const [selectedShowroom, setSelectedShowroom] = useState(-1);
+
+    // state variables to count number of movies at time for selected date
+    const [numMoviesAt12, setNumMoviesAt12] = useState(0);
+    const [numMoviesAt3, setNumMoviesAt3] = useState(0);
+    const [numMoviesAt6, setNumMoviesAt6] = useState(0);
+    const [numMoviesAt9, setNumMoviesAt9] = useState(0);
+
+    // state variables to track shows on selected date/time
+    const [showsOnDate, setShowsOnDate] = useState([]);
+    const [showsAtTime, setShowsAtTime] = useState([]);
+    const [occupiedShowrooms, setOccupiedShowrooms] = useState([]);
+
+
+    // retrieves all shows that are showing on targetDate upon date selection
+    const dateSelectionHandler = async (event) => {
         const targetDate = event.target.value;
+        console.log(targetDate)
         setSelectedDate(targetDate);
-        if (targetDate === "") {
-            setDisplayTime(false);
-            setSelectedTime(-1);
-        }
+
+        // hide showroom options and submit button upon date change
         setDisplayShowroom(false);
         setSelectedShowroom(-1);
         setDisplaySubmitButton(false);
-        
 
-        await fetch(`http://localhost:5000/shows/${targetDate}`,
-            {method: "GET", 
-             headers: {"Content-Type": "application/json"}})
-        .then( (res) => res.json() )
-        .then( (data) => {
+        // do not show time buttons upon date clear
+        if (targetDate === "") {
+            setDisplayTime(false);
+            setSelectedTime(-1);
+            return;
+        }
+
+        getShowsByDate(targetDate)
+        .then( (shows) => {
             // reset prior time counts
-            setNum12(0);
-            setNum3(0);
-            setNum6(0);
-            setNum9(0);
+            setNumMoviesAt12(0);
+            setNumMoviesAt3(0);
+            setNumMoviesAt6(0);
+            setNumMoviesAt9(0);
 
-            // condense data and update new time counts
-            data = data.map((show) => ({
+            // condense show data
+            shows = shows.map((show) => ({
                 date: show.date,
                 time: show.time,
                 showroom: show.showroom,
             }))
-            data.forEach( (show) => {
+
+            // update new time counts
+            shows.forEach( (show) => {
                 if (show.time === 12)
-                    setNum12((prev) => prev + 1);
+                    setNumMoviesAt12((prev) => prev + 1);
                 else if (show.time === 3)
-                    setNum3((prev) => prev + 1);
+                    setNumMoviesAt3((prev) => prev + 1);
                 else if (show.time === 6)
-                    setNum6((prev) => prev + 1);
+                    setNumMoviesAt6((prev) => prev + 1);
                 else if (show.time === 9)
-                    setNum9((prev) => prev + 1);
+                    setNumMoviesAt9((prev) => prev + 1);
             });
 
-            // update data and display times
-            setShowsOnDate(data);
+            // update data and display time buttons
+            setShowsOnDate(shows);
             setDisplayTime(true);
-            console.log(data);
-        })
-        .catch((error) => console.error("Error fetching dates:", error));
-    } // onDateChangeHandler
+        });   
+    } // dateSelectionHandler
 
+
+    // updates button statuses upon completion of state update following date selection 
     useEffect( () => {
-        // every showroom booked at all times
-        if (num12 === NUM_SHOWROOMS && num3 === NUM_SHOWROOMS 
-            && num6 === NUM_SHOWROOMS && num9 === NUM_SHOWROOMS) {
-                alert("There are no times available for this date")
-                return;
-        }
-
-        // disable any buttons which correspond to full times
-        let button;
-        if (num12 === NUM_SHOWROOMS)
-            document.getElementById("button12").className = "Disabled";
-        else if ((button = document.getElementById("button12")) != null)
-            button.className = "ScheduleButton";
+        const fullyBooked = (numMoviesAt12 === NUM_SHOWROOMS && numMoviesAt3 === NUM_SHOWROOMS 
+            && numMoviesAt6 === NUM_SHOWROOMS && numMoviesAt9 === NUM_SHOWROOMS)
         
-        if (num3 === NUM_SHOWROOMS)
-            document.getElementById("button3").className = "Disabled";
-        else if ((button = document.getElementById("button3")) != null)
-            button.className = "ScheduleButton";
-
-        if (num6 === NUM_SHOWROOMS)
-            document.getElementById("button6").className = "Disabled";
-        else if ((button = document.getElementById("button6")) != null)
-            button.className = "ScheduleButton";
-
-        if (num9 === NUM_SHOWROOMS)
-            document.getElementById("button9").className = "Disabled";
-        else if ((button = document.getElementById("button9")) != null)
-            button.className = "ScheduleButton";
-
-    }, [showsOnDate, num12, num3, num6, num9])
-
-    const onTimeChangeHandler = (event) => {
-        let time;
-        switch (event.target.id) {
-            case "button12":
-                time=12;
-                break;
-            case "button3":
-                time=3;
-                break;
-            case "button6":
-                time=6;
-                break;
-            case "button9":
-                time=9;
-                break;
+        if (fullyBooked) {
+            alert("There are no times available for this date")
+            setDisplayTime(false);
+            return;
         }
 
-        setOccupiedShowrooms([]);
-        setShowsAtTime(showsOnDate.filter((show) => show.time === time));
-        setSelectedTime(time);
-    } // onTimeChangeHandler
+        // enable if time slot is available, disable if not
+        updateTimeButtonStatus("12", numMoviesAt12, NUM_SHOWROOMS);
+        updateTimeButtonStatus("3", numMoviesAt3, NUM_SHOWROOMS);
+        updateTimeButtonStatus("6", numMoviesAt6, NUM_SHOWROOMS);
+        updateTimeButtonStatus("9", numMoviesAt9, NUM_SHOWROOMS);
+    }, [numMoviesAt12, numMoviesAt3, numMoviesAt6, numMoviesAt9])
 
+
+    // updates selectedTime and filters down tracked shows upon time selection
+    const timeSelectionHandler = (event) => {
+        const time = event.target.id; // string form of time number
+        setSelectedTime(time);
+        setShowsAtTime(showsOnDate.filter((show) => show.time === time));
+    } // timeSelectionHandler
+
+
+    // updates occupiedShowrooms upon completion of state update following time selection
     useEffect( () => {
+        setOccupiedShowrooms([]);
         showsAtTime.forEach( (show) => 
             getShowroomByShow(show)
             .then( (showroom) => {
                 setOccupiedShowrooms( oldArray => [...oldArray, showroom.showroom_number]);
-            }))
+            })
+        );
+
+        // only display showroom selection option if time selection available
         if (displayTime)
             setDisplayShowroom(true);
     }, [showsAtTime])
 
-    const getShowroomByShow = async (show) => {
-        let showroom;
-        await fetch(`http://localhost:5000/showrooms/${show.showroom.$oid}`,
-            {method: "GET",
-             headers: {"Content-Type": "application/json"}}
-        )
-        .then( (res) => res.json())
-        .then( (data) => showroom = data)
-        .catch((error) => console.error("Error fetching showrooms:", error));
-        return showroom;
-    }
 
+    // disables buttons which correspond to occupied rooms upon state update
     useEffect( () => {
-        // disable any buttons which correspond to full times
-        let button;
-        if (occupiedShowrooms.includes(1))
-            document.getElementById("showroom1").className = "Disabled";
-        else if ((button = document.getElementById("showroom1")) != null)
-            button.className = "ScheduleButton";
-        
-        if (occupiedShowrooms.includes(2))
-            document.getElementById("showroom2").className = "Disabled";
-        else if ((button = document.getElementById("showroom2")) != null)
-            button.className = "ScheduleButton";
-
-        if (occupiedShowrooms.includes(3))
-            document.getElementById("showroom3").className = "Disabled";
-        else if ((button = document.getElementById("showroom3")) != null)
-            button.className = "ScheduleButton";
+        updateShowroomButtonStatus("showroom1", occupiedShowrooms, 1);
+        updateShowroomButtonStatus("showroom2", occupiedShowrooms, 2);
+        updateShowroomButtonStatus("showroom3", occupiedShowrooms, 3);
     }, [occupiedShowrooms])
 
-    const getMovieByTitle = async (title) => {
-        let movieId;
-        await fetch(`http://localhost:5000/movies/${title}`,
-            {method: "GET",
-             headers: {"Content-Type": "application/json"}}
-        )
-        .then( (res) => res.json() )
-        .then( (data) => {movieId = data._id})
-        return movieId;
-    }
 
-    const getShowroomByNumber = async (number) => {
-        let showroomId;
-        await fetch(`http://localhost:5000/showrooms/number/${number}`,
-            {method: "GET",
-             headers: {"Content-Type": "application/json"}}
-        )
-        .then( (res) => res.json())
-        .then( (data) => showroomId = data._id)
-        return showroomId;
-    }
-
-    const onShowroomChangeHandler = async (event) => {
+    // updates selectedShowroom and displays submit button upon showroom selection
+    const showroomSelectionHandler = async (event) => {
         let number;
         switch (event.target.id) {
             case "showroom1":
@@ -211,80 +156,69 @@ function SchedulePage() {
             case "showroom3":
                 number = 3;
                 break;
+            default:
+                break;
         }
         setSelectedShowroom(number);
         setDisplaySubmitButton(true);
-    }
+    } // showroomSelectionHandler
 
-    const onFormSubmit = async (event) => {
-        let movieId;
-        let showroomId;
 
-        movieId = await getMovieByTitle(movieInfo.title);
-        showroomId = await getShowroomByNumber(selectedShowroom);
+    // posts new showing to database and navigates back to manage movies page upon form submit
+    const submitFormHandler = async () => {
+        await handleFormSubmit(movieInfo.title, selectedShowroom, selectedDate, selectedTime)
+        .then(() => navigate("/managemovies"));
+    } // submitFormHandler
 
-        let newShowroom = {
-            movie: movieId,
-            showroom: showroomId,
-            date: selectedDate,
-            time: selectedTime,
-            duration: 3
-        } 
-
-        await fetch("http://localhost:5000/shows",
-            {method: "POST",
-             headers: {"Content-Type": "application/json"},
-             body: JSON.stringify(newShowroom),
-            }
-        )
-        .then(() => navigate("/managemovies"))
-
-        
-    }
 
     return (
     <div className="PageContainer">
         <div className="Title">{movieInfo.title}</div>
-        <img className="Image" src={movieInfo.trailer_picture_url}></img>
+        <img className="Image" src={movieInfo.trailer_picture_url} alt={movieInfo.title}></img>
 
         <div className="FormContainer">
             <div className="DateSelection">
                 <div>Select a Movie Date: </div>
                 <div id="spacer"></div>
-                <input type="date" onChange={onDateChangeHandler}></input>
+                <input type="date" onChange={dateSelectionHandler}></input>
             </div>
 
             <div className="TimeSelection">
                 <div>Select a Movie Time: </div>
                 {displayTime ? <div className="ButtonsContainer">
                     
-                    <button id="button12" className="ScheduleButton"
-                            onClick={onTimeChangeHandler}>12:00 pm</button>
-                    <button id="button3" className="ScheduleButton"
-                            onClick={onTimeChangeHandler}>3:00 pm</button>
-                    <button id="button6" className="ScheduleButton"
-                            onClick={onTimeChangeHandler}>6:00 pm</button>
-                    <button id="button9" className="ScheduleButton"
-                            onClick={onTimeChangeHandler}>9:00 pm</button>
+                    <button id="12" className="ScheduleButton"
+                            onClick={timeSelectionHandler}>12:00 pm</button>
+                    <button id="3" className="ScheduleButton"
+                            onClick={timeSelectionHandler}>3:00 pm</button>
+                    <button id="6" className="ScheduleButton"
+                            onClick={timeSelectionHandler}>6:00 pm</button>
+                    <button id="9" className="ScheduleButton"
+                            onClick={timeSelectionHandler}>9:00 pm</button>
                     
                 </div> : <></>}
+                {displayShowroom ? <div>Selected {selectedTime}:00</div> : <></>}
             </div>
 
             <div className="ShowroomSelection">
+                
                 <div>Select a Showroom: </div>
                 {displayShowroom ? <div className="ButtonsContainer">
                     <button id="showroom1" className="ScheduleButton"
-                            onClick={onShowroomChangeHandler}>Showroom 1</button>
+                            onClick={showroomSelectionHandler}>Showroom 1</button>
                     <button id="showroom2" className="ScheduleButton"
-                            onClick={onShowroomChangeHandler}>Showroom 2</button>
+                            onClick={showroomSelectionHandler}>Showroom 2</button>
                     <button id="showroom3" className="ScheduleButton"
-                            onClick={onShowroomChangeHandler}>Showroom 3</button>
-                    </div> : <></>
+                            onClick={showroomSelectionHandler}>Showroom 3</button>
+                    </div> : <></>  
                 }
+                {displaySubmitButton ? <div>Selected Showroom {selectedShowroom}</div> : <></>}
             </div>
 
             {displaySubmitButton ? 
-                <button className="ScheduleButton" onClick={onFormSubmit}>Schedule Movie</button> : <></>}
+                <button className="ScheduleButton" onClick={submitFormHandler}>Schedule Movie</button> 
+                : <></>
+            }
         </div>
     </div>
     );
