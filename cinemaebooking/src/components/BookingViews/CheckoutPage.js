@@ -5,18 +5,17 @@ import "./CheckoutPage.css";
 const CheckoutPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
-
   const [paymentMethod, setPaymentMethod] = useState("saved");
   const [cardNumber, setCardNumber] = useState("");
   const [expiryMonth, setExpiryMonth] = useState("");
   const [expiryYear, setExpiryYear] = useState("");
   const [cvc, setCvc] = useState("");
   const [zip, setZip] = useState("");
-
   const [promoCode, setPromoCode] = useState("");
   const [discount, setDiscount] = useState(0);
   const [error, setError] = useState("");
 
+  // eventully get from db
   const validPromoCodes = {
     "DISCOUNT10": 10, // 10% discount
     "MOVIE5": 5 // 5% discount
@@ -40,6 +39,15 @@ const CheckoutPage = () => {
     selectedSeats: [],
     totalPrice: 0,
   };
+
+  const formatDate = (dateString) => { // formats the date into Month DD, YYYY
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "2-digit"
+    })
+  }
 
   const { movieTitle, selectedDate, showtime, selectedSeats, totalPrice } =
     location.state || defaultOrder;
@@ -76,7 +84,7 @@ const CheckoutPage = () => {
         <h3 className="orderTitle">Order Details</h3>
         <div className="orderDetails">
           <div className="detailItem"><strong>Movie:</strong> <span>{movieTitle}</span></div>
-          <div className="detailItem"><strong>Date:</strong> <span>{selectedDate}</span></div>
+          <div className="detailItem"><strong>Date:</strong> <span>{formatDate(selectedDate)}</span></div>
           <div className="detailItem"><strong>Showtime:</strong> <span>{showtime}</span></div>
           <div className="detailItem"><strong>Seats:</strong> <span>{selectedSeats.join(", ")}</span></div>
           <div className="detailItem"><strong>Total Price:</strong> <span>${totalPrice.toFixed(2)}</span></div>
