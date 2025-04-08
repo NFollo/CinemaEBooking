@@ -14,6 +14,7 @@ const SeatSelection = () => {
   const ticketPrice = 15.99;
 
   const [selectedSeats, setSelectedSeats] = useState([]);
+  const unavailableSeats = ["A1", "D6", "F5"]; // unavaliable seats delete this later
 
   useEffect(() => {
     const savedSeats = JSON.parse(localStorage.getItem("selectedSeats")) || [];
@@ -25,6 +26,9 @@ const SeatSelection = () => {
   }, [selectedSeats]);
 
   const toggleSeatSelection = (seatNumber) => {
+
+    if (unavailableSeats.includes(seatNumber)) return; // prevents user from selecting an unavaliable seat
+
     setSelectedSeats((prevSelected) => {
       if (prevSelected.includes(seatNumber)) {
         return prevSelected.filter((seat) => seat !== seatNumber); //deselect seat
@@ -92,11 +96,13 @@ const SeatSelection = () => {
                 const seatLetter = String.fromCharCode(65 + seatIndex); 
                 const seatNumber = `${seatLetter}${rowIndex + 1}`; 
                 const isSelected = selectedSeats.includes(seatNumber);
+                const isUnavailable = unavailableSeats.includes(seatNumber);
 
                 return (
                   <div
                     key={seatNumber}
-                    className={`seat ${isSelected ? "selected" : ""}`}
+                    //className={`seat ${isSelected ? "selected" : ""}`}
+                    className={`seat ${isUnavailable ? "sold" : ""} ${isSelected ? "selected" : ""}`}
                     onClick={() => toggleSeatSelection(seatNumber)}
                   >
                     <span className="seatNumber">{seatNumber}</span> 
