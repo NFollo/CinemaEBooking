@@ -101,6 +101,29 @@ def init_routes(app, mail):
             except Exception as err:
                 return jsonify({"error": "Failed to update user", "message": str(err)}), 500    
 
+    @app.route('/users/subscribed', methods=['GET'])
+    def get_subscribed_users():
+        ''' Fetch all users who are subscribed to promotions '''
+        try:
+            # Query users who are subscribed to promotions
+            subscribed_users = User.objects(receive_promotions=True)
+            
+            # Create a list to store the user details to send back
+            users_list = []
+            for user in subscribed_users:
+                user_data = {
+                    "email": user.email,
+                    "name": user.first_name,
+                    "receive_promotions": user.receive_promotions
+                }
+                users_list.append(user_data)
+
+            # Return the list of subscribed users
+            return jsonify(users_list), 200
+
+        except Exception as err:
+            return jsonify({"error": "Failed to fetch subscribed users", "message": str(err)}), 500
+        
     @app.route('/addresses/<id>', methods=['GET', 'PATCH']) # shouldn't be able to delete
     def get_address_by_id(id):
         ''' Fetch or update address by ID '''
@@ -558,42 +581,92 @@ def init_routes(app, mail):
                 return jsonify({"message": "Promotion created successfully", "promotion_id": str(promotion.id)}), 201
             except Exception as err:
                 return jsonify({"error": "Failed to add promotion", "message": str(err)}), 500
-    @app.route('/promotions/<promotion_id>', methods=['PUT'])
+    @app.route('/promotions/<promotion_id>', methods=['PUT', 'DELETE'])
     def promotion(promotion_id):
         '''
         Updates an existing promotion based on the provided promotion ID.
         '''
-        try:
-            promotion = Promotion.objects(id=promotion_id).first()
+        if request.method == 'GET':
+            try:
+                promotion = Promotion.objects(id=promotion_id).first()
+                
+                if not promotion:
+                    return jsonify({"error": "Promotion not found"}), 404
+                
+                json = request.json
+                
+                if "expiration_date" in json:
+                    json["expiration_date"] = datetime.fromisoformat(json["expiration_date"].replace("Z", "+00:00"))
+                
+                if "movie_id" in json:
+                    movie_id = json["movie_id"]
+                    # Check if the movie_id is a valid ObjectId string
+                    if not ObjectId.is_valid(movie_id):
+                        return jsonify({"error": "Invalid movie_id"}), 400
+                    json["movie_id"] = ObjectId(movie_id)
+                
+                # Update the promotion with the new data
+                for key, value in json.items():
+                    if hasattr(promotion, key):
+                        setattr(promotion, key, value)
+                
+                # Validate and save the updated promotion
+                promotion.validate()
+                promotion.save()
+                
+                return jsonify({"message": "Promotion updated successfully", "promotion_id": str(promotion.id)}), 200
+            except Exception as err:
+                return jsonify({"error": "Failed to update promotion", "message": str(err)}), 500
+        if request.method == 'DELETE':
+            '''Delete the specific promotion'''
+            try:
+                # Fetch the promotion by ID
+                promotion = Promotion.objects.get(id=promotion_id)  
+             
+                promotion.delete()
+
+                return jsonify({"message": "Promotion deleted successfully"}), 200
+
+            except Promotion.DoesNotExist:
+                return jsonify({"error": "Promotion not found"}), 404
+            except Exception as err:
+                return jsonify({"error": "Failed to delete promotion", "message": str(err)}), 500
             
-            if not promotion:
+    @app.route('/promotions/send', methods=['POST'])
+    def sendPromotion():
+        if request.method == 'POST':
+            json = request.json
+            promo_id = json.get('promotion').get('_id')
+
+            try:
+                promotion = Promotion.objects.get(id=promo_id)
+            except Promotion.DoesNotExist:
                 return jsonify({"error": "Promotion not found"}), 404
             
-            json = request.json
+            subscribers = User.objects(receive_promotions=True)
             
-            if "expiration_date" in json:
-                json["expiration_date"] = datetime.fromisoformat(json["expiration_date"].replace("Z", "+00:00"))
-            
-            if "movie_id" in json:
-                movie_id = json["movie_id"]
-                # Check if the movie_id is a valid ObjectId string
-                if not ObjectId.is_valid(movie_id):
-                    return jsonify({"error": "Invalid movie_id"}), 400
-                json["movie_id"] = ObjectId(movie_id)
-            
-            # Update the promotion with the new data
-            for key, value in json.items():
-                if hasattr(promotion, key):
-                    setattr(promotion, key, value)
-            
-            # Validate and save the updated promotion
-            promotion.validate()
-            promotion.save()
-            
-            return jsonify({"message": "Promotion updated successfully", "promotion_id": str(promotion.id)}), 200
-        except Exception as err:
-            return jsonify({"error": "Failed to update promotion", "message": str(err)}), 500
+            email_list = [user.email for user in subscribers]
 
+            movie = promotion.movie_id  
+            
+            if not movie:
+                return jsonify({"error": "Movie not found"}), 404
+
+            # Prepare email content
+            subject = f"Exclusive Promotion: {promotion.promo_code}"
+            body = f"Dear User,\n\nWe are excited to announce our latest promotion: {promotion.promo_code}\n\n" \
+                f"For the movie {movie.title}!!!"
+
+            try:
+                # Send email to all subscribers
+                msg = Message(subject, sender=os.environ['MAIL_USERNAME'], recipients=email_list)
+                msg.body = body
+                mail.send(msg)
+                promotion.update(set__email_send=True)
+                return jsonify({"message": f"Promotion sent to {len(email_list)} users."}), 200
+            except Exception as e:
+                return jsonify({"error": f"Failed to send emails: {str(e)}"}), 500
     return
+
 
     

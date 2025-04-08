@@ -11,16 +11,31 @@ function EditPromotions() {
   const location = useLocation();
 
   // Get the promotion passed via router state, if any
-  const promotion = location.state?.promotion;
-  const isNewPromo = location.state?.isNewPromo || false;
-  const isEdit = !isNewPromo
+  const [promotion, setPromotion] = useState(null);
+  const [isNewPromo, setIsNewPromo] = useState(false);
+  const isEdit = !isNewPromo;
 
   // Fetch all movies
-  useEffect(() => {
-    axios.get("http://localhost:5000/movies")
-      .then((res) => setMovies(res.data))
-      .catch((err) => console.error("Error fetching movies:", err));
-  }, []);
+useEffect(() => {
+  axios.get("http://localhost:5000/movies")
+    .then((res) => setMovies(res.data))
+    .catch((err) => console.error("Error fetching movies:", err));
+
+  // Load promotion data from location.state or localStorage / if refreshing the pages, remembers the page
+  if (location.state?.promotion) {
+    setPromotion(location.state.promotion);
+    setIsNewPromo(location.state.isNewPromo || false);
+  } else {
+    const saved = localStorage.getItem("promotionData");
+    if (saved) {
+      const { promotion, isNewPromo } = JSON.parse(saved);
+      setPromotion(promotion);
+      setIsNewPromo(isNewPromo);
+    }
+  }
+}, [location.state]);
+
+
 
   // Initialize promotion data
   useEffect(() => {

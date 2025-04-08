@@ -53,7 +53,7 @@ function PromotionForm({ initialData, movies, onSubmit, isEdit }) {
           ? new Date(initialData.expiration_date).toISOString().split("T")[0]
           : "",
         movie_id: initialData.movie_id || "",
-        email_send: initialData.email_send || false,
+        email_send: false,
       });
     }
   }, [initialData]);
@@ -137,19 +137,6 @@ function PromotionForm({ initialData, movies, onSubmit, isEdit }) {
         value={formData.expiration_date}
         onChange={handleChange}
       />
-
-      <div>
-        <label>
-          <input
-            type="checkbox"
-            name="email_send"
-            checked={formData.email_send}
-            onChange={handleChange}
-          />
-          Send Email Notification
-        </label>
-      </div>
-
       <div>
         <input
           type="submit"
