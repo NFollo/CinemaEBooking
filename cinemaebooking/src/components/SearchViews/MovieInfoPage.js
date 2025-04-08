@@ -2,6 +2,7 @@ import "./MovieInfoPage.css";
 import { useNavigate, useLocation } from "react-router-dom"; 
 import axios from "axios";
 import { useState, useEffect } from "react";
+import Cookies from "js-cookie";
 
 function MovieInfoPage({movie}) {
     // navigation for BookTickets button
@@ -15,6 +16,8 @@ function MovieInfoPage({movie}) {
         trailer_picture_url: "https://via.placeholder.com/150",
         trailer_video_url: ""
     };
+
+    const [authorization, setAuthorization] = useState(Cookies.get("authorization"));
     
     // eventually retrieve from DB
     //let title = 'Sonic (R)';
@@ -29,9 +32,13 @@ function MovieInfoPage({movie}) {
     let reviews = [["Jennifer", "7", "Good"], ["Bob", "2", "I hate Sanic"]];
 
     const handleBookTickets = () => {
-        navigate(`/buytickets?movie=${movieInfo.title}`, { // unique url for each movie
-            state: movieInfo
-        });   
+        if (authorization === "admin" || authorization === "customer") {
+            navigate(`/buytickets?movie=${movieInfo.title}`, { // unique url for each movie
+                state: movieInfo
+            });  
+        } else {
+            alert("You must be logged in to book tickets");
+        } 
     };
 
     useEffect(() => {
