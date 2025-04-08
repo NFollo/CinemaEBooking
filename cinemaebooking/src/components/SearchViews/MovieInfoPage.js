@@ -1,5 +1,7 @@
 import "./MovieInfoPage.css";
 import { useNavigate, useLocation } from "react-router-dom"; 
+import axios from "axios";
+import { useState, useEffect } from "react";
 
 function MovieInfoPage({movie}) {
     // navigation for BookTickets button
@@ -15,14 +17,15 @@ function MovieInfoPage({movie}) {
     };
     
     // eventually retrieve from DB
-    let title = 'Sonic (R)';
-    let status = 'Currently Running';
-    let categories = ['Action', 'Fantasy', 'Comedy'];
+    //let title = 'Sonic (R)';
+    const [status, setStatus] = useState('Currently Running');
+    const [categories, setCategories] = useState([""]);
     //let posterLink = "https://i.etsystatic.com/12729518/r/il/e19c5f/1989024537/il_1080xN.1989024537_hueq.jpg";
-    let description = "Gotta go fast hehehehehhe";
-    let directors = ["Jeff Fowler"];
-    let castMembers = ["Jim Carrey", "Ben Schwartz", "James Marsden", "Tika Sumpter"];
-    let producers = ["Tobery Ascher", "Nan Morales", "Tim Miller"];
+    const [description, setDescription] = useState("");
+    const [directors, setDirectors] = useState([""]);
+    const [castMembers, setCastMembers] = useState([""]);
+    const [producers, setProducers] = useState([""]);
+    const [rating, setRating] = useState("");
     let reviews = [["Jennifer", "7", "Good"], ["Bob", "2", "I hate Sanic"]];
 
     const handleBookTickets = () => {
@@ -31,6 +34,29 @@ function MovieInfoPage({movie}) {
         });   
     };
 
+    useEffect(() => {
+        const getMovieData = async() => {
+          try {
+            var response = await axios.get('http://localhost:5000/movies/' + movieInfo.title);
+            //console.log(movieInfo.title);
+            console.log(response.data);
+            //console.log(status);
+            if (!response.data.currently_running) {
+                setStatus("Not Currently Running");
+            }
+            setCategories(response.data.categories);
+            setDescription(response.data.synopsis);
+            setCastMembers(response.data.cast);
+            setDirectors(response.data.directors);
+            setProducers(response.data.producers);
+            setRating(response.data.mpaa_us_film_rating_code);
+          } catch (e) {
+            console.log("Error fetching movie data: " + e);
+          }
+        };
+        getMovieData();
+    }, []);
+
     return (
         <div className='pageContainer'>
             <p className='title'>{movieInfo.title}</p>
@@ -38,10 +64,10 @@ function MovieInfoPage({movie}) {
             <p>{status}</p>
 
             <div className='categoriesContainer'>
-                {categories.map((category) => <div>{category}</div>)}
+                <span className="MovieInfoPageRating">{rating}</span> {categories.map((category) => <div>{category}</div>)}
             </div>
 
-            <img className='poster' src={movieInfo.trailer_picture_url} alt={title} />
+            <img className='poster' src={movieInfo.trailer_picture_url} alt={movieInfo.title} />
 
             <iframe className='trailer' src={movieInfo.trailer_video_url} title="sonic3" >
             </iframe>

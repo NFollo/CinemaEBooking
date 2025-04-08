@@ -75,3 +75,7 @@
     
     gap: 1em;
 }
+
+.MovieInfoPageRating {
+    font-weight: bold;
+}
