@@ -586,7 +586,7 @@ def init_routes(app, mail):
         '''
         Updates an existing promotion based on the provided promotion ID.
         '''
-        if request.method == 'GET':
+        if request.method == 'PUT':
             try:
                 promotion = Promotion.objects(id=promotion_id).first()
                 
