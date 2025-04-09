@@ -89,7 +89,13 @@ def init_routes(app, mail):
                             hashed_password = encrypt(value)  # Use the encrypt function
                             setattr(user, key, str(hashed_password))  # Store the hashed password as a string
                         else:
-                            setattr(user, key, value)
+                            # add address attribute if does not exist
+                            if key == 'address':
+                                filter_criteria = {'_id': user.id}
+                                update_operation = {'$set': {'address': value}}
+                                User._get_collection().update_one(filter_criteria, update_operation)
+                            else:
+                                setattr(user, key, value)
                             
                 user.save()
 
