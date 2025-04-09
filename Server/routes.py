@@ -610,7 +610,7 @@ def init_routes(app, mail):
                     if hasattr(promotion, key):
                         setattr(promotion, key, value)
                 
-                # Validate and save the updated promotion
+                # Validate and save the updated npromotion
                 promotion.validate()
                 promotion.save()
                 
@@ -648,14 +648,16 @@ def init_routes(app, mail):
             email_list = [user.email for user in subscribers]
 
             movie = promotion.movie_id  
-            
+
+            expiration_date = promotion.expiration_date.strftime('%Y-%m-%d %H:%M:%S')
             if not movie:
                 return jsonify({"error": "Movie not found"}), 404
 
             # Prepare email content
             subject = f"Exclusive Promotion: {promotion.promo_code}"
             body = f"Dear User,\n\nWe are excited to announce our latest promotion: {promotion.promo_code}\n\n" \
-                f"For the movie {movie.title}!!!"
+                f"For the movie {movie.title}!!!\n\n" \
+                f"Promotion expires: {expiration_date}"
 
             try:
                 # Send email to all subscribers
