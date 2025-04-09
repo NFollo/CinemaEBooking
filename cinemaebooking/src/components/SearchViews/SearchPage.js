@@ -9,6 +9,7 @@ function SearchPage({query}) {
     const [movies, setMovies] = useState([]); // State for movie list
 
     var movieContainer = document.getElementById("movies");
+    let isMovieMatch = false;
 
     const searchMovies = () => {
 
@@ -44,6 +45,7 @@ function SearchPage({query}) {
 
         };
 
+        isMovieMatch = (movies.length !== 0);
         movies.forEach((movie) => {
             
             if (query != null && (query === "" || doesMatch(query, movie.title)) ) {
@@ -116,7 +118,9 @@ useEffect(() => {
         </div>
         <div id="movies" className="SearchPageMovies">
                       
-        </div>
+        </div> 
+        
+        {!isMovieMatch && query !== ""? <p className="centered">No movies match the search results!</p> : <></>}
       </div>
     );
 
