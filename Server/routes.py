@@ -182,9 +182,12 @@ def init_routes(app, mail):
                 data = request.get_json() 
 
                 for key, value in data.items():
-                    if key == 'card_number':
+                    if key == 'card_number' and value != "":
                         payment_card.card_number = str(encrypt(data['card_number']))
                         payment_card.last_four = data['card_number'][-4:]
+
+                    elif key == 'cvc' and value != "":
+                        payment_card.cvc = str(encrypt(data['cvc']))
 
                     elif hasattr(payment_card, key):
                         setattr(payment_card, key, value)

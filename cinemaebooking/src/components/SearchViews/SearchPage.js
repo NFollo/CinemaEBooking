@@ -42,6 +42,7 @@ function SearchPage({query}) {
     ];*/
 
     var movieContainer = document.getElementById("movies");
+    let isMovieMatch = false;
 
     const searchMovies = () => {
 
@@ -77,6 +78,7 @@ function SearchPage({query}) {
 
         };
 
+        isMovieMatch = (movies.length !== 0);
         movies.forEach((movie) => {
             
             if (query != null && (query === "" || doesMatch(query, movie.title)) ) {
@@ -143,7 +145,9 @@ function SearchPage({query}) {
         </div>
         <div id="movies" className="SearchPageMovies">
                       
-        </div>
+        </div> 
+        
+        {!isMovieMatch && query !== ""? <p className="centered">No movies match the search results!</p> : <></>}
       </div>
     );
 

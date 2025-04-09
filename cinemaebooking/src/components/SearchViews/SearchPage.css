@@ -48,3 +48,7 @@
     padding: 10px 10px;
     text-decoration: none;
 }
+
+.centered {
+    justify-self: center;
+}
