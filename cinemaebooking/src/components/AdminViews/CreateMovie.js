@@ -37,7 +37,7 @@ function CreateMovie() {
             const myDirectors = directors.split(",");
             const myProducers = producers.split(",");
             const myCategories = categories.split(",");
-            const movieStat = false;
+            var movieStat = false;
             if (isRunning === "Currently Running") {
                 movieStat = true;
             }
