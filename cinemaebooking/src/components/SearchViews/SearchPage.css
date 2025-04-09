@@ -52,3 +52,44 @@
 .centered {
     justify-self: center;
 }
+
+.filter-controls {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.toggle-button {
+    padding: 8px 15px;
+    background-color: #4a4a4a;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.toggle-button:hover {
+    background-color: #5a5a5a;
+}
+
+.category-select {
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    min-width: 200px;
+    font-size: 14px;
+}
+
+.SearchPageSubtext2 {
+    font-size: 90%;
+    color: #666;
+    margin: 5px 0;
+}
+
+.centered {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 1.2rem;
+    color: #666;
+}
