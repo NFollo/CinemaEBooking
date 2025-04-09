@@ -51,22 +51,44 @@ const CheckoutPage = () => {
   const [card3Zipcode, setCard3Zipcode] = useState("");
   const [card3Last4, setCard3Last4] = useState("");
 
-  // eventully get from db
-  const validPromoCodes = {
-    "DISCOUNT10": 10, // 10% discount
-    "MOVIE5": 5 // 5% discount
-  };
+  const [validPromoCodes, setValidPromoCodes] = useState([]);
+
+  useEffect(() => {
+    const fetchPromotions = async () => {
+      try {
+        const res = await axios.get("http://localhost:5000/promotions");
+        setValidPromoCodes(res.data);
+        console.log("fetched promos: ", res.data)
+      } catch (error) {
+        console.error("Failed to fetch promotions:", error);
+      }
+    };
+
+    fetchPromotions();
+  }, []);
+
 
   const applyPromoCode = () => {
-    if (validPromoCodes[promoCode]) {
-      const discountAmount = (totalPrice * validPromoCodes[promoCode]) / 100;
-      setDiscount(discountAmount);
-      setError("");
+    const matchedPromo = validPromoCodes.find(promo => promo.promo_code === promoCode);
+  
+    if (matchedPromo) {
+      const today = new Date();
+      const expirationDate = new Date(matchedPromo.expiration_date);
+  
+      if (today <= expirationDate) {
+        const discountAmount = (totalPrice * matchedPromo.discount) / 100;
+        setDiscount(discountAmount);
+        setError("");
+      } else {
+        setError("Promo code has expired");
+        setDiscount(0);
+      }
     } else {
       setError("Invalid promo code");
       setDiscount(0);
     }
   };
+  
 
   const defaultOrder = {
     movieTitle: "Unknown Movie",
@@ -76,14 +98,20 @@ const CheckoutPage = () => {
     totalPrice: 0,
   };
 
-  const formatDate = (dateString) => { // formats the date into Month DD, YYYY
+  const formatDate = (dateString) => {
     const date = new Date(dateString);
+    date.setDate(date.getDate() + 1);
     return date.toLocaleDateString("en-US", {
       year: "numeric",
       month: "long",
       day: "2-digit"
     })
   }
+
+  // useEffect(() => {
+  //   console.log("Order state:", location.state);
+  // }, [location.state]);
+  
 
   useEffect(() => {
     const getCards = async () => {
@@ -299,16 +327,18 @@ const CheckoutPage = () => {
          )}
        </div>
 
+       
        <div className="promoContainer">
         <div className="promoBox">
-          <h3>Coupon Code</h3>
-            <input 
-              type="text" 
-              placeholder="Enter your code" 
-              className="promoInput" 
-              value={promoCode} 
-              onChange={(e) => setPromoCode(e.target.value)} 
-            />
+          <h3>Promo Code</h3>
+          <input 
+            type="text" 
+            placeholder="Enter your code" 
+            className="promoInput" 
+            value={promoCode || ""}
+            onChange={(e) => setPromoCode(e.target.value)} 
+          />
+
             <button className="applyButton" onClick={applyPromoCode}>Apply</button>
           </div>
           {error && <p className="errorText">{error}</p>}

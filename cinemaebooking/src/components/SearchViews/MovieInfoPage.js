@@ -10,12 +10,13 @@ function MovieInfoPage({movie}) {
     const location = useLocation(); 
 
     // no movie 
-    const movieInfo = location.state || {
+    const [movieInfo, setMovieInfo] = useState(location.state || {
         title: "Unknown Movie",
         description: "No description available",
         trailer_picture_url: "https://via.placeholder.com/150",
         trailer_video_url: ""
-    };
+    });
+      
 
     const [authorization, setAuthorization] = useState(Cookies.get("authorization"));
     
@@ -42,14 +43,13 @@ function MovieInfoPage({movie}) {
     };
 
     useEffect(() => {
-        const getMovieData = async() => {
+        const getMovieData = async () => {
           try {
-            var response = await axios.get('http://localhost:5000/movies/' + movieInfo.title);
-            //console.log(movieInfo.title);
+            const response = await axios.get('http://localhost:5000/movies/' + movieInfo.title);
             console.log(response.data);
-            //console.log(status);
+      
             if (!response.data.currently_running) {
-                setStatus("Not Currently Running");
+              setStatus("Not Currently Running");
             }
             setCategories(response.data.categories);
             setDescription(response.data.synopsis);
@@ -57,12 +57,20 @@ function MovieInfoPage({movie}) {
             setDirectors(response.data.directors);
             setProducers(response.data.producers);
             setRating(response.data.mpaa_us_film_rating_code);
+      
+            // update id
+            setMovieInfo(prev => ({
+              ...prev,
+              _id: response.data._id
+            }));
           } catch (e) {
             console.log("Error fetching movie data: " + e);
           }
         };
+      
         getMovieData();
-    }, []);
+      }, []);
+      
 
     return (
         <div className='pageContainer'>

@@ -530,7 +530,7 @@ def init_routes(app, mail):
                     show_dict['movie'] = str(show_dict['movie']) if isinstance(show_dict.get('movie'), ObjectId) else show_dict.get('movie')
                     show_dict['showroom'] = str(show_dict['showroom']) if isinstance(show_dict.get('showroom'), ObjectId) else show_dict.get('showroom')
 
-                shows_list.append(show_dict)
+                    shows_list.append(show_dict)
 
                 return jsonify(shows_list), 200
             except Exception as err:

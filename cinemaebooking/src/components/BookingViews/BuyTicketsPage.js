@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom"; 
 import "./BuyTicketsPage.css";
 
@@ -7,15 +7,31 @@ function BuyTicketsPage() {
   const navigate = useNavigate();
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedShowtime, setSelectedShowtime] = useState("");
+  const [selectedTime, setSelectedTime] = useState("");
+  const [selectedShow, setSelectedShow] = useState(null);
+  const [availableDates, setAvailableDates] = useState([]); 
+  const [availableShowtimes, setAvailableShowtimes] = useState({}); 
   const [tickets, setTickets] = useState({ adult: 0, child: 0, senior: 0 });
   const today = new Date().toISOString().split("T")[0];
+
+  const showroomMapping = { // hardcoded showroom id to showroom number
+    '67d47d3e2016246101cf8c05': 1,
+    '67d47f66f3d339983b1b1185': 2,
+    '67ec946be0d4d125670ad5bc': 3,
+  };
+  
+  const getShowroomNumber = (showroomId) => showroomMapping[showroomId] || "Unknown";
   
   // no movie 
+  console.log("location.state:", location.state);
   const movie = location.state || {
     title: "Unknown Movie",
     description: "No description available",
     trailer_picture_url: "https://via.placeholder.com/150",
+    
   };
+  console.log("Selected movie ID:", movie._id);
+
 
   const ticketPrices = {
     adult: 15.99,
@@ -31,6 +47,49 @@ function BuyTicketsPage() {
       setSelectedDate("");
     }
   };
+
+  const formatShowtime = (hour) => {
+    const intHour = parseInt(hour);
+    const displayHour = intHour % 12 === 0 ? 12 : intHour % 12;
+    return `${displayHour}:00 PM`;
+  };
+  
+  
+
+  useEffect(() => {
+    const fetchMovieShows = async () => {
+      const movieId = movie._id?.$oid || movie._id;
+      if (!movieId) return;
+  
+      try {
+        const res = await fetch(`http://localhost:5000/shows/movie/${movieId}`);
+        const data = await res.json();
+        console.log("Fetched show data:", data);
+  
+        const result = {};
+        const dateSet = new Set();
+  
+        data.forEach(show => {
+          const date = show.date;
+          const time = show.time.toString();
+  
+          if (!result[date]) result[date] = {};
+          if (!result[date][time]) result[date][time] = [];
+  
+          result[date][time].push(show);
+          dateSet.add(date);
+        });
+  
+        setAvailableDates(Array.from(dateSet).sort());
+        setAvailableShowtimes(result);
+      } catch (err) {
+        console.error("Failed to fetch shows by movie ID", err);
+      }
+    };
+  
+    fetchMovieShows();
+  }, [movie]);
+  
 
   const totalPrice = (tickets.adult * ticketPrices.adult) + 
                      (tickets.child * ticketPrices.child) + 
@@ -49,22 +108,24 @@ function BuyTicketsPage() {
   const totalTickets = tickets.adult + tickets.child + tickets.senior;
 
   const handleContinue = () => {
-    if (!selectedDate || !selectedShowtime || totalTickets === 0) {
+    if (!selectedDate || !selectedTime || totalTickets === 0) {
       alert("Please select a date, showtime, and at least one ticket before continuing.");
       return;
     }
 
     navigate(
-      `/seatselection?movie=${encodeURIComponent(movie.title)}&date=${selectedDate}&showtime=${selectedShowtime}&tickets=${totalTickets}`,
+      `/seatselection?movie=${encodeURIComponent(movie.title)}&date=${selectedDate}&showtime=${selectedTime}&tickets=${totalTickets}`,
       {
         state: {
           movie,
           selectedDate,
-          selectedShowtime,
+          showtime: selectedTime,
+          selectedShow,
           tickets
         }
       }
     );
+    
     
     
   };
@@ -91,7 +152,7 @@ function BuyTicketsPage() {
           </div>
         </div>
 
-        <div className="dateSelection">
+        {/* <div className="dateSelection">
           <h3>Date:</h3>
           <input 
             type="date" 
@@ -118,9 +179,82 @@ function BuyTicketsPage() {
               ))}
             </div>
           </>
+        )} */}
+
+        <div className="dateSelection">
+          <h3>Select Date:</h3>
+          <div className="dateButtons">
+          {availableDates.map((date) => {
+          const [year, month, day] = date.split("-");
+          const localDate = new Date(year, month - 1, day); // JS months are 0-indexed
+          
+          return (
+            <button
+              key={date}
+              className={`dateButton ${selectedDate === date ? "selected" : ""}`}
+              onClick={() => {
+                setSelectedDate(date);
+                setSelectedShowtime("");
+              }}
+            >
+              {localDate.toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "long",
+                day: "numeric"
+              })}
+            </button>
+          );
+        })}
+
+          </div>
+        </div>
+
+        {selectedDate && (
+          <>
+            <h3>Select Showtime:</h3>
+            <div className="showtimeButtons">
+            {Object.keys(availableShowtimes[selectedDate] || {})
+              .sort((a, b) => {
+                const toSortValue = (time) => (parseInt(time) === 12 ? 0 : parseInt(time));
+                return toSortValue(a) - toSortValue(b);
+              })
+              .map((time) => (
+                <button
+                  key={time}
+                  className={`showtimeButton ${selectedTime === time ? "selected" : ""}`}
+                  onClick={() => {
+                    setSelectedTime(time);
+                    setSelectedShow(null);
+                  }}
+                >
+                  {formatShowtime(time)}
+                </button>
+            ))}
+
+            </div>
+          </>
         )}
 
-        {selectedShowtime && (
+
+        {selectedTime && (
+          <>
+            <h3>Select Showroom:</h3>
+            <div className="showroomButtons">
+              {(availableShowtimes[selectedDate][selectedTime] || []).map((show) => (
+                <button
+                  key={show._id}
+                  className={`showtimeButton ${selectedShow?._id === show._id ? "selected" : ""}`}
+                  onClick={() => setSelectedShow(show)}
+              >
+                  Showroom {getShowroomNumber(show.showroom)}
+              </button>
+              
+              ))}
+            </div>
+          </>
+        )}
+
+        {selectedShow && (
           <>
             <div className="ticketSelection">
               {[

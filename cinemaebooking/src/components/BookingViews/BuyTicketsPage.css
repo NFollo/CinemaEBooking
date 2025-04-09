@@ -114,6 +114,29 @@ body, html {
     cursor: pointer;
 }
 
+.dateButton {
+    padding: 10px 16px;
+    margin: 5px;
+    border: none;
+    border-radius: 6px;
+    background-color: #444;
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+  
+.dateButton:hover {
+    background: rgb(245, 65, 65);
+    color: black
+}
+  
+.dateButton.selected {
+    background: rgb(245, 65, 65);
+    color: rgb(255, 255, 255)
+}
+  
+
 .showtimeButtons {
     display: flex;
     flex-wrap: wrap;
@@ -130,11 +153,35 @@ body, html {
     font-size: 16px;
     border-radius: 5px;
     align-items: center;
+    margin-bottom: 20px;
 }
 
 .showtimeButton:hover, .showtimeButton.selected {
     background: rgb(245, 65, 65);
-    color: black;
+    color: rgb(255, 255, 255);
+}
+
+.showroomButtons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.showroomButton {
+    background: #444;
+    border: none;
+    color: white;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 5px;
+    align-items: center;
+}
+
+.showroomButton:hover, .showtimeButton.selected {
+    background: rgb(245, 65, 65);
+    color: rgb(255, 255, 255);
 }
 
 .ticketSelection {
