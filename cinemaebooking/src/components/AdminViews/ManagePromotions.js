@@ -100,17 +100,17 @@ function ManagePromotions() {
               <>
                 <div onClick={() => openModal(promo)} className="ManageEditButton">Send</div>
                 <div onClick={() => handleEdit(promo)} className="ManageEditButton">Edit</div>
+                <div onClick={() => handleDelete(promo._id)} className="ManageEditButton">Delete</div>
               </>
             )}
             {promo.email_send && (
               <div className="ManageUnitOptions">
                 <div className="ManageEditButton" style={{ cursor: "not-allowed", opacity: 0.5 }}>Sent</div>
                 <div className="ManageEditButton" style={{ cursor: "not-allowed", opacity: 0.5 }}>Edit </div>
+                <div className="ManageEditButton" style={{ cursor: "not-allowed", opacity: 0.5 }}>Delete </div>
               </div>
               
             )}
-            <div onClick={() => handleDelete(promo._id)} className="ManageEditButton">Delete</div>
-            {/* <div className="ManagePromocode">Code: {promo.code || "none"}</div> */}
           </div>
         </div>
       ))}
