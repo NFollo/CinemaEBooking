@@ -79,7 +79,7 @@ function MovieInfoPage({movie}) {
             <iframe className='trailer' src={movieInfo.trailer_video_url} title="sonic3" >
             </iframe>
 
-            <p>{description}</p>
+            <div className='description'>{description}</div>
 
             <div className='directorsContainer'>
                 <p className='label'>Directors:</p>

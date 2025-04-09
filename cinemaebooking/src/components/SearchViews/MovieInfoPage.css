@@ -79,3 +79,7 @@
 .MovieInfoPageRating {
     font-weight: bold;
 }
+
+.description {
+    width: 50%;
+}
