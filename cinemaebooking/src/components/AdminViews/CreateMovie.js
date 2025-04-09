@@ -16,6 +16,7 @@ function CreateMovie() {
     const [producers, setProducers] = useState("");
     const [directors, setDirectors] = useState("");
     const [cast, setCast] = useState("");
+    const [isRunning, setIsRunning] = useState(false);
 
     async function addMovie (movie) {
         //console.log(movie);
@@ -28,7 +29,7 @@ function CreateMovie() {
 
     const onFormSubmit = (e) => {
         e.preventDefault();
-        if (title === "" || synopsis === "" || rating === "" || poster === "" || trailer === "" || categories === "" || producers === "" || directors === "" || cast === "") {
+        if (isRunning === "" || title === "" || synopsis === "" || rating === "" || poster === "" || trailer === "" || categories === "" || producers === "" || directors === "" || cast === "") {
             alert("Please fill out all of the data before submitting");
         } else {
             // create arrays from the string inputs
@@ -36,6 +37,10 @@ function CreateMovie() {
             const myDirectors = directors.split(",");
             const myProducers = producers.split(",");
             const myCategories = categories.split(",");
+            const movieStat = false;
+            if (isRunning === "Currently Running") {
+                movieStat = true;
+            }
 
             // package to be posted to the database
             const movie = {
@@ -48,7 +53,7 @@ function CreateMovie() {
                 cast : myCast,
                 directors : myDirectors,
                 producers : myProducers,
-                currently_running : true,
+                currently_running : movieStat,
             }
 
             //console.log(movie);
@@ -97,7 +102,7 @@ function CreateMovie() {
                 </div>
                 <div className="CreateMovieEntry">
                     <div className="CreateMovieSubtitle">
-                        Movie Trailer (URL)
+                        Movie Trailer (embed URL)
                     </div>
                     <input className="CreateMovieInput" value={trailer} onChange={(e) => setTrailer(e.target.value)}></input>
                 </div>
@@ -126,6 +131,16 @@ function CreateMovie() {
                         Cast
                     </div>
                     <input className="CreateMovieInput" value={cast} onChange={(e) => setCast(e.target.value)}></input>
+                </div>
+                <div className="CreateMovieEntry">
+                    <div className="CreateMovieSubtitle">
+                        Movie Status
+                    </div>
+                    <select className="CreateMovieInput" value={isRunning} onChange={(e) => setIsRunning(e.target.value)}>
+                        <option value=""></option>
+                        <option value="Currently Running">Currently Running</option>
+                        <option value="Coming Soon">Coming Soon</option>
+                    </select>
                 </div>
                 <button className="CreateMovieButton" onClick={onFormSubmit}>Add Movie</button>
             </form>

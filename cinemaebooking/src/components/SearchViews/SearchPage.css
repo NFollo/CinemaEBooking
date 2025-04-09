@@ -22,10 +22,12 @@
     width: 15%;
 }
 
-.SearchPageMovieCard img {
+.SearchPageMovieCardImage {
     width: 13vw;
     height: 20vw;
 }
+
+
 
 .SearchPageMovieTitle {
     font-size: 150%;

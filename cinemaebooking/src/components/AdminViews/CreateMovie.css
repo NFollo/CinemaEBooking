@@ -32,6 +32,13 @@
     grid-column-start: 2;
 }
 
+.CreateMovieCheckbox {
+    grid-column-start: 2;
+    justify-self: start;
+    align-self: center;
+    width: fit-content; 
+}
+
 .CreateMovie form {
     display: flex;
     flex-direction: column;
@@ -54,6 +61,7 @@
     margin: 0% 30%;
     text-decoration: none;
     text-align: center;
+    margin-bottom: 20px;
 }
 
 .CreateMovieButton:hover {

@@ -46,6 +46,7 @@ function SearchPage({ query }) {
             movieCard.className = "SearchPageMovieCard";
 
             const movieImg = document.createElement("img");
+            movieImg.className = "SearchPageMovieCardImage"
             movieImg.src = movie.trailer_picture_url;
             
             const movieTitle = document.createElement("div");
