@@ -134,7 +134,9 @@ function Main() {
             <Route exact path='/search' 
               element={
                 <div>
-                  <NavBar onSearch={onSearch} input={input} clearInput={clearInput}/>
+                  {authorization === "admin" ? <AdminNavBar onSearch={onSearch} input={input} clearInput={clearInput} logout={logout}/> 
+                    : (authorization === "customer" ? <LoggedNavBar onSearch={onSearch} logout={logout} input={input} clearInput={clearInput}/> 
+                    : <NavBar onSearch={onSearch} input={input} clearInput={clearInput}/>)}
                   <SearchPage query={input}/>
                 </div>
               } 
@@ -240,7 +242,9 @@ function Main() {
             <Route path="/orderconfirmation" element={<OrderConfirmation />} />
             <Route exact path='/movieinfo' 
               element={ <div>
-                          <NavBar onSearch={onSearch} input={input} clearInput={clearInput}/>
+                          {authorization === "admin" ? <AdminNavBar onSearch={onSearch} input={input} clearInput={clearInput} logout={logout}/> 
+                            : (authorization === "customer" ? <LoggedNavBar onSearch={onSearch} logout={logout} input={input} clearInput={clearInput}/> 
+                            : <NavBar onSearch={onSearch} input={input} clearInput={clearInput}/>)}
                           <MovieInfoPage />
                         </div>} 
             />
