@@ -108,6 +108,12 @@ const CheckoutPage = () => {
     })
   }
 
+  const formatShowtime = (hour) => {
+    const intHour = parseInt(hour);
+    const displayHour = intHour % 12 === 0 ? 12 : intHour % 12;
+    return `${displayHour}:00 PM`;
+  };
+
   // useEffect(() => {
   //   console.log("Order state:", location.state);
   // }, [location.state]);
@@ -221,7 +227,7 @@ const CheckoutPage = () => {
         <div className="orderDetails">
           <div className="detailItem"><strong>Movie:</strong> <span>{movieTitle}</span></div>
           <div className="detailItem"><strong>Date:</strong> <span>{formatDate(selectedDate)}</span></div>
-          <div className="detailItem"><strong>Showtime:</strong> <span>{showtime}</span></div>
+          <div className="detailItem"><strong>Showtime:</strong> <span>{formatShowtime(showtime)}</span></div>
           <div className="detailItem"><strong>Seats:</strong> <span>{selectedSeats.join(", ")}</span></div>
           <div className="detailItem"><strong>Total Price:</strong> <span>${totalPrice.toFixed(2)}</span></div>
         </div>
