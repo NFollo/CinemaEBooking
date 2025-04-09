@@ -175,15 +175,13 @@ def init_routes(app, mail):
                 payment_card = PaymentCard.objects.get(id=id)  
                 data = request.get_json() 
 
-                if 'card_number' in data:
-                    payment_card.card_number = str(encrypt(data['card_number']))
-                    payment_card.last_four = data['card_number'][-4:]
-                if 'cvc' in data:
-                    payment_card.cvc = str(encrypt(data['cvc']))
-                if 'expiration_date' in data:
-                    payment_card.expiration_date = data['expiration_date']
-                if 'cardholder_name' in data:
-                    payment_card.cardholder_name = data['cardholder_name']
+                for key, value in data.items():
+                    if key == 'card_number':
+                        payment_card.card_number = str(encrypt(data['card_number']))
+                        payment_card.last_four = data['card_number'][-4:]
+
+                    elif hasattr(payment_card, key):
+                        setattr(payment_card, key, value)
 
                 payment_card.save()  
 
