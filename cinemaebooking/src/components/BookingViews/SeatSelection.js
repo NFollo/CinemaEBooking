@@ -72,7 +72,7 @@ const SeatSelection = () => {
       <div className="seatKey">
         <div className="keyItem">
           <div className="seat unavailable"></div>
-          <small>N/A</small>
+          <small>Unoccupied</small>
         </div>
         <div className="keyItem">
           <div className="seat selected"></div>
