@@ -11,3 +11,19 @@
     background-color: rgb(158,22,22);
     height: 100vh;
 }
+
+.LoginFormSection input[type="password"],
+.LoginFormSection input[type="text"] {
+  padding-right: 40px;
+}
+
+.password-container {
+  position: relative;
+}
+
+.password-toggle-icon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  cursor: pointer;
+}

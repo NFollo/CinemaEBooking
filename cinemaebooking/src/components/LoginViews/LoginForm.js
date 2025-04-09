@@ -3,10 +3,12 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useState } from "react";
 import { checkPasswordMatch, getUserPrivilege } from "../../applicationLogic/LoginHandlers"
 import Cookies from "js-cookie";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 function LoginForm(props) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate();
 
     // handler for login button
@@ -76,14 +78,27 @@ function LoginForm(props) {
                 onChange={(e) => setEmail(e.target.value)}
                 required></input>
           </div>
-          <div className="LoginFormSection">
+          <div className="LoginFormSection password-container">
             Password:
-            <input name="password"
-                type="password"
-                value={password} 
-                onChange={(e) => setPassword(e.target.value)}
-                required></input>
-          </div>  
+            <input
+              name="password"
+              type={showPassword ? "text" : "password"}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+            <span
+              className="password-toggle-icon"
+              onClick={() => setShowPassword(!showPassword)}
+              role="button"
+              aria-label={showPassword ? "Hide password" : "Show password"}
+              title={showPassword ? "Hide password" : "Show password"}
+            >
+              {showPassword ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
+            </span>
+          </div>
+
+
           <input type="submit" value="Login" onClick={onSubmit} className="LoginFormSubmit"></input>  
         </form>
 
