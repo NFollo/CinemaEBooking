@@ -339,7 +339,9 @@ const CheckoutPage = () => {
             onChange={(e) => setPromoCode(e.target.value)} 
           />
 
-            <button className="applyButton" onClick={applyPromoCode}>Apply</button>
+            {/* <button className="applyButton" onClick={applyPromoCode}>Apply</button> */}
+            <button className="applyButton">Apply</button>
+
           </div>
           {error && <p className="errorText">{error}</p>}
           {discount > 0 && <p className="successText">Discount Applied: -${discount.toFixed(2)}</p>}
