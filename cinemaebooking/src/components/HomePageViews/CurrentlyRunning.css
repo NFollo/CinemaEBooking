@@ -70,7 +70,8 @@
 }
   
 .SoonMovieImg img {
-    width: 100%;
+    width: 18vw;
+    height: 26vw;
     transition: opacity 0.3s ease-in-out;
 }
 
@@ -100,4 +101,8 @@
     padding: 0% 10%;
     width: 100%;
     justify-self: center;
+}
+
+.SoonMovieRating {
+    font-size: 70%;
 }

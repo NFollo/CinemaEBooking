@@ -9,7 +9,7 @@ function CurrentlyRunning() {
   const [carouselGroups, setCarouselGroups] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:5000/movies/homepageInfo")
+    fetch("http://localhost:5000/movies")
       .then((res) => res.json())
       .then((data) => {
         // Filter movies where currently_running is true
@@ -19,6 +19,7 @@ function CurrentlyRunning() {
             trailer_picture_url: movie.trailer_picture_url,
             trailer_video_url: movie.trailer_video_url,
             currently_running: movie.currentlyRunning,
+            rating: movie.mpaa_us_film_rating_code,
           }));
         setMovies(currentlyRunningMovies);
       })
@@ -63,6 +64,7 @@ function CurrentlyRunning() {
                     <div className="SoonMovieImg" onClick={() => handleClick(movieData)}> 
                       <img src={movieData.trailer_picture_url} alt={movieData.title} />
                     </div>
+                    <div className="SoonMovieRating">{movieData.rating}</div>
                     <div className="SoonMovieTitle">{movieData.title}</div>
                     <div className="SoonMovieDesc">{movieData.description}</div>
                   </div>
