@@ -37,6 +37,7 @@ function EditProfile() {
     const [card, setCard] = useState({
         id: "",
         card_type: "",
+        card_number: "",
         name_on_card: "",
         last_four: "",
         month: "",
@@ -74,6 +75,51 @@ function EditProfile() {
             type: "billing",
         },
     });
+
+    // only allow numbers
+    const disallowNonNumericInput = (evt) => {
+        if (evt.ctrlKey) return;
+        if (evt.key.length > 1) return;
+        if (/[0-9]/.test(evt.key)) return;
+        evt.preventDefault();
+    };
+
+    // format card number
+    const formatToCardNumber = (evt) => {
+        const digits = evt.target.value.replace(/\D/g, '').substring(0, 16);
+        const part1 = digits.substring(0, 4);
+        const part2 = digits.substring(4, 8);
+        const part3 = digits.substring(8, 12);
+        const part4 = digits.substring(12, 16);
+    
+        let formattedCard = '';
+        if (digits.length > 12) {
+            formattedCard = `${part1}-${part2}-${part3}-${part4}`;
+        } else if (digits.length > 8) {
+            formattedCard = `${part1}-${part2}-${part3}`;
+        } else if (digits.length > 4) {
+            formattedCard = `${part1}-${part2}`;
+        } else {
+            formattedCard = part1;
+        }
+    
+        switch (evt.target.name) {
+            case "card1_number":
+                setCard((prev) => ({ ...prev, card_number: formattedCard }));
+                break;
+            case "card2_number":
+                setCard2((prev) => ({ ...prev, card_number: formattedCard }));
+                break;
+            case "card3_number":
+                setCard3((prev) => ({ ...prev, card_number: formattedCard }));
+                break;
+            case "newCard_number":
+                setNewCard((prev) => ({ ...prev, card_number: formattedCard }));
+                break;
+            default:
+        }
+        //setCardNumber(formattedCard);
+    }
 
     async function createPaymentCard(
         cardType,
@@ -304,6 +350,12 @@ function EditProfile() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if ( (card && card.card_type === "") || (card2 && card2.card_type === "") 
+              || (card3 && card3.card_type === "")) {
+            alert("Please select a valid card type");
+            return;
+        }
+
         
         try {
             // updates user
@@ -356,13 +408,21 @@ function EditProfile() {
                 setAddress((prev) => ({ ...prev, id: newAddressId }));
             }
 
-            // updates billing address
-            if (card.billing_address.id) {
+            // updates billing addresses
+            if (card && card.billing_address.id) {
                 await axios.patch(`http://localhost:5000/addresses/${card.billing_address.id.$oid}`, card.billing_address);
+            }
+            
+            if (card2 && card2.billing_address.id) {
+                await axios.patch(`http://localhost:5000/addresses/${card2.billing_address.id.$oid}`, card2.billing_address);
+            }
+
+            if (card3 && card3.billing_address.id) {
+                await axios.patch(`http://localhost:5000/addresses/${card3.billing_address.id.$oid}`, card3.billing_address);
             }
 
             // updates cards
-            if (card.id) {
+            if (card) {
                 await axios.patch(`http://localhost:5000/paymentCards/${card.id.$oid}`, {
                     card_type: card.card_type,
                     name_on_card: card.name_on_card,
@@ -374,11 +434,33 @@ function EditProfile() {
                 });
             }
 
-            
+            if (card2) {
+                await axios.patch(`http://localhost:5000/paymentCards/${card2.id.$oid}`, {
+                    card_type: card2.card_type,
+                    name_on_card: card2.name_on_card,
+                    card_number: card2.card_number,
+                    month: card2.month,
+                    year: card2.year,
+                    cvc: card2.cvc,
+                    billing_address: card2.billing_address.id,
+                });
+            }
 
-            
+            if (card3) {
+                await axios.patch(`http://localhost:5000/paymentCards/${card3.id.$oid}`, {
+                    card_type: card3.card_type,
+                    name_on_card: card3.name_on_card,
+                    card_number: card3.card_number,
+                    month: card3.month,
+                    year: card3.year,
+                    cvc: card3.cvc,
+                    billing_address: card3.billing_address.id,
+                });
+            }
+
             await fetchData();
             
+            console.log("right before update post")
             await axios.post('http://localhost:5000/sendProfileChangedEmail', {
                 email: user.email,
             });
@@ -535,13 +617,18 @@ function EditProfile() {
                 <div>Name on Card:</div>
                 <input type="text" name="name_on_card" value={card.name_on_card} onChange={handleCardChange} />
                 <div>Card Number:</div>
-                <input type="text" name="card_number" value={card.card_number} onChange={handleCardChange} />
+                <input type="text" name="card1_number" value={card.card_number} onChange={handleCardChange} 
+                    placeholder="1111-2222-3333-4444"
+                    maxlength="19"
+                    onKeyDown={disallowNonNumericInput}
+                    onKeyUp={formatToCardNumber}/>
                 <div>Expiration Month:</div>
                 <input type="text" name="month" value={card.month} onChange={handleCardChange} />
                 <div>Expiration Year:</div>
                 <input type="text" name="year" value={card.year} onChange={handleCardChange} />
                 <div>CVC:</div>
-                <input type="text" name="cvc" value={card.cvc} onChange={handleCardChange} />
+                <input type="password" name="cvc" value={card.cvc} onChange={handleCardChange} 
+                    maxLength={3}/>
 
                 <div className="EditProfileSubtitle">Billing Address</div>
                 <div>Street:</div>
@@ -585,13 +672,18 @@ function EditProfile() {
                 <div>Name on Card:</div>
                 <input type="text" name="name_on_card" value={card2.name_on_card} onChange={handleCard2Change} />
                 <div>Card Number:</div>
-                <input type="text" name="card_number" value={card2.card_number} onChange={handleCard2Change} />
+                <input type="text" name="card2_number" value={card2.card_number} onChange={handleCard2Change} 
+                    placeholder="1111-2222-3333-4444"
+                    maxlength="19"
+                    onKeyDown={disallowNonNumericInput}
+                    onKeyUp={formatToCardNumber}/>
                 <div>Expiration Month:</div>
                 <input type="text" name="month" value={card2.month} onChange={handleCard2Change} />
                 <div>Expiration Year:</div>
                 <input type="text" name="year" value={card2.year} onChange={handleCard2Change} />
                 <div>CVC:</div>
-                <input type="text" name="cvc" value={card2.cvc} onChange={handleCard2Change} />
+                <input type="password" name="cvc" value={card2.cvc} onChange={handleCard2Change} 
+                    maxLength={3}/>
 
                 <div className="EditProfileSubtitle">Billing Address (Card 2)</div>
                 <div>Street:</div>
@@ -634,13 +726,18 @@ function EditProfile() {
                 <div>Name on Card:</div>
                 <input type="text" name="name_on_card" value={card3.name_on_card} onChange={handleCard3Change} />
                 <div>Card Number:</div>
-                <input type="text" name="card_number" value={card3.card_number} onChange={handleCard3Change} />
+                <input type="text" name="card3_number" value={card3.card_number} onChange={handleCard3Change} 
+                    placeholder="1111-2222-3333-4444"
+                    maxlength="19"
+                    onKeyDown={disallowNonNumericInput}
+                    onKeyUp={formatToCardNumber}/>
                 <div>Expiration Month:</div>
                 <input type="text" name="month" value={card3.month} onChange={handleCard3Change} />
                 <div>Expiration Year:</div>
                 <input type="text" name="year" value={card3.year} onChange={handleCard3Change} />
                 <div>CVC:</div>
-                <input type="text" name="cvc" value={card3.cvc} onChange={handleCard3Change} />
+                <input type="password" name="cvc" value={card3.cvc} onChange={handleCard3Change} 
+                    maxLength={3}/>
 
                 <div className="EditProfileSubtitle">Billing Address (Card 3)</div>
                 <div>Street:</div>
@@ -671,7 +768,7 @@ function EditProfile() {
             </>
             )}
 
-            <div className="EditProfileSubtitle">Add New Card</div>
+            {!card3 && (<><div className="EditProfileSubtitle">Add New Card</div>
 
             <div>Card Type:</div>
             <select name="card_type" value={newCard.card_type} onChange={(e) =>
@@ -687,9 +784,12 @@ function EditProfile() {
             onChange={(e) => setNewCard({ ...newCard, name_on_card: e.target.value })}
             />
             <div>Card Number:</div>
-            <input type="text" name="card_number" value={newCard.card_number}
-            onChange={(e) => setNewCard({ ...newCard, card_number: e.target.value })}
-            />
+            <input type="text" name="newCard_number" value={newCard.card_number}
+                onChange={(e) => setNewCard({ ...newCard, card_number: e.target.value })}
+                placeholder="1111-2222-3333-4444"
+                    maxlength="19"
+                    onKeyDown={disallowNonNumericInput}
+                    onKeyUp={formatToCardNumber}/>
             <div>Expiration Month:</div>
             <input type="text" name="month" value={newCard.month}
             onChange={(e) => setNewCard({ ...newCard, month: e.target.value })}
@@ -699,9 +799,9 @@ function EditProfile() {
             onChange={(e) => setNewCard({ ...newCard, year: e.target.value })}
             />
             <div>CVC:</div>
-            <input type="text" name="cvc" value={newCard.cvc}
+            <input type="password" name="cvc" value={newCard.cvc}
             onChange={(e) => setNewCard({ ...newCard, cvc: e.target.value })}
-            />
+            maxLength={3}/>
 
             <div className="EditProfileSubtitle">New Billing Address</div>
 
@@ -745,7 +845,7 @@ function EditProfile() {
                 <button type="button" className="addNewCardButton" onClick={handleAddCard}>
                 Add New Card
                 </button>
-            </div>
+            </div></>)}
             
             <div className="SignupFormSplit">
             Receive promotions:
