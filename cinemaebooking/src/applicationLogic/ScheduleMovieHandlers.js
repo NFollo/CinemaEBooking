@@ -32,7 +32,7 @@ export async function getShowsByDate(targetDate) {
 
 export async function getShowroomByShow(show) {
     let showroom;
-    await fetch(`http://localhost:5000/showrooms/${show.showroom.$oid}`,
+    await fetch(`http://localhost:5000/showrooms/${show.showroom}`,
         {method: "GET",
          headers: {"Content-Type": "application/json"}}
     )

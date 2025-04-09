@@ -4,104 +4,42 @@ import Carousel from 'react-bootstrap/Carousel';
 import { useState, useEffect } from 'react';
 
 function ComingSoon() {
-
   const navigate = useNavigate(); 
   const [movies, setMovies] = useState([]);
-
+  const [comingSoonMovies, setComingSoonMovies] = useState([]);
   const [sixMovies, setSixMovies] = useState([]);
 
   useEffect(() => {
-         fetch("http://localhost:5000/movies/homepageInfo") // Fetch from backend API
-           .then((res) => res.json()) // Parse JSON response
-           .then((data) =>{
-             setMovies(
-               data.map((movie) => ({
-                 title: movie.title,
-                 trailer_picture_url: movie.trailer_picture_url,
-                 trailer_video_url: movie.trailer_video_url,
-                 currently_running: movie.currentlyRunning, // Keep same as API
-               }))
-             );
-         }
-           )
-           .catch((error) => console.error("Error fetching movies:", error));   
- 
+    fetch("http://localhost:5000/movies/homepageInfo")
+      .then((res) => res.json())
+      .then((data) => {
+        // Filter movies where currently_running is false (coming soon)
+        const filteredMovies = data.filter(movie => !movie.currently_running)
+          .map(movie => ({
+            title: movie.title,
+            trailer_picture_url: movie.trailer_picture_url,
+            trailer_video_url: movie.trailer_video_url,
+            currently_running: movie.currentlyRunning,
+          }));
+        setMovies(filteredMovies);
+      })
+      .catch((error) => console.error("Error fetching movies:", error));   
   }, []); 
 
   useEffect(() => { 
-    if(movies.length >= 6) {
-      setSixMovies([
-        [movies[2], movies[3], movies[4]]
-      ]);
+    // Group into sets of 3 for the carousel
+    if (movies.length > 0) {
+      const grouped = [];
+      for (let i = 0; i < movies.length; i += 3) {
+        grouped.push(movies.slice(i, i + 3));
+      }
+      setSixMovies(grouped);
     }
   }, [movies]);
 
-  /*const movieList = [
-    {
-      title: "Dog Man 1",
-      description: "Description of move here",
-      image: "https://connect.gtcmovies.com/CDN/Image/Entity/FilmPosterGraphic/HO00004607",
-    },
-    {
-      title: "Dog Man 2",
-      description: "Description of move here",
-      image: "https://connect.gtcmovies.com/CDN/Image/Entity/FilmPosterGraphic/HO00004607",
-    },
-    {
-      title: "Dog Man 3",
-      description: "Description of move here",
-      image: "https://connect.gtcmovies.com/CDN/Image/Entity/FilmPosterGraphic/HO00004607",
-    },
-    {
-      title: "Dog Man 4",
-      description: "Description of move here",
-      image: "https://connect.gtcmovies.com/CDN/Image/Entity/FilmPosterGraphic/HO00004607",
-    },
-    {
-      title: "Dog Man 5",
-      description: "Description of move here",
-      image: "https://connect.gtcmovies.com/CDN/Image/Entity/FilmPosterGraphic/HO00004607",
-    },
-    {
-      title: "Dog Man 6",
-      description: "Description of move here",
-      image: "https://connect.gtcmovies.com/CDN/Image/Entity/FilmPosterGraphic/HO00004607",
-    },
-    {
-      title: "Dog Man 7",
-      description: "Description of move here",
-      image: "https://connect.gtcmovies.com/CDN/Image/Entity/FilmPosterGraphic/HO00004607",
-    },
-    {
-      title: "Dog Man 8",
-      description: "Description of move here",
-      image: "https://connect.gtcmovies.com/CDN/Image/Entity/FilmPosterGraphic/HO00004607",
-    },
-    {
-      title: "Dog Man 9 ",
-      description: "Description of move here",
-      image: "https://connect.gtcmovies.com/CDN/Image/Entity/FilmPosterGraphic/HO00004607",
-    },
-    {
-      title: "Dog Man 10",
-      description: "Description of move here",
-      image: "https://connect.gtcmovies.com/CDN/Image/Entity/FilmPosterGraphic/HO00004607",
-    },
-    {
-      title: "Dog Man 11",
-      description: "Description of move here",
-      image: "https://connect.gtcmovies.com/CDN/Image/Entity/FilmPosterGraphic/HO00004607",
-    },
-    {
-      title: "Dog Man 12",
-      description: "Description of move here",
-      image: "https://connect.gtcmovies.com/CDN/Image/Entity/FilmPosterGraphic/HO00004607",
-    }
-  ];*/
-
-  const handleClick = (myindex) => {
-    navigate(`/movieinfo?movie=${movies[myindex].title}`, { // added a unique url for each movie
-      state: movies[myindex]
+  const handleClick = (movie) => {
+    navigate(`/movieinfo?movie=${movie.title}`, {
+      state: movie
     });
   };
   
@@ -115,24 +53,30 @@ function ComingSoon() {
       <div className="ComingSoonText">
         Coming Soon
       </div>
-      <Carousel className="ComingSoonCarousel">
-        {sixMovies.length > 0 && sixMovies.map((smallMovieList) => (
-          <Carousel.Item>
-            <div className="ComingSoonGrid">
-              {smallMovieList.map((movieData) => (        
-                <div className="SoonMovie">
-                  <div className="SoonMovieImg" onClick={() => handleClick(movies.indexOf(movieData))}> 
-                    <img src={movieData.trailer_picture_url} alt={movieData.title} />
+      {sixMovies.length > 0 ? (
+        <Carousel className="ComingSoonCarousel">
+          {sixMovies.map((movieGroup, index) => (
+            <Carousel.Item key={`carousel-item-${index}`}>
+              <div className="ComingSoonGrid">
+                {movieGroup.map((movieData, movieIndex) => (        
+                  <div className="SoonMovie" key={`movie-${index}-${movieIndex}`}>
+                    <div className="SoonMovieImg" onClick={() => handleClick(movieData)}> 
+                      <img src={movieData.trailer_picture_url} alt={movieData.title} />
+                    </div>
+                    <div className="SoonMovieTitle">{movieData.title}</div>
+                    <div className="SoonMovieDesc">{movieData.description}</div>
                   </div>
-                  <div className="SoonMovieTitle">{movieData.title}</div>
-                  <div className="SoonMovieDesc">{movieData.description}</div>
-                </div>
-              ))}
-            </div>
-          </Carousel.Item>
-        ))}
-      </Carousel>   
-      <button className="ComingSoonBrowse" onClick={() => handleBrowseClick()}>Browse All Movies</button>   
+                ))}
+              </div>
+            </Carousel.Item>
+          ))}
+        </Carousel>
+      ) : (
+        <div className="no-movies">No upcoming movies found</div>
+      )}
+      <button className="ComingSoonBrowse" onClick={handleBrowseClick}>
+        Browse All Movies
+      </button>   
     </div>
   );
 }

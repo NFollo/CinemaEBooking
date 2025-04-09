@@ -201,10 +201,10 @@ function ViewProfile() {
               <div>Expiration Date: <span>{card1Month + " " +  card1Year}</span></div>
               <div>CVC: <span>***</span></div>
               <div className="ViewProfileSubtitle">Card 1 Billing Address</div>
-              <div>Country: <span>{card1Country}</span></div>
-              <div>State: <span>{card1State}</span></div>
-              <div>City: <span>{card1City}</span></div>
               <div>Address: <span>{card1Address}</span></div>
+              <div>City: <span>{card1City}</span></div>
+              <div>State: <span>{card1State}</span></div>
+              <div>Country: <span>{card1Country}</span></div>
               <div>ZIP Code: <span>{card1Zipcode}</span></div>
             </div> : ""}
 
@@ -217,11 +217,11 @@ function ViewProfile() {
               <div>Expiration Date: <span>{card2Month + " " +  card2Year}</span></div>
               <div>CVC: <span>***</span></div>
               <div className="ViewProfileSubtitle">Card 2 Billing Address</div>
-              <div>Country: <span>{card2Country}</span></div>
-              <div>State: <span>{card2State}</span></div>
-              <div>City: <span>{card2City}</span></div>
-              <div>Address: <span>{card2Address}</span></div>
-              <div>ZIP Code: <span>{card2Zipcode}</span></div>
+              <div>Address: <span>{card1Address}</span></div>
+              <div>City: <span>{card1City}</span></div>
+              <div>State: <span>{card1State}</span></div>
+              <div>Country: <span>{card1Country}</span></div>
+              <div>ZIP Code: <span>{card1Zipcode}</span></div>
             </div> : ""}
 
             {numberOfCards >= 3 ? 
@@ -233,14 +233,14 @@ function ViewProfile() {
               <div>Expiration Date: <span>{card3Month + " " +  card3Year}</span></div>
               <div>CVC: <span>***</span></div>
               <div className="ViewProfileSubtitle">Card 3 Billing Address</div>
-              <div>Country: <span>{card3Country}</span></div>
-              <div>State: <span>{card3State}</span></div>
-              <div>City: <span>{card3City}</span></div>
-              <div>Address: <span>{card3Address}</span></div>
-              <div>ZIP Code: <span>{card3Zipcode}</span></div>
+              <div>Address: <span>{card1Address}</span></div>
+              <div>City: <span>{card1City}</span></div>
+              <div>State: <span>{card1State}</span></div>
+              <div>Country: <span>{card1Country}</span></div>
+              <div>ZIP Code: <span>{card1Zipcode}</span></div>
             </div> : ""}
 
-            <p>Receive Promotions: {receivePromotions ? "Yes" : "No"}</p>
+            <div className="ViewProfileSubtitle">Receive Promotions: {receivePromotions ? "Yes" : "No"}</div>
             <button onClick={navEditProfile} className="ViewProfileEdit">Edit Profile</button>            
 
         </div>

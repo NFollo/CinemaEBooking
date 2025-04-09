@@ -8,15 +8,17 @@ function MovieInfoPage({movie}) {
     // navigation for BookTickets button
     const navigate = useNavigate();
     const location = useLocation(); 
-
+    
     // no movie 
-    const [movieInfo, setMovieInfo] = useState(location.state || {
+
+    // if refresh page, saves the information
+    const storedMovieInfo = localStorage.getItem("movieInfo");
+    const movieInfo = location.state || (storedMovieInfo ? JSON.parse(storedMovieInfo) : {
         title: "Unknown Movie",
         description: "No description available",
         trailer_picture_url: "https://via.placeholder.com/150",
         trailer_video_url: ""
     });
-      
 
     const [authorization, setAuthorization] = useState(Cookies.get("authorization"));
     
@@ -31,11 +33,16 @@ function MovieInfoPage({movie}) {
     const [producers, setProducers] = useState([""]);
     const [rating, setRating] = useState("");
     let reviews = [["Jennifer", "7", "Good"], ["Bob", "2", "I hate Sanic"]];
+    
+    // store movie data object to pass in to booking
+    const [movieData, setMovieData] = useState(movieInfo);
+
 
     const handleBookTickets = () => {
         if (authorization === "admin" || authorization === "customer") {
-            navigate(`/buytickets?movie=${movieInfo.title}`, { // unique url for each movie
-                state: movieInfo
+            console.log(movieData._id?.$oid);
+            navigate(`/buytickets?movie=${movieData.title}`, { // unique url for each movie
+                state: movieData // pass whole movie object in
             });  
         } else {
             alert("You must be logged in to book tickets");
@@ -47,7 +54,8 @@ function MovieInfoPage({movie}) {
           try {
             const response = await axios.get('http://localhost:5000/movies/' + movieInfo.title);
             console.log(response.data);
-      
+            setMovieData(response.data);
+            //console.log(status);
             if (!response.data.currently_running) {
               setStatus("Not Currently Running");
             }
@@ -72,6 +80,12 @@ function MovieInfoPage({movie}) {
       }, []);
       
 
+    useEffect(() => {
+        if (location.state) {
+            localStorage.setItem("movieInfo", JSON.stringify(location.state));
+        }
+    }, [location.state]);
+
     return (
         <div className='pageContainer'>
             <p className='title'>{movieInfo.title}</p>
@@ -87,7 +101,7 @@ function MovieInfoPage({movie}) {
             <iframe className='trailer' src={movieInfo.trailer_video_url} title="sonic3" >
             </iframe>
 
-            <p>{description}</p>
+            <div className='description'>{description}</div>
 
             <div className='directorsContainer'>
                 <p className='label'>Directors:</p>

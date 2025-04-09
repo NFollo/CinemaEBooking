@@ -33,7 +33,11 @@ function BuyTicketsPage() {
   console.log("Selected movie ID:", movie._id);
 
 
-  const ticketPrices = {
+  // THIS IS HOW YOU GET THE MOVIE ID
+  console.log("BUY TICKET PAGE MOVIE ID: " + movie._id?.$oid) 
+
+
+  const ticketPrices = {  
     adult: 15.99,
     child: 12.99,
     senior: 14.49,

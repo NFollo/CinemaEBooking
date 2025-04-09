@@ -307,13 +307,23 @@ function EditProfile() {
         
         try {
             // updates user
-            await axios.patch(`http://localhost:5000/users/${user.email}`, {
-                first_name: user.first_name,
-                last_name: user.last_name,
-                phone_number: user.phone_number,
-                receive_promotions: user.receivePromotions,
-                password: newPassword,
-            });
+            // TEMP FIX
+            if (newPassword === "")
+                await axios.patch(`http://localhost:5000/users/${user.email}`, {
+                    first_name: user.first_name,
+                    last_name: user.last_name,
+                    phone_number: user.phone_number,
+                    receive_promotions: user.receivePromotions,
+                });
+            else {
+                await axios.patch(`http://localhost:5000/users/${user.email}`, {
+                    first_name: user.first_name,
+                    last_name: user.last_name,
+                    phone_number: user.phone_number,
+                    receive_promotions: user.receivePromotions,
+                    password: newPassword,
+                });
+            }
             /*
             // rest password
              await axios.post('http://localhost:5000/resetPassword', {
@@ -353,7 +363,7 @@ function EditProfile() {
 
             // updates cards
             if (card.id) {
-                await axios.patch(`http://localhost:5000/paymentCards/${card.id}`, {
+                await axios.patch(`http://localhost:5000/paymentCards/${card.id.$oid}`, {
                     card_type: card.card_type,
                     name_on_card: card.name_on_card,
                     card_number: card.card_number,

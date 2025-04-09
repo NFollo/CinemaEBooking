@@ -89,7 +89,13 @@ def init_routes(app, mail):
                             hashed_password = encrypt(value)  # Use the encrypt function
                             setattr(user, key, str(hashed_password))  # Store the hashed password as a string
                         else:
-                            setattr(user, key, value)
+                            # add address attribute if does not exist
+                            if key == 'address':
+                                filter_criteria = {'_id': user.id}
+                                update_operation = {'$set': {'address': value}}
+                                User._get_collection().update_one(filter_criteria, update_operation)
+                            else:
+                                setattr(user, key, value)
                             
                 user.save()
 
@@ -175,15 +181,16 @@ def init_routes(app, mail):
                 payment_card = PaymentCard.objects.get(id=id)  
                 data = request.get_json() 
 
-                if 'card_number' in data:
-                    payment_card.card_number = str(encrypt(data['card_number']))
-                    payment_card.last_four = data['card_number'][-4:]
-                if 'cvc' in data:
-                    payment_card.cvc = str(encrypt(data['cvc']))
-                if 'expiration_date' in data:
-                    payment_card.expiration_date = data['expiration_date']
-                if 'cardholder_name' in data:
-                    payment_card.cardholder_name = data['cardholder_name']
+                for key, value in data.items():
+                    if key == 'card_number' and value != "":
+                        payment_card.card_number = str(encrypt(data['card_number']))
+                        payment_card.last_four = data['card_number'][-4:]
+
+                    elif key == 'cvc' and value != "":
+                        payment_card.cvc = str(encrypt(data['cvc']))
+
+                    elif hasattr(payment_card, key):
+                        setattr(payment_card, key, value)
 
                 payment_card.save()  
 
@@ -255,6 +262,7 @@ def init_routes(app, mail):
                 movies_list = [
                         {"id": str(movie.id), 
                         "title": movie.title, 
+                        ""
                         "trailer_picture_url": movie.trailer_picture_url, 
                         "trailer_video_url": movie.trailer_video_url,
                         "currently_running": movie.currently_running} 
@@ -508,7 +516,7 @@ def init_routes(app, mail):
                     show_dict['movie'] = str(show_dict['movie']) if isinstance(show_dict.get('movie'), ObjectId) else show_dict.get('movie')
                     show_dict['showroom'] = str(show_dict['showroom']) if isinstance(show_dict.get('showroom'), ObjectId) else show_dict.get('showroom')
 
-                shows_list.append(show_dict)
+                    shows_list.append(show_dict)
 
                 return jsonify(shows_list), 200
             except Exception as err:
@@ -542,6 +550,7 @@ def init_routes(app, mail):
         if request.method == 'GET': 
             try:
                 # Fetch all shows for the targetDate
+                print(targetId)
                 showroom = Showroom.objects.get(id=targetId)
                 showroom_dict = showroom.to_mongo().to_dict()
                 return jsonify(showroom_dict), 200
