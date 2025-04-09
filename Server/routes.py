@@ -259,6 +259,7 @@ def init_routes(app, mail):
                 movies_list = [
                         {"id": str(movie.id), 
                         "title": movie.title, 
+                        ""
                         "trailer_picture_url": movie.trailer_picture_url, 
                         "trailer_video_url": movie.trailer_video_url,
                         "currently_running": movie.currently_running} 

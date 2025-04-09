@@ -8,39 +8,6 @@ function SearchPage({query}) {
 
     const [movies, setMovies] = useState([]); // State for movie list
 
-    /*var sampleMovies = [
-        {
-            title: "Sonic",
-            trailer_picture_url: "https://i.etsystatic.com/12729518/r/il/e19c5f/1989024537/il_1080xN.1989024537_hueq.jpg",
-            desc: "Sonic is fast"            
-        },
-        {
-            title: "Detective Pikachu",
-            trailer_picture_url: "https://i.etsystatic.com/12729518/r/il/e19c5f/1989024537/il_1080xN.1989024537_hueq.jpg",
-            desc:  "Ryan Reynolds is an electric mouse"
-        },
-        {
-            title: "Sonic 3",
-            trailer_picture_url: "https://i.etsystatic.com/12729518/r/il/e19c5f/1989024537/il_1080xN.1989024537_hueq.jpg",
-            desc:  "Sonic is three times as fast"
-        },
-        {
-            title: "Sonic 2",
-            trailer_picture_url: "https://i.etsystatic.com/12729518/r/il/e19c5f/1989024537/il_1080xN.1989024537_hueq.jpg",
-            desc:  "Sonic is not quite as fast as in Sonic 3"
-        },
-        {
-            title: "Pokemon the First Movie",
-            trailer_picture_url: "https://i.etsystatic.com/12729518/r/il/e19c5f/1989024537/il_1080xN.1989024537_hueq.jpg",
-            desc:  "The first movie (for pokemon)"
-        },
-        {
-            title: "Sonic 4",
-            trailer_picture_url: "https://i.etsystatic.com/12729518/r/il/e19c5f/1989024537/il_1080xN.1989024537_hueq.jpg",
-            desc:  "I'm running out of movies"
-        }
-    ];*/
-
     var movieContainer = document.getElementById("movies");
 
     const searchMovies = () => {
@@ -83,17 +50,32 @@ function SearchPage({query}) {
                 const movieCard = document.createElement("div");
                 movieCard.className = "SearchPageMovieCard";
 
+
+                // says to add movie trailer in search??? - Angel
+                // // Movie Trailer (video element)
+                // const trailer = document.createElement("video");
+                // trailer.src = movie.trailer_video_url;
+                // trailer.poster = movie.trailer_picture_url;
+                // trailer.controls = true;
+                // trailer.className = "movie-trailer";
+
                 const movieImg = document.createElement("img");
                 movieImg.src = movie.trailer_picture_url;
-
+                
                 const movieTitle = document.createElement("div");
                 movieTitle.className = "SearchPageMovieTitle";
                 movieTitle.textContent = movie.title;
 
+                const movieRating = document.createElement("div");
+                movieTitle.className = "SearchPageSubtext1";
+                movieRating.textContent = movie.mpaa_us_film_rating_code;
+                movieRating.style.fontWeight = 'bold';
+
+                console.log("SEARCH: " + movie)
                 // const movieDesc = document.createElement("div");
                 // movieDesc.className = "SearchPageMovieDesc";
                 // movieDesc.textContent = movie.desc;
-
+                
                 const viewMovieButton = document.createElement("button");
                 viewMovieButton.className = 'button';
                 viewMovieButton.textContent = "View Movie";
@@ -101,8 +83,9 @@ function SearchPage({query}) {
                     navigate(`/movieinfo?movie=${movie.title}`, 
                         {state: movie})
                 })
-
+                
                 movieCard.append(movieImg);
+                movieCard.append(movieRating)
                 movieCard.append(movieTitle);
                 //movieCard.append(movieDesc);
                 movieCard.append(viewMovieButton);
@@ -113,24 +96,14 @@ function SearchPage({query}) {
 
     };
 
-    useEffect(() => {
-        fetch("http://localhost:5000/movies/homepageInfo") // Fetch from backend API
-          .then((res) => res.json()) // Parse JSON response
-          .then((data) =>{
-            setMovies(
-              data.map((movie) => ({
-                title: movie.title,
-                trailer_picture_url: movie.trailer_picture_url,
-                trailer_video_url: movie.trailer_video_url,
-                currently_running: movie.currentlyRunning, // Keep same as API
-              }))
-            );
-            console.log(data);
-        }
-          )
-          .catch((error) => console.error("Error fetching movies:", error));   
-
-      }, []); 
+useEffect(() => {
+    fetch("http://localhost:5000/movies") // no need to do /homepageInfo, just pass the whole movie object -Angel
+      .then((res) => res.json()) 
+      .then((data) => {
+        setMovies(data);  // set all movie
+    })
+      .catch((error) => console.error("Error fetching movies:", error));   
+}, []);
 
       useEffect(() => {
         searchMovies();
