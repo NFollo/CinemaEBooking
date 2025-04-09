@@ -67,7 +67,7 @@ function MovieInfoPage({movie}) {
             setRating(response.data.mpaa_us_film_rating_code);
       
             // update id
-            setMovieInfo(prev => ({
+            setMovieData(prev => ({
               ...prev,
               _id: response.data._id
             }));
