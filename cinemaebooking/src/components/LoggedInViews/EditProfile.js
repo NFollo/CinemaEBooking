@@ -522,51 +522,55 @@ function EditProfile() {
             <input type="text" name="country" value={address.country} onChange={handleAddressChange} />
 
             {/* card information */}
-            <div className="EditProfileSubtitle">Card 1 Information</div>
-            <div>Card Type:</div>
-            <select name="card_type" value={card.card_type} onChange={handleCardChange}>
-            <option value="">Select</option>
-            <option value="credit">Credit</option>
-            <option value="debit">Debit</option>
-            </select>
+            {cards.length >= 1 && (
+                <>
+                <div className="EditProfileSubtitle">Card 1 Information</div>
+                <div>Card Type:</div>
+                <select name="card_type" value={card.card_type} onChange={handleCardChange}>
+                    <option value="">Select</option>
+                    <option value="credit">Credit</option>
+                    <option value="debit">Debit</option>
+                </select>
 
-            <div>Name on Card:</div>
-            <input type="text" name="name_on_card" value={card.name_on_card} onChange={handleCardChange} />
-            <div>Card Number:</div>
-            <input type="text" name="card_number" value={card.card_number} onChange={handleCardChange} />
-            <div>Expiration Month:</div>
-            <input type="text" name="month" value={card.month} onChange={handleCardChange} />
-            <div>Expiration Year:</div>
-            <input type="text" name="year" value={card.year} onChange={handleCardChange} />
-            <div>CVC:</div>
-            <input type="text" name="cvc" value={card.cvc} onChange={handleCardChange} />
+                <div>Name on Card:</div>
+                <input type="text" name="name_on_card" value={card.name_on_card} onChange={handleCardChange} />
+                <div>Card Number:</div>
+                <input type="text" name="card_number" value={card.card_number} onChange={handleCardChange} />
+                <div>Expiration Month:</div>
+                <input type="text" name="month" value={card.month} onChange={handleCardChange} />
+                <div>Expiration Year:</div>
+                <input type="text" name="year" value={card.year} onChange={handleCardChange} />
+                <div>CVC:</div>
+                <input type="text" name="cvc" value={card.cvc} onChange={handleCardChange} />
 
-            <div className="EditProfileSubtitle">Billing Address</div>
-            <div>Street:</div>
-            <input type="text" name="street" value={card.billing_address.street} onChange={handleBillingChange} />
-            <div>City:</div>
-            <input type="text" name="city" value={card.billing_address.city} onChange={handleBillingChange} />
-            <div>State:</div>
-            <input type="text" name="state" value={card.billing_address.state} onChange={handleBillingChange} />
-            <div>Zip Code:</div>
-            <input type="text" name="zip_code" value={card.billing_address.zip_code} onChange={handleBillingChange} />
-            <div>Country:</div>
-            <input type="text" name="country" value={card.billing_address.country} onChange={handleBillingChange} />
+                <div className="EditProfileSubtitle">Billing Address</div>
+                <div>Street:</div>
+                <input type="text" name="street" value={card.billing_address.street} onChange={handleBillingChange} />
+                <div>City:</div>
+                <input type="text" name="city" value={card.billing_address.city} onChange={handleBillingChange} />
+                <div>State:</div>
+                <input type="text" name="state" value={card.billing_address.state} onChange={handleBillingChange} />
+                <div>Zip Code:</div>
+                <input type="text" name="zip_code" value={card.billing_address.zip_code} onChange={handleBillingChange} />
+                <div>Country:</div>
+                <input type="text" name="country" value={card.billing_address.country} onChange={handleBillingChange} />
 
-            <div style={{ marginTop: "10px" }}>
-                <button
-                    type="button"
-                    className="deleteCardButton"
-                    onClick={() =>
-                    handleDeleteCard(
-                        card.id?.$oid || card.id,
-                        card.billing_address.id?.$oid || card.billing_address.id
-                    )
-                    }
-                >
-                    Delete Card
-                </button>
-            </div>
+                <div style={{ marginTop: "10px" }}>
+                    <button
+                        type="button"
+                        className="deleteCardButton"
+                        onClick={() =>
+                            handleDeleteCard(
+                                card.id?.$oid || card.id,
+                                card.billing_address.id?.$oid || card.billing_address.id
+                            )
+                        }
+                    >
+                        Delete Card
+                    </button>
+                </div>
+                </>
+            )}
 
             {card2 && (
             <>
