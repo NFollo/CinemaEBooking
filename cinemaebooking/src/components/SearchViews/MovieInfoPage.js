@@ -57,7 +57,7 @@ function MovieInfoPage({movie}) {
             setMovieData(response.data);
             //console.log(status);
             if (!response.data.currently_running) {
-              setStatus("Not Currently Running");
+              setStatus("Coming Soon");
             }
             setCategories(response.data.categories);
             setDescription(response.data.synopsis);
@@ -121,8 +121,16 @@ function MovieInfoPage({movie}) {
             <button className='button' onClick={handleBookTickets}>
                 Book Tickets
             </button>
+            <br></br>
 
-            <div className='reviewsContainer'>
+            
+        </div>
+    );
+}
+
+// reviews div
+/*
+<div className='reviewsContainer'>
                 <p className='label'>Reviews:</p>
                 {reviews.map((review) => (
                     <div className='review'>
@@ -135,8 +143,6 @@ function MovieInfoPage({movie}) {
                     </div>
                 ))}
             </div>
-        </div>
-    );
-}
+*/
 
 export default MovieInfoPage;

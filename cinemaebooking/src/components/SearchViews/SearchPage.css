@@ -22,13 +22,16 @@
     width: 15%;
 }
 
-.SearchPageMovieCard img {
+.SearchPageMovieCardImage {
     width: 13vw;
     height: 20vw;
 }
 
+
+
 .SearchPageMovieTitle {
-    font-size: 200%;
+    font-size: 150%;
+    line-height: 100%;
     font-weight: bolder;
 }
 
@@ -85,6 +88,7 @@
     font-size: 90%;
     color: #666;
     margin: 5px 0;
+    line-height: 1.4;
 }
 
 .centered {

@@ -5,8 +5,8 @@ import { CgProfile } from "react-icons/cg";
 import createAcc from "../../img/create-acc.png";
 import login from "../../img/login.png";
 import { Link, useNavigate } from 'react-router-dom';
-// import user from "../img/user.png"; 
-// import edit from "../img/edit.png";
+import user from "../../img/user.png"; 
+import edit from "../../img/edit.png";
 // import logout from "../img/log-out.png";
 // import { SearchBar } from "./SearchBar";
 
@@ -63,12 +63,12 @@ function LoggedNavBar({onSearch, input, clearInput, logout}) {
           <ul className={`dropdown-menu ${openMenu ? "active" : ""}`}>
             <Link to={'/viewprofile'}>
               <button className="signUp">
-                <DropdownItem img={createAcc} text="View Profile" />
+                <DropdownItem img={user} text="View Profile" />
               </button>
             </Link>
             <Link to={'/editprofile'}>
               <button className="signUp">
-                <DropdownItem img={createAcc} text="Edit Profile" />
+                <DropdownItem img={edit} text="Edit Profile" />
               </button>
             </Link>
             <Link to={'/'}>

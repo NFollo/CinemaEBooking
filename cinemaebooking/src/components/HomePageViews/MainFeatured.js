@@ -19,7 +19,7 @@ function MainFeatured() {
               Sonic 3
             </div>
             <div className="MainFeaturedCarouselBody">
-              A breif description of the movie goes here
+              The third Sonic movie
             </div>
           </div>
         </Carousel.Item>
@@ -33,7 +33,7 @@ function MainFeatured() {
               Sonic 2
             </div>
             <div className="MainFeaturedCarouselBody">
-              A breif description of the movie goes here
+              The second Sonic movie
             </div>
           </div>
         </Carousel.Item>
@@ -47,7 +47,7 @@ function MainFeatured() {
               Sonic 
             </div>
             <div className="MainFeaturedCarouselBody">
-              A breif description of the movie goes here
+              Sonic is fast
             </div>
           </div>
         </Carousel.Item>

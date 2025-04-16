@@ -73,8 +73,9 @@ function ManageMovies({query}) {
                 scheduleButton.className = "ManageEditButton";
                 scheduleButton.textContent = "Schedule";
                 scheduleButton.addEventListener("click", () => {
+                    movie.currently_running ? 
                     navigate(`/schedule?movie=${movie.title}`, 
-                        {state: movie})
+                        {state: movie}) : alert("Cannot schedule a movie that is coming soon");
                 });
 
                 bottomButtons.append(editButton);
@@ -91,7 +92,7 @@ function ManageMovies({query}) {
     } // search movies
   
     useEffect(() => {
-      fetch("http://localhost:5000/movies/homepageInfo") // Fetch from backend API
+      fetch("http://localhost:5000/movies") // Fetch from backend API
           .then((res) => res.json()) // Parse JSON response
           .then((data) =>{
               setMovies(
@@ -99,7 +100,7 @@ function ManageMovies({query}) {
                       title: movie.title,
                       trailer_picture_url: movie.trailer_picture_url,
                       trailer_video_url: movie.trailer_video_url,
-                      currently_running: movie.currentlyRunning, // Keep same as API
+                      currently_running: movie.currently_running, // Keep same as API
                   }))
               );
           console.log(data);

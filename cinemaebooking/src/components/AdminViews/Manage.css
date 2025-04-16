@@ -74,7 +74,8 @@
 }
 
 .ManageUnitImage {
-    max-width: 50%;
+    width: 13vw;
+    height: 20vw;
 }
 
 .MoviesContainer {
