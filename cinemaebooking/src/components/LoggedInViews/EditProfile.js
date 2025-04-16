@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
 
+import {createAddress, getAddress, updateAddress} from "../../applicationLogic/AddressManager";
+
 
 function EditProfile() {
     const navigate = useNavigate();
@@ -145,9 +147,11 @@ function EditProfile() {
         };
     
         // Create billing address
-        const billingRes = await axios.post("http://localhost:5000/createAddress", billingAddressPayload);
-        const billingAddressId = billingRes.data.address_id;
-        if (!billingAddressId) return -1;
+        const billingAddressId = await createAddress("billing", billingStreet, billingCity, billingState, billingCountry, billingZipCode);
+        if (billingAddressId === -1) {
+            alert("Error saving billing address");
+            return -1;
+        }
     
         // Create card
         const cardPayload = {
@@ -188,8 +192,7 @@ function EditProfile() {
         // gets home address 
         if (data.address != null) {
             const addrId = data.address.$oid || data.address._id || data.address;
-            const getaddr = await axios.get(`http://localhost:5000/addresses/${addrId}`);
-            const addr = getaddr.data;
+            const addr = await getAddress(addrId);
 
             setAddress({
                 id: addr._id || addrId,
@@ -207,10 +210,8 @@ function EditProfile() {
         const cards = getCards.data;
         setCards(cards);
         if (cards.length >= 1) {
-            const getBillingAddress = async (cardObj) => {
-                const res = await axios.get('http://localhost:5000/addresses/' + (cardObj.billing_address.$oid || cardObj.billing_address._id));
-                return res.data;
-            };
+            const getBillingAddress = async (cardObj) => 
+                await getAddress(cardObj.billing_address.$oid || cardObj.billing_address._id);
         
             const firstCard = cards[0];
             const billing1 = await getBillingAddress(firstCard);
@@ -386,19 +387,12 @@ function EditProfile() {
             */
             // updates home address
             if (address.id) {
-                await axios.patch(`http://localhost:5000/addresses/${address.id.$oid}`, address);
-                console.log("Updated existing address:", address.id);
+                await updateAddress(address.id.$oid, address.type, address.street, address.city, 
+                    address.state, address.country, address.zip_code);
             } else {
-                const createRes = await axios.post("http://localhost:5000/createAddress", {
-                    street: address.street,
-                    city: address.city,
-                    state: address.state,
-                    zip_code: address.zip_code,
-                    country: address.country,
-                    type: "home",
-                });
 
-                const newAddressId = createRes.data.address_id;
+                const newAddressId = await createAddress("home", address.street, address.city, address.state,
+                    address.country, address.zip_code);
                 console.log("Created new address:", newAddressId);
 
                 await axios.patch(`http://localhost:5000/users/${user.email}`, {
@@ -410,17 +404,23 @@ function EditProfile() {
 
             // updates billing addresses
             if (card && card.billing_address.id) {
-                await axios.patch(`http://localhost:5000/addresses/${card.billing_address.id.$oid}`, card.billing_address);
+                await updateAddress(card.billing_address.id.$oid, "billing", card.billing_address.street, 
+                    card.billing_address.city, card.billing_address.state, card.billing_address.country,
+                    card.billing_address.zip_code);
             }
             
             if (card2 && card2.billing_address.id) {
-                await axios.patch(`http://localhost:5000/addresses/${card2.billing_address.id.$oid}`, card2.billing_address);
+                await updateAddress(card2.billing_address.id.$oid, "billing", card2.billing_address.street, 
+                    card2.billing_address.city, card2.billing_address.state, card2.billing_address.country,
+                    card2.billing_address.zip_code);
             }
 
             if (card3 && card3.billing_address.id) {
-                await axios.patch(`http://localhost:5000/addresses/${card3.billing_address.id.$oid}`, card3.billing_address);
+                await updateAddress(card3.billing_address.id.$oid, "billing", card3.billing_address.street, 
+                    card3.billing_address.city, card3.billing_address.state, card3.billing_address.country,
+                    card3.billing_address.zip_code);
             }
-
+            
             // updates cards
             if (card) {
                 await axios.patch(`http://localhost:5000/paymentCards/${card.id.$oid}`, {
@@ -459,8 +459,6 @@ function EditProfile() {
             }
 
             await fetchData();
-            
-            console.log("right before update post")
             await axios.post('http://localhost:5000/sendProfileChangedEmail', {
                 email: user.email,
             });

@@ -4,6 +4,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import "./CheckoutPage.css";
 import axios from "axios";
 
+import {getAddress} from "../../applicationLogic/AddressManager";
+
 const CheckoutPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -136,12 +138,12 @@ const CheckoutPage = () => {
           setCard1Month(cards[0].month);
           setCard1Year(cards[0].year);
           setCard1Last4(cards[0].last_four);
-          const addr = await axios.get(`http://localhost:5000/addresses/${cards[0].billing_address.$oid}`);
-          setCard1Country(addr.data.country);
-          setCard1State(addr.data.state);
-          setCard1City(addr.data.city);
-          setCard1Address(addr.data.street);
-          setCard1Zipcode(addr.data.zip_code);
+          const addr = await getAddress(cards[0].billing_address.$oid);
+          setCard1Address(addr.street);
+          setCard1City(addr.city);
+          setCard1State(addr.state);
+          setCard1Country(addr.country);
+          setCard1Zipcode(addr.zip_code);
         }
   
         if (cards.length >= 2) {
@@ -150,12 +152,12 @@ const CheckoutPage = () => {
           setCard2Month(cards[1].month);
           setCard2Year(cards[1].year);
           setCard2Last4(cards[1].last_four);
-          const addr = await axios.get(`http://localhost:5000/addresses/${cards[1].billing_address.$oid}`);
-          setCard2Country(addr.data.country);
-          setCard2State(addr.data.state);
-          setCard2City(addr.data.city);
-          setCard2Address(addr.data.street);
-          setCard2Zipcode(addr.data.zip_code);
+          const addr = await getAddress(cards[1].billing_address.$oid);
+          setCard2Address(addr.street);
+          setCard2City(addr.city);
+          setCard2State(addr.state);
+          setCard2Country(addr.country);
+          setCard2Zipcode(addr.zip_code);
         }
   
         if (cards.length >= 3) {
@@ -164,11 +166,11 @@ const CheckoutPage = () => {
           setCard3Month(cards[2].month);
           setCard3Year(cards[2].year);
           setCard3Last4(cards[2].last_four);
-          const addr = await axios.get(`http://localhost:5000/addresses/${cards[2].billing_address.$oid}`);
-          setCard3Country(addr.data.country);
-          setCard3State(addr.data.state);
-          setCard3City(addr.data.city);
+          const addr = await getAddress(cards[2].billing_address.$oid);
           setCard3Address(addr.data.street);
+          setCard3City(addr.data.city);
+          setCard3State(addr.data.state);
+          setCard3Country(addr.data.country);
           setCard3Zipcode(addr.data.zip_code);
         }
   

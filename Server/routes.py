@@ -130,6 +130,24 @@ def init_routes(app, mail):
         except Exception as err:
             return jsonify({"error": "Failed to fetch subscribed users", "message": str(err)}), 500
         
+    @app.route('/addresses', methods=['POST']) 
+    def create_new_address(): 
+        '''
+        returns the ObjectId of the created Address document as a string upon success
+        '''
+        if request.method == 'POST': # Handle POST requests
+            json = request.json 
+            try:
+                address = Address(**json)  
+                address.validate()   
+                address.save()
+            except FieldDoesNotExist as err:
+                return jsonify({"error": "Invalid field in request", "message": str(err)}), 400
+            except ValidationError as err:
+                return jsonify({"error": str(err)}), 400  
+                
+            return jsonify({"address_id": str(address.id)}), 201 # Return DB ObjectId reference
+        
     @app.route('/addresses/<id>', methods=['GET', 'PATCH']) # shouldn't be able to delete
     def get_address_by_id(id):
         ''' Fetch or update address by ID '''
@@ -270,24 +288,6 @@ def init_routes(app, mail):
                 return jsonify(movies_list), 200
             except Exception as err:
                 return jsonify({"error": "Failed to fetch movies", "message": str(err)}), 500
-        
-    @app.route('/createAddress', methods=['POST']) 
-    def newAddress(): 
-        '''
-        returns the ObjectId of the created Address document as a string upon success
-        '''
-        if request.method == 'POST': # Handle POST requests
-            json = request.json 
-            try:
-                address = Address(**json)  
-                address.validate()   
-                address.save()
-            except FieldDoesNotExist as err:
-                return jsonify({"error": "Invalid field in request", "message": str(err)}), 400
-            except ValidationError as err:
-                return jsonify({"error": str(err)}), 400  
-                
-            return jsonify({"address_id": str(address.id)}), 201 # Return DB ObjectId reference
         
     @app.route('/createPaymentCard', methods=['POST']) # TODO: Users should only be able to add up to three payment cards... - Angel
     def newPaymentCard(): 

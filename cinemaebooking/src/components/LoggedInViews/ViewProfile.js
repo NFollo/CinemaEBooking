@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import Cookies from "js-cookie";
 import axios from "axios";
 
+import {getAddress} from "../../applicationLogic/AddressManager";
+
 function ViewProfile() {
 
     // do not use this data as a reference please change the names of all the variables as necessary
@@ -93,14 +95,12 @@ function ViewProfile() {
         console.log("receivePromotions: " + receivePromotions);
 
         if (response.data.address != null) {
-          //console.log(response.data.address.$oid);
-          var getaddr = await axios.get('http://localhost:5000/addresses/' + response.data.address.$oid);
-          console.log(getaddr.data);
-          setCountry(getaddr.data.country);
-          setState(getaddr.data.state);
-          setZipcode(getaddr.data.zip_code);
-          setAddress(getaddr.data.street);
-          setCity(getaddr.data.city);
+          let getaddr = await getAddress(response.data.address.$oid)
+          setAddress(getaddr.street);
+          setCity(getaddr.city);
+          setState(getaddr.state);
+          setCountry(getaddr.country);
+          setZipcode(getaddr.zip_code);
           setHasAddress(true);
         } 
 
@@ -115,12 +115,12 @@ function ViewProfile() {
           setCard1Month(getCards.data[0].month);
           setCard1Year(getCards.data[0].year);
           setCard1Last4(getCards.data[0].last_four)
-          let cardAddr = await axios.get('http://localhost:5000/addresses/' + getCards.data[0].billing_address.$oid);
-          setCard1Country(cardAddr.data.country);
-          setCard1State(cardAddr.data.state);
-          setCard1City(cardAddr.data.city);
-          setCard1Address(cardAddr.data.street);
-          setCard1Zipcode(cardAddr.data.zip_code);
+          let cardAddr = await getAddress(getCards.data[0].billing_address.$oid);
+          setCard1Address(cardAddr.street);
+          setCard1City(cardAddr.city);
+          setCard1State(cardAddr.state);
+          setCard1Country(cardAddr.country);
+          setCard1Zipcode(cardAddr.zip_code);
         }
 
         if (cards.length >= 2) {
@@ -129,12 +129,12 @@ function ViewProfile() {
           setCard2Month(getCards.data[1].month);
           setCard2Year(getCards.data[1].year);
           setCard2Last4(getCards.data[1].last_four)
-          let cardAddr = await axios.get('http://localhost:5000/addresses/' + getCards.data[1].billing_address.$oid);
-          setCard2Country(cardAddr.data.country);
-          setCard2State(cardAddr.data.state);
-          setCard2City(cardAddr.data.city);
-          setCard2Address(cardAddr.data.street);
-          setCard2Zipcode(cardAddr.data.zip_code);
+          let cardAddr = await getAddress(getCards.data[1].billing_address.$oid);
+          setCard2Address(cardAddr.street);
+          setCard2City(cardAddr.city);
+          setCard2State(cardAddr.state);
+          setCard2Country(cardAddr.country);
+          setCard2Zipcode(cardAddr.zip_code);
         }
 
         if (cards.length >= 3) {
@@ -143,12 +143,12 @@ function ViewProfile() {
           setCard3Month(getCards.data[2].month);
           setCard3Year(getCards.data[2].year);
           setCard3Last4(getCards.data[2].last_four)
-          let cardAddr = await axios.get('http://localhost:5000/addresses/' + getCards.data[2].billing_address.$oid);
-          setCard3Country(cardAddr.data.country);
-          setCard3State(cardAddr.data.state);
-          setCard3City(cardAddr.data.city);
-          setCard3Address(cardAddr.data.street);
-          setCard3Zipcode(cardAddr.data.zip_code);
+          let cardAddr = await getAddress(getCards.data[2].billing_address.$oid);
+          setCard3Address(cardAddr.street);
+          setCard3City(cardAddr.city);
+          setCard3State(cardAddr.state);
+          setCard3Country(cardAddr.country);
+          setCard3Zipcode(cardAddr.zip_code);
         }
 
       } catch (error) {

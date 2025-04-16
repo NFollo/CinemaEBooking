@@ -2,8 +2,11 @@ import "./SignupForm.css";
 import { Link, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { isValidRequiredForm, isValidAddressForm, isValidPaymentCardForm, 
-    createAddress, createUser, createPaymentCard } 
+    createUser, createPaymentCard, isCompleteAddress } 
     from '../../applicationLogic/SignupHandlers';
+
+import {createAddress} from '../../applicationLogic/AddressManager';
+
 import axios from "axios";
 
 
@@ -158,7 +161,7 @@ function SignupForm() {
         if (!isValidRequired)
             return;
 
-        // ensure address is either empty or fullly complete
+        // ensure address is either empty or fully complete
         const isValidHomeAddress = isValidAddressForm(streetAddress, city, state, country, zipCode);
         if (!isValidHomeAddress)
             return;
@@ -172,10 +175,12 @@ function SignupForm() {
 
         // handle home address document creation (if specified) and exit upon error
         let homeAddressId = 0;
-        if (displayAddressInput) {
+        if (displayAddressInput && isCompleteAddress(streetAddress, city, state, country, zipCode)) {
             homeAddressId = await createAddress('home', streetAddress, city, state, country, zipCode);
-            if (homeAddressId === -1)
+            if (homeAddressId === -1) {
+                alert('Error saving address');
                 return;
+            }
         }
 
         // handle user document creation and exit upon error

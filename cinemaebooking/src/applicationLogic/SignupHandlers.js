@@ -1,4 +1,5 @@
 import axios from 'axios';
+import {createAddress} from './AddressManager'
 
 
 /**
@@ -63,7 +64,7 @@ export function isValidRequiredForm(firstName, lastName, email, password,
  * Returns true if all address fields are complete. 
  * Returns false otherwise.
  */
-function isCompleteAddress(streetAddress, city, state, country, zipCode) {
+export function isCompleteAddress(streetAddress, city, state, country, zipCode) {
     return (streetAddress !== "" && city !== "" && state !== "" && country !== "" && zipCode !== "");
 } // isCompleteAddress
 
@@ -170,49 +171,6 @@ export function isValidPaymentCardForm(cardType, nameOnCard, cardNumber,
     return true;
 } // isValidPaymentCard
 
-/**
- * Returns 0 if form's address field is empty.
- * Returns -1 upon database request error.
- * Returns ObjectId of newly created Address document otherwise.
- */
-export async function createAddress(type, streetAddress, city, state, country, zipCode) {
-    // determine state of address
-    const isEmpty = isEmptyAddress(streetAddress, city, state, country, zipCode);
-
-    // return without error if form fields all empty
-    if (isEmpty)
-        return 0;
-
-    // create address javascript object
-    const newAddress = {
-        type: type,
-        street: streetAddress,
-        city: city,
-        state: state,
-        country: country,
-        zip_code: zipCode
-    }
-
-    // add address to database and return id of newly created document
-    let addressId = null;
-
-    await fetch("http://localhost:5000/createAddress", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify(newAddress),
-    })
-    .then((res) => res.json())                       // parse JSON response
-    .then((data) => {addressId = data.address_id;}) // assign return value
-    .catch((error) => {
-        console.error("Error creating address: ", error);
-        alert("Error creating address");
-        return -1;
-    });
-
-    return addressId;
-} // createHomeAddress
 
 /**
  * Returns -1 upon database request error.
