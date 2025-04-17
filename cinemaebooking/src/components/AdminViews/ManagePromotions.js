@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import SendPromotionModal from "./SendPromotionModal";
 
+import {getSubscribedUsers} from "../../applicationLogic/UserManager";
+
 function ManagePromotions() {
   const [promotions, setPromotions] = useState([]);
   const navigate = useNavigate();
@@ -60,17 +62,14 @@ function ManagePromotions() {
   };
   
   
-  const openModal = (promo) => {
-    // Fetch the list of subscribed users for this promotion
-    axios.get("http://localhost:5000/users/subscribed")
-      .then((res) => {
-        const users = res.data;
+  const openModal = async (promo) => {
+    await getSubscribedUsers()
+      .then((users) => {
         const count = users.length; // Get the count of subscribed users
         setUserCount(count); // Set the user count
         setSelectedPromo(promo);
         setShowModal(true);
-      })
-      .catch((err) => console.error("Error fetching subscribed users:", err));
+      });
   };
 
   const handleDelete = (id) => {

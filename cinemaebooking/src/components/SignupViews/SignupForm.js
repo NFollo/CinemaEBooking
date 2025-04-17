@@ -6,6 +6,7 @@ import { isValidRequiredForm, isValidAddressForm, isValidPaymentCardForm,
     from '../../applicationLogic/SignupHandlers';
 
 import {createAddress} from '../../applicationLogic/AddressManager';
+import {updateUserVerificationStatus} from "../../applicationLogic/UserManager";
 
 import axios from "axios";
 
@@ -213,9 +214,7 @@ function SignupForm() {
             var response = await axios.post('http://localhost:5000/verifyCode', { email, code });
 
             if (response.status === 200) {
-                let verified_user = true
-                await axios.patch(`http://localhost:5000/users/${email}`, {verified_user});
-                // Navigate after being confirmed form here
+                await updateUserVerificationStatus(email, true);
                 navigate("/login");
             }
           } catch (error) {

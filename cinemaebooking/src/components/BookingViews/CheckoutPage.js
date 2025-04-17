@@ -5,6 +5,7 @@ import "./CheckoutPage.css";
 import axios from "axios";
 
 import {getAddress} from "../../applicationLogic/AddressManager";
+import {getUserByEmail} from "../../applicationLogic/UserManager";
 
 const CheckoutPage = () => {
   const location = useLocation();
@@ -128,8 +129,8 @@ const CheckoutPage = () => {
         if (!email) return;
   
         // Get user by email to retrieve their ObjectId
-        const userRes = await axios.get(`http://localhost:5000/users/${email}`);
-        const userId = userRes.data._id.$oid;
+        const user = await getUserByEmail(email);
+        const userId = user._id.$oid;
   
         // Fetch all payment cards for that user
         const cardRes = await axios.get(`http://localhost:5000/paymentCards/${userId}`);

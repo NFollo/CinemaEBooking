@@ -5,6 +5,8 @@ import axios from "axios";
 import Cookies from "js-cookie";
 
 import {createAddress, getAddress, updateAddress} from "../../applicationLogic/AddressManager";
+import {getUserByEmail, updateUserAddress, updateUserDetails, updateUserPassword} 
+    from "../../applicationLogic/UserManager";
 
 
 function EditProfile() {
@@ -177,21 +179,20 @@ function EditProfile() {
         }
 
         try {
-        const res = await axios.get(`http://localhost:5000/users/${email}`);
-        const data = res.data;
+        const retrievedUser = await getUserByEmail(email);
 
         // gets user info
         setUser({
-            email: data.email,
-            first_name: data.first_name,
-            last_name: data.last_name,
-            phone_number: data.phone_number,
-            receivePromotions: data.receive_promotions
+            email: retrievedUser.email,
+            first_name: retrievedUser.first_name,
+            last_name: retrievedUser.last_name,
+            phone_number: retrievedUser.phone_number,
+            receivePromotions: retrievedUser.receive_promotions
         });
 
         // gets home address 
-        if (data.address != null) {
-            const addrId = data.address.$oid || data.address._id || data.address;
+        if (retrievedUser.address != null) {
+            const addrId = retrievedUser.address.$oid || retrievedUser.address._id || retrievedUser.address;
             const addr = await getAddress(addrId);
 
             setAddress({
@@ -206,7 +207,8 @@ function EditProfile() {
         }
 
         // gets card info
-        const getCards = await axios.get('http://localhost:5000/paymentCards/' + (data._id.$oid || data._id));
+        const getCards = await axios.get('http://localhost:5000/paymentCards/' 
+            + (retrievedUser._id.$oid || retrievedUser._id));
         const cards = getCards.data;
         setCards(cards);
         if (cards.length >= 1) {
@@ -359,24 +361,17 @@ function EditProfile() {
 
         
         try {
-            // updates user
-            // TEMP FIX
-            if (newPassword === "")
-                await axios.patch(`http://localhost:5000/users/${user.email}`, {
-                    first_name: user.first_name,
-                    last_name: user.last_name,
-                    phone_number: user.phone_number,
-                    receive_promotions: user.receivePromotions,
-                });
-            else {
-                await axios.patch(`http://localhost:5000/users/${user.email}`, {
-                    first_name: user.first_name,
-                    last_name: user.last_name,
-                    phone_number: user.phone_number,
-                    receive_promotions: user.receivePromotions,
-                    password: newPassword,
-                });
+            const newUser = {
+                firstName: user.first_name,
+                lastName: user.last_name,
+                phoneNumber: user.phone_number,
+                receivePromotions: user.receivePromotions
             }
+
+            await updateUserDetails(user.email, newUser);
+            if (newPassword !== "")
+                await updateUserPassword(user.email, newPassword);
+            
             /*
             // rest password
              await axios.post('http://localhost:5000/resetPassword', {
@@ -385,6 +380,7 @@ function EditProfile() {
                  new_password: newPassword,
                });              
             */
+
             // updates home address
             if (address.id) {
                 await updateAddress(address.id.$oid, address.type, address.street, address.city, 
@@ -395,9 +391,7 @@ function EditProfile() {
                     address.country, address.zip_code);
                 console.log("Created new address:", newAddressId);
 
-                await axios.patch(`http://localhost:5000/users/${user.email}`, {
-                    address: newAddressId,
-                });
+                await updateUserAddress(user.email, newAddressId);
 
                 setAddress((prev) => ({ ...prev, id: newAddressId }));
             }
@@ -420,7 +414,7 @@ function EditProfile() {
                     card3.billing_address.city, card3.billing_address.state, card3.billing_address.country,
                     card3.billing_address.zip_code);
             }
-            
+
             // updates cards
             if (card) {
                 await axios.patch(`http://localhost:5000/paymentCards/${card.id.$oid}`, {
@@ -483,8 +477,8 @@ function EditProfile() {
     
         try {
             // Get user ID
-            const res = await axios.get(`http://localhost:5000/users/${email}`);
-            const userId = res.data._id?.$oid || res.data._id;
+            const retrievedUser = await getUserByEmail(email);
+            const userId = retrievedUser._id?.$oid || retrievedUser._id;
     
             const paymentCardId = await createPaymentCard(
                 newCard.card_type,

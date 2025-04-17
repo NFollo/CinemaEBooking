@@ -5,6 +5,7 @@ import Cookies from "js-cookie";
 import axios from "axios";
 
 import {getAddress} from "../../applicationLogic/AddressManager";
+import {getUserByEmail} from "../../applicationLogic/UserManager";
 
 function ViewProfile() {
 
@@ -86,16 +87,15 @@ function ViewProfile() {
     useEffect(() => {
     const getAllData = async() => {
       try {
-        var response = await axios.get('http://localhost:5000/users/' + Cookies.get("email"));
-        //console.log(response.data);
-        setFirst_name(response.data.first_name);
-        setLast_name(response.data.last_name);
-        setPhone_number(response.data.phone_number);
-        setReceivePromotions(response.data.receive_promotions);
-        console.log("receivePromotions: " + receivePromotions);
+        const retrievedUser = await getUserByEmail(Cookies.get("email"));
+        
+        setFirst_name(retrievedUser.first_name);
+        setLast_name(retrievedUser.last_name);
+        setPhone_number(retrievedUser.phone_number);
+        setReceivePromotions(retrievedUser.receive_promotions);
 
-        if (response.data.address != null) {
-          let getaddr = await getAddress(response.data.address.$oid)
+        if (retrievedUser.address != null) {
+          let getaddr = await getAddress(retrievedUser.address.$oid)
           setAddress(getaddr.street);
           setCity(getaddr.city);
           setState(getaddr.state);
@@ -104,9 +104,8 @@ function ViewProfile() {
           setHasAddress(true);
         } 
 
-        var getCards = await axios.get('http://localhost:5000/paymentCards/' + response.data._id.$oid);
+        let getCards = await axios.get(`http://localhost:5000/paymentCards/${retrievedUser._id.$oid}`);
         const cards = getCards.data;
-        console.log("cards: " + cards); // remove this later
         setNumberOfCards(cards.length);
 
         if (cards.length >= 1) {

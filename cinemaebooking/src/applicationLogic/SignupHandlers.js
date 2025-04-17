@@ -1,6 +1,5 @@
-import axios from 'axios';
 import {createAddress} from './AddressManager'
-
+import {axiosCreateUser} from "./AxiosUserManager"
 
 /**
  * Returns true if the input with specified length is a valid decimal number.
@@ -13,9 +12,6 @@ function isDecimalNumber(input, length) {
     }
     return true;
 } // isDecimalNumber
-
-
-
 
 /**
  * Returns true if required fields complete, passwords match, and phone number is valid.
@@ -193,32 +189,19 @@ export async function createUser(firstName, lastName, email, password, phoneNumb
         address: (isValidHomeAddressId ? homeAddressId : null),
     };
 
+    let userId = null;
     try {
-        // Add user to database and return ID of newly created document
-        const response = await axios.post("http://localhost:5000/users", newUser, {
-            headers: {
-                "Content-Type": "application/json",
-            },
-        });
-
-        // If the request is successful, return the user ID
-        return response.data.user_id;
+        userId = await axiosCreateUser(newUser);
     } catch (error) {
-        if (error.response) {
-            // Handle specific HTTP error statuses
-            if (error.response.status === 409) {
-                alert("Email already exists, please use a different email or login!");
-            } else {
-                console.error("Error creating user: ", error.response.data);
-                alert("Error creating user: " + error.response.data.error);
-            }
-        } else {
-            // Handle network or other errors
-            console.error("Error creating user: ", error);
+        console.error("Error creating user: ", error);
+        if (error.response && error.response.status === 409)
+            alert("Email already exists, please use a different email or login!");
+        else 
             alert("Error creating user");
-        }
-        return -1; // Return -1 to indicate failure
+        userId = -1;
     }
+
+    return userId;
 }
 
 /**
