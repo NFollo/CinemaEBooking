@@ -66,7 +66,7 @@ export async function axiosUpdateUserVerificationStatus(email, status) {
     let user = null;
 
     const response = await axios.patch(`http://localhost:5000/users/email/${email}`, 
-        {verification_status: status}
+        {verified_user: status}
     )
         .catch((error) => {
             console.error("Error updating user: ", error);
