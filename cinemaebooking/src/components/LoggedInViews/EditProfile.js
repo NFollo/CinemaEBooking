@@ -305,7 +305,10 @@ function EditProfile() {
 
     const handleCardChange = (e) => {
         const { name, value } = e.target;
-        setCard((prev) => ({ ...prev, [name]: value }));
+        if (name === "card1_number")
+            setCard((prev) => ({...prev, ["card_number"]: value}));
+        else
+            setCard((prev) => ({ ...prev, [name]: value }));
     };
 
     const handleBillingChange = (e) => {
@@ -321,7 +324,10 @@ function EditProfile() {
 
     const handleCard2Change = (e) => {
         const { name, value } = e.target;
-        setCard2((prev) => ({ ...prev, [name]: value }));
+        if (name === "card2_number")
+            setCard2((prev) => ({...prev, ["card_number"]: value}));
+        else
+            setCard2((prev) => ({ ...prev, [name]: value }));
     };
     
     const handleBilling2Change = (e) => {
@@ -337,7 +343,10 @@ function EditProfile() {
     
     const handleCard3Change = (e) => {
         const { name, value } = e.target;
-        setCard3((prev) => ({ ...prev, [name]: value }));
+        if (name === "card3_number")
+            setCard3((prev) => ({...prev, ["card_number"]: value}));
+        else
+            setCard3((prev) => ({ ...prev, [name]: value }));
     };
     
     const handleBilling3Change = (e) => {
