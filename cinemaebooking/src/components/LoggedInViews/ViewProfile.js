@@ -8,7 +8,14 @@ import {getAddress} from "../../applicationLogic/AddressManager";
 import {getUserByEmail} from "../../applicationLogic/UserManager";
 import {userInfo, receivePromotions, address, card1, card2, card3, build} from "./ViewProfileBuilder";
 
-function ViewProfile() {
+import LoggedNavBar from '../NavBarViews/LoggedNavBar';
+import AdminNavBar from '../NavBarViews/AdminNavBar';
+import { Navigate } from "react-router-dom";
+
+function ViewProfile( {onSearch, input, clearInput, logout} ) {
+
+    // authorization
+    const [authorization, setAuthorization] = useState(Cookies.get("authorization"));
 
     // Basic Info
     const [m_userInfo, setUserInfo] = useState({
@@ -188,6 +195,13 @@ function ViewProfile() {
     };
 
     return (
+    <div>
+        <div>
+        {(authorization === "admin" || authorization === "customer") ? "" : <Navigate to="/"></Navigate>}  
+                  {authorization === "admin" ? <AdminNavBar onSearch={onSearch} input={input} clearInput={clearInput} logout={logout}/> 
+                    : (authorization === "customer" ? <LoggedNavBar onSearch={onSearch} logout={logout} input={input} clearInput={clearInput}/> 
+                    : "")}
+        </div>
       <div className="ViewProfile">
         <div className="ViewProfileTitle">
             View Profile
@@ -196,6 +210,7 @@ function ViewProfile() {
             {build()} {/* builder.build() */}        
             <button onClick={navEditProfile} className="ViewProfileEdit">Edit Profile</button>
         </div>
+      </div>
       </div>
     );
 }

@@ -4,7 +4,11 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import PromotionForm from './PromotionForm';
 
-function EditPromotions() {
+import AdminNavBar from '../NavBarViews/AdminNavBar';
+import { Navigate } from "react-router-dom";
+import Cookies from "js-cookie";
+
+function EditPromotions( {onSearch, input, clearInput, logout} ) {
   const [movies, setMovies] = useState([]);
   const [promoData, setPromoData] = useState(null);
   const navigate = useNavigate();
@@ -14,6 +18,9 @@ function EditPromotions() {
   const [promotion, setPromotion] = useState(null);
   const [isNewPromo, setIsNewPromo] = useState(false);
   const isEdit = !isNewPromo;
+
+  // authorization
+  const [authorization, setAuthorization] = useState(Cookies.get("authorization"));
 
   // Fetch all movies
 useEffect(() => {
@@ -71,6 +78,11 @@ useEffect(() => {
   };
 
   return (
+    <div>
+    <div>
+      {authorization === "admin" ? "" : <Navigate to="/"></Navigate>}  
+      <AdminNavBar onSearch={onSearch} logout={logout} input={input} clearInput={clearInput}/>
+    </div>
     <div className="AdminEdit">
       <div className="AdminEditTitle">{isEdit ? "Edit Promotion" : "Add Promotion"}</div>
       {promoData && (
@@ -81,6 +93,7 @@ useEffect(() => {
           isEdit={isEdit}
         />
       )}
+    </div>
     </div>
   );
 }

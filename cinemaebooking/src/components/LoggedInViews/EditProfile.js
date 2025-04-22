@@ -7,9 +7,16 @@ import Cookies from "js-cookie";
 import {createAddress, getAddress, updateAddress} from "../../applicationLogic/AddressManager";
 import {getUserByEmail, updateUserAddress, updateUserDetails, updateUserPassword} 
     from "../../applicationLogic/UserManager";
+import LoggedNavBar from '../NavBarViews/LoggedNavBar';
+import AdminNavBar from '../NavBarViews/AdminNavBar';
+import { Navigate } from "react-router-dom";
 
 
-function EditProfile() {
+function EditProfile( {onSearch, input, clearInput, logout} ) {
+
+    // authorization
+    const [authorization, setAuthorization] = useState(Cookies.get("authorization"));
+
     const navigate = useNavigate();
     const [error, setError] = useState(null);
     const [cards, setCards] = useState([]);
@@ -559,6 +566,13 @@ function EditProfile() {
     
 
     return (
+        <div>
+        <div>
+            {(authorization === "admin" || authorization === "customer") ? "" : <Navigate to="/"></Navigate>}  
+                  {authorization === "admin" ? <AdminNavBar onSearch={onSearch} input={input} clearInput={clearInput} logout={logout}/> 
+                    : (authorization === "customer" ? <LoggedNavBar onSearch={onSearch} logout={logout} input={input} clearInput={clearInput}/> 
+                    : "")}
+        </div>
         <div className="EditProfile">
         <div className="EditProfileTitle">Edit Profile</div>
         {error && <div className="Error">{error}</div>}
@@ -866,6 +880,7 @@ function EditProfile() {
 
             <input type="submit" value="Save Changes" className="EditProfileSave" />
         </form>
+        </div>
         </div>
     );
 }

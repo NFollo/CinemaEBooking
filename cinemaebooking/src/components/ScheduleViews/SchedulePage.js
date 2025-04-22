@@ -3,10 +3,15 @@ import {useState, useEffect} from "react";
 import {useLocation, useNavigate} from 'react-router-dom';
 import {updateTimeButtonStatus, updateShowroomButtonStatus, getShowsByDate, getShowroomByShow, 
     handleFormSubmit} from '../../applicationLogic/ScheduleMovieHandlers';
+// import NavBar from '../NavBarViews/NavBar';
+// import LoggedNavBar from '../NavBarViews/LoggedNavBar';
+import AdminNavBar from '../NavBarViews/AdminNavBar';
+import { Navigate } from "react-router-dom";
+import Cookies from "js-cookie";
 
 const NUM_SHOWROOMS = 3;
 
-function SchedulePage() {
+function SchedulePage( {onSearch, input, clearInput, logout} ) {
     const location = useLocation(); 
     const navigate = useNavigate();
 
@@ -17,6 +22,9 @@ function SchedulePage() {
         trailer_picture_url: "https://via.placeholder.com/150",
         trailer_video_url: ""
     };
+
+    // authorizatoin
+    const [authorization, setAuthorization] = useState(Cookies.get("authorization"));
 
     // state booleans for displaying form selection buttons
     const [displayTime, setDisplayTime] = useState(false);
@@ -170,9 +178,13 @@ function SchedulePage() {
         .then(() => navigate("/managemovies"));
     } // submitFormHandler
 
-
     return (
-    <div className="PageContainer">
+    <div>
+    <div>
+        {authorization === "admin" ? "" : <Navigate to="/"></Navigate>}
+        <AdminNavBar onSearch={onSearch} logout={logout} input={input} clearInput={clearInput} />
+    </div>
+    <div className="PageContainer">        
         <div className="Title">{movieInfo.title}</div>
         <img className="Image" src={movieInfo.trailer_picture_url} alt={movieInfo.title}></img>
 
@@ -220,6 +232,7 @@ function SchedulePage() {
                 : <></>
             }
         </div>
+    </div>
     </div>
     );
 } // SchedulePage

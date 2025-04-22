@@ -1,14 +1,28 @@
 import "./AdminEdit.css";
 import { useNavigate } from 'react-router-dom';
 
-function AdminEditProfile() {
+import AdminNavBar from '../NavBarViews/AdminNavBar';
+import { Navigate } from "react-router-dom";
+import Cookies from "js-cookie";
+import { useState } from "react";
 
+function AdminEditProfile( {onSearch, input, clearInput, logout} ) {
+
+  // authorization
+  const [authorization, setAuthorization] = useState(Cookies.get("authorization"));
+
+  // navigation
   const navigate = useNavigate();
   const navProfiles = () => {
     navigate("/manageusers");
   };
 
   return (
+    <div>
+    <div>
+        {authorization === "admin" ? "" : <Navigate to="/"></Navigate>}  
+        <AdminNavBar onSearch={onSearch} logout={logout} input={input} clearInput={clearInput}/>
+    </div>
     <div className="AdminEdit">
       <div className="AdminEditTitle">Edit User Profile</div>
       <form>
@@ -73,6 +87,7 @@ function AdminEditProfile() {
             
         </form>
 
+    </div>
     </div>
   );
 }

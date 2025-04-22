@@ -31,6 +31,10 @@ function LoggedNavBar({onSearch, input, clearInput, logout}) {
     e.preventDefault();
     navigate("/search");
   };
+  const myLogout = () => {
+    navHome();
+    logout();
+  };
 
   return (
     <nav className="navbar">
@@ -72,7 +76,7 @@ function LoggedNavBar({onSearch, input, clearInput, logout}) {
               </button>
             </Link>
             <Link to={'/'}>
-              <button className="login" onClick={logout}>
+              <button className="login" onClick={myLogout}>
                 <DropdownItem img={login} text="Sign Out" />
               </button>
             </Link>

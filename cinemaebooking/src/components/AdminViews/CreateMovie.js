@@ -3,7 +3,14 @@ import { useNavigate } from 'react-router-dom';
 import {useState} from 'react';
 import axios from "axios";
 
-function CreateMovie() {
+import AdminNavBar from '../NavBarViews/AdminNavBar';
+import { Navigate } from "react-router-dom";
+import Cookies from "js-cookie";
+
+function CreateMovie( {onSearch, input, clearInput, logout} ) {
+
+    // authorization
+    const [authorization, setAuthorization] = useState(Cookies.get("authorization"));
 
     const navigate = useNavigate();
 
@@ -64,6 +71,11 @@ function CreateMovie() {
     };
 
     return (
+        <div>
+        <div>
+            {authorization === "admin" ? "" : <Navigate to="/"></Navigate>}  
+            <AdminNavBar onSearch={onSearch} logout={logout} input={input} clearInput={clearInput}/>
+        </div>
         <div className="CreateMovie">      
             <div className="CreateMovieTitle">
                 Add Movie
@@ -144,6 +156,7 @@ function CreateMovie() {
                 </div>
                 <button className="CreateMovieButton" onClick={onFormSubmit}>Add Movie</button>
             </form>
+        </div>
         </div>
     );
 }

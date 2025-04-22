@@ -2,7 +2,15 @@ import "./Manage.css";
 import { useNavigate } from 'react-router-dom';
 import {useState, useEffect} from 'react';
 
-function ManageMovies({query}) {
+import AdminNavBar from '../NavBarViews/AdminNavBar';
+import { Navigate } from "react-router-dom";
+import Cookies from "js-cookie";
+
+function ManageMovies({query, onSearch, input, clearInput, logout}) {
+
+    // authorization
+    const [authorization, setAuthorization] = useState(Cookies.get("authorization"));
+
     const navigate = useNavigate();
     const [movies, setMovies] = useState([]);
 
@@ -113,6 +121,11 @@ function ManageMovies({query}) {
     }, [movies, query]);
   
     return (
+        <div>
+        <div>
+            {authorization === "admin" ? "" : <Navigate to="/"></Navigate>}  
+            <AdminNavBar onSearch={onSearch} logout={logout} input={input} clearInput={clearInput}/>
+        </div>
         <div className="SearchPage">      
             <div className="SearchPageHeader">
                 {query === "" ? "Browse All Movies" : "Search results for \"" + query + "\""}            
@@ -121,6 +134,7 @@ function ManageMovies({query}) {
                 <button className="ManageEditButton" onClick={navCreateMovie}>Add Movie</button>  
             </div>
             <div id="movies" className="MoviesContainer"></div>
+        </div>
         </div>
       );
 }

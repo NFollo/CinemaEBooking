@@ -4,7 +4,11 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import Cookies from "js-cookie";
 
-function MovieInfoPage({movie}) {
+import NavBar from '../NavBarViews/NavBar';
+import LoggedNavBar from '../NavBarViews/LoggedNavBar';
+import AdminNavBar from '../NavBarViews/AdminNavBar';
+
+function MovieInfoPage({movie, onSearch, input, clearInput, logout}) {
     // navigation for BookTickets button
     const navigate = useNavigate();
     const location = useLocation(); 
@@ -87,6 +91,12 @@ function MovieInfoPage({movie}) {
     }, [location.state]);
 
     return (
+        <div>
+        <div>
+            {authorization === "admin" ? <AdminNavBar onSearch={onSearch} input={input} clearInput={clearInput} logout={logout}/> 
+                            : (authorization === "customer" ? <LoggedNavBar onSearch={onSearch} logout={logout} input={input} clearInput={clearInput}/> 
+                            : <NavBar onSearch={onSearch} input={input} clearInput={clearInput}/>)}
+        </div>
         <div className='pageContainer'>
             <p className='title'>{movieInfo.title}</p>
 
@@ -124,6 +134,7 @@ function MovieInfoPage({movie}) {
             <br></br>
 
             
+        </div>
         </div>
     );
 }

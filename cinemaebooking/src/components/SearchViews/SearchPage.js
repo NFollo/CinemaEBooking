@@ -2,13 +2,21 @@ import "./SearchPage.css";
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-function SearchPage({ query }) {
+import Cookies from "js-cookie";
+import NavBar from '../NavBarViews/NavBar';
+import LoggedNavBar from '../NavBarViews/LoggedNavBar';
+import AdminNavBar from '../NavBarViews/AdminNavBar';
+
+function SearchPage({ query, onSearch, input, clearInput, logout }) {
     const navigate = useNavigate();
     const [movies, setMovies] = useState([]);
     const [filterBy, setFilterBy] = useState('title'); // 'title' or 'category'
     const [isMovieMatch, setIsMovieMatch] = useState(false);
     const [allCategories, setAllCategories] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState('');
+
+    // authorization
+    const [authorization, setAuthorization] = useState(Cookies.get("authorization"));
 
     useEffect(() => {
         fetch("http://localhost:5000/movies")
@@ -93,6 +101,12 @@ function SearchPage({ query }) {
     };
 
     return (
+        <div>
+        <div>
+            {authorization === "admin" ? <AdminNavBar onSearch={onSearch} input={input} clearInput={clearInput} logout={logout}/> 
+                    : (authorization === "customer" ? <LoggedNavBar onSearch={onSearch} logout={logout} input={input} clearInput={clearInput}/> 
+                    : <NavBar onSearch={onSearch} input={input} clearInput={clearInput}/>)}
+        </div>
         <div className="SearchPage">        
             <div className="SearchPageHeader">
                 {query === "" && !selectedCategory ? "Browse All Movies" : 
@@ -122,6 +136,7 @@ function SearchPage({ query }) {
             {!isMovieMatch && (query !== "" || selectedCategory !== "") && (
                 <p className="centered">No movies match the search criteria!</p>
             )}
+        </div>
         </div>
     );
 }

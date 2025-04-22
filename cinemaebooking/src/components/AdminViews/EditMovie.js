@@ -1,10 +1,16 @@
 import "./AdminEdit.css";
 import { useNavigate } from 'react-router-dom';
-//import { useState } from "react";
+import { useState } from "react";
 
-function EditMovie() {
+import AdminNavBar from '../NavBarViews/AdminNavBar';
+import { Navigate } from "react-router-dom";
+import Cookies from "js-cookie";
+
+function EditMovie( {onSearch, input, clearInput, logout} ) {
 
   //const [selectedShowtime, setSelectedShowtime] = useState("");
+  // authorization
+  const [authorization, setAuthorization] = useState(Cookies.get("authorization"));
 
   const navigate = useNavigate();
   const navMovies = () => {
@@ -12,6 +18,11 @@ function EditMovie() {
   };
 
   return (
+    <div>
+    <div>
+      {authorization === "admin" ? "" : <Navigate to="/"></Navigate>}  
+      <AdminNavBar onSearch={onSearch} logout={logout} input={input} clearInput={clearInput}/>
+    </div>
     <div className="AdminEdit">
       <div className="AdminEditTitle">Edit Movie</div>
       <form className="editForm">
@@ -70,6 +81,7 @@ function EditMovie() {
             
         </form>
 
+    </div>
     </div>
   );
 }

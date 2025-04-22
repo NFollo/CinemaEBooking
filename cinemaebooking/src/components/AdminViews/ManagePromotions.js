@@ -4,11 +4,18 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import SendPromotionModal from "./SendPromotionModal";
 
+import AdminNavBar from '../NavBarViews/AdminNavBar';
+import { Navigate } from "react-router-dom";
+import Cookies from "js-cookie";
+
 import {getSubscribedUsers} from "../../applicationLogic/UserManager";
 
-function ManagePromotions() {
+function ManagePromotions( {onSearch, input, clearInput, logout} ) {
   const [promotions, setPromotions] = useState([]);
   const navigate = useNavigate();
+
+  // authorization
+  const [authorization, setAuthorization] = useState(Cookies.get("authorization"));
 
   // popup for sending the promo
   const [showModal, setShowModal] = useState(false);
@@ -81,6 +88,11 @@ function ManagePromotions() {
   };
 
   return (
+    <div>
+    <div>
+      {authorization === "admin" ? "" : <Navigate to="/"></Navigate>}  
+      <AdminNavBar onSearch={onSearch} logout={logout} input={input} clearInput={clearInput}/>
+    </div>
     <div className="Manage">
       <div className="ManageTitle">Manage Promotions</div>
 
@@ -127,6 +139,7 @@ function ManagePromotions() {
           onSend={() => handleSend(selectedPromo)}
         />
       )}
+    </div>
     </div>
   );
 }

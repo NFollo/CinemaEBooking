@@ -2,6 +2,7 @@ import './Main.css';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 
+import HomeView from './HomeView/HomeView';
 import AdminEditProfile from "./AdminViews/AdminEditProfile";
 import EditMovie from "./AdminViews/EditMovie";
 import EditPromotions from "./AdminViews/EditPromotions";
@@ -39,6 +40,7 @@ import ConfirmationPage from "./SignupViews/ConfirmationPage";
 import SignupPage from "./SignupViews/SignupPage";
 
 import Cookies from "js-cookie";
+//import { useNavigate } from 'react-router-dom';
 
 
 function Main() {
@@ -46,6 +48,8 @@ function Main() {
   const [input, setInput] = useState("");
   const onSearch = (e) => setInput(e.target.value);
   const clearInput = () => setInput("");
+
+  //const navigate = useNavigate();
 
   // Initialize login cookie as false if not already set
   useEffect(() => {
@@ -61,6 +65,8 @@ function Main() {
     if (Cookies.get("email")) {
       Cookies.set("email", "0", { expires: 0, path: "/" });
     }
+    window.location.reload();
+    //navigate("/"); 
   };
 
   // This is for the testing header.  Clicking the button cycles between unauthorized, customer, and admin
@@ -90,164 +96,27 @@ function Main() {
       <Router>
         <div className="AllRoutes">
           <Routes>
-            <Route exact path='/' 
-              element={
-                <div>
-                  {authorization === "admin" ? <AdminNavBar onSearch={onSearch} input={input} clearInput={clearInput} logout={logout}/> 
-                    : (authorization === "customer" ? <LoggedNavBar onSearch={onSearch} logout={logout} input={input} clearInput={clearInput}/> 
-                    : <NavBar onSearch={onSearch} input={input} clearInput={clearInput}/>)}
-                  <TitleBody />
-                  <MainFeatured />
-                  <CurrentlyRunning />
-                  <ComingSoon />
-                </div>
-              } 
-            />
-            <Route exact path='/login' 
-              element={
-                <div>
-                  <LoginPage setAuthorization={setAuthorization}/>
-                </div>
-              } 
-            />
-            <Route exact path='/forgotpassword' 
-              element={
-                <div>
-                  <LoginForgotPassword />
-                </div>
-              } 
-            />
-            <Route exact path='/signup' 
-              element={
-                <div>
-                  <SignupPage />
-                </div>
-              } 
-            />
-            <Route exact path='/confirmation' 
-              element={
-                <div>
-                  <ConfirmationPage />
-                </div>
-              } 
-            />
-            <Route exact path='/search' 
-              element={
-                <div>
-                  {authorization === "admin" ? <AdminNavBar onSearch={onSearch} input={input} clearInput={clearInput} logout={logout}/> 
-                    : (authorization === "customer" ? <LoggedNavBar onSearch={onSearch} logout={logout} input={input} clearInput={clearInput}/> 
-                    : <NavBar onSearch={onSearch} input={input} clearInput={clearInput}/>)}
-                  <SearchPage query={input}/>
-                </div>
-              } 
-            />
-            <Route exact path='/schedule' 
-              element={
-                <div>
-                  {authorization === "admin" ? "" : <Navigate to="/"></Navigate>}
-                  <AdminNavBar onSearch={onSearch} logout={logout} input={input} clearInput={clearInput}/>
-                  <SchedulePage />
-                </div>
-              } 
-            />
-            <Route exact path='/viewprofile' 
-              element={
-                <div>
-                  {(authorization === "admin" || authorization === "customer") ? "" : <Navigate to="/"></Navigate>}  
-                  {authorization === "admin" ? <AdminNavBar onSearch={onSearch} input={input} clearInput={clearInput} logout={logout}/> 
-                    : (authorization === "customer" ? <LoggedNavBar onSearch={onSearch} logout={logout} input={input} clearInput={clearInput}/> 
-                    : <NavBar onSearch={onSearch} input={input} clearInput={clearInput}/>)}
-                  <ViewProfile />
-                </div>
-              } 
-            />
-            <Route exact path='/editprofile' 
-              element={
-                <div>
-                  {(authorization === "admin" || authorization === "customer") ? "" : <Navigate to="/"></Navigate>}  
-                  {authorization === "admin" ? <AdminNavBar onSearch={onSearch} input={input} clearInput={clearInput} logout={logout}/> 
-                    : (authorization === "customer" ? <LoggedNavBar onSearch={onSearch} logout={logout} input={input} clearInput={clearInput}/> 
-                    : <NavBar onSearch={onSearch} input={input} clearInput={clearInput}/>)}
-                  <EditProfile />
-                </div>
-              } 
-            />
-            <Route exact path='/manageusers' 
-              element={
-                <div>
-                  {authorization === "admin" ? "" : <Navigate to="/"></Navigate>}  
-                  <AdminNavBar onSearch={onSearch} logout={logout} input={input} clearInput={clearInput}/>
-                  <ManageUsers />
-                </div>
-              } 
-            /> 
-            <Route exact path='/admineditprofile' 
-              element={
-                <div>
-                  {authorization === "admin" ? "" : <Navigate to="/"></Navigate>}  
-                  <AdminNavBar onSearch={onSearch} logout={logout} input={input} clearInput={clearInput}/>
-                  <AdminEditProfile />
-                </div>
-              } 
-            /> 
-            <Route exact path='/managemovies' 
-              element={
-                <div>
-                  {authorization === "admin" ? "" : <Navigate to="/"></Navigate>}  
-                  <AdminNavBar onSearch={onSearch} logout={logout} input={input} clearInput={clearInput}/>
-                  <ManageMovies query={input}/>
-                </div>
-              } 
-            /> 
-            <Route exact path='/admineditmovie' 
-              element={
-                <div>
-                  {authorization === "admin" ? "" : <Navigate to="/"></Navigate>}  
-                  <AdminNavBar onSearch={onSearch} logout={logout} input={input} clearInput={clearInput}/>
-                  <EditMovie />
-                </div>
-              } 
-            /> 
-            <Route exact path='/admincreatemovie' 
-              element={
-                <div>
-                  {authorization === "admin" ? "" : <Navigate to="/"></Navigate>}  
-                  <AdminNavBar onSearch={onSearch} logout={logout} input={input} clearInput={clearInput}/>
-                  <CreateMovie />
-                </div>
-              } 
-            /> 
-            <Route exact path='/managepromotions' 
-              element={
-                <div>
-                  {authorization === "admin" ? "" : <Navigate to="/"></Navigate>}  
-                  <AdminNavBar onSearch={onSearch} logout={logout} input={input} clearInput={clearInput}/>
-                  <ManagePromotions />
-                </div>
-              } 
-            /> 
-            <Route exact path='/editpromotions' 
-              element={
-                <div> 
-                  {authorization === "admin" ? "" : <Navigate to="/"></Navigate>}                 
-                  <AdminNavBar onSearch={onSearch} logout={logout} input={input} clearInput={clearInput}/>
-                  <EditPromotions />
-                </div>
-              } 
-            />            
+            <Route exact path='/' element={<HomeView onSearch={onSearch} logout={logout} input={input} clearInput={clearInput} />} />
+            <Route exact path='/login' element={<LoginPage setAuthorization={setAuthorization}/>} />
+            <Route exact path='/forgotpassword' element={<LoginForgotPassword />} />
+            <Route exact path='/signup' element={<SignupPage />} />
+            <Route exact path='/confirmation' element={<ConfirmationPage />} />
+            <Route exact path='/search' element={<SearchPage query={input} onSearch={onSearch} logout={logout} input={input} clearInput={clearInput}/>} />
+            <Route exact path='/schedule' element={<SchedulePage onSearch={onSearch} logout={logout} input={input} clearInput={clearInput} />} />
+            <Route exact path='/viewprofile' element={<ViewProfile onSearch={onSearch} logout={logout} input={input} clearInput={clearInput} />} />
+            <Route exact path='/editprofile' element={<EditProfile onSearch={onSearch} logout={logout} input={input} clearInput={clearInput} />} />
+            <Route exact path='/manageusers' element={<ManageUsers onSearch={onSearch} logout={logout} input={input} clearInput={clearInput} />} /> 
+            <Route exact path='/admineditprofile' element={<AdminEditProfile onSearch={onSearch} logout={logout} input={input} clearInput={clearInput} />} /> 
+            <Route exact path='/managemovies' element={<ManageMovies query={input} onSearch={onSearch} logout={logout} input={input} clearInput={clearInput} />} /> 
+            <Route exact path='/admineditmovie' element={<EditMovie onSearch={onSearch} logout={logout} input={input} clearInput={clearInput} />} /> 
+            <Route exact path='/admincreatemovie' element={<CreateMovie onSearch={onSearch} logout={logout} input={input} clearInput={clearInput} />} /> 
+            <Route exact path='/managepromotions' element={<ManagePromotions onSearch={onSearch} logout={logout} input={input} clearInput={clearInput} />} /> 
+            <Route exact path='/editpromotions' element={<EditPromotions onSearch={onSearch} logout={logout} input={input} clearInput={clearInput} />} />            
             <Route exact path='/buytickets' element={<BuyTicketsPage />} />
             <Route exact path='/seatselection' element={<SeatSelection />} />
-            <Route path="/checkout" element={<CheckoutPage />} />
-            
+            <Route path="/checkout" element={<CheckoutPage />} />            
             <Route path="/orderconfirmation" element={<OrderConfirmation />} />
-            <Route exact path='/movieinfo' 
-              element={ <div>
-                          {authorization === "admin" ? <AdminNavBar onSearch={onSearch} input={input} clearInput={clearInput} logout={logout}/> 
-                            : (authorization === "customer" ? <LoggedNavBar onSearch={onSearch} logout={logout} input={input} clearInput={clearInput}/> 
-                            : <NavBar onSearch={onSearch} input={input} clearInput={clearInput}/>)}
-                          <MovieInfoPage />
-                        </div>} 
-            />
+            <Route exact path='/movieinfo' element={<MovieInfoPage onSearch={onSearch} logout={logout} input={input} clearInput={clearInput} />} />
             <Route path='/*' element={<div>Error404</div>} />
           </Routes>
         </div>
