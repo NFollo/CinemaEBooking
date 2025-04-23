@@ -2,29 +2,32 @@ import './CurrentlyRunning.css';
 import { useNavigate } from "react-router-dom"; 
 import Carousel from 'react-bootstrap/Carousel';
 import { useState, useEffect } from 'react';
+import MovieMgr from "../../applicationLogic/AxiosMovieManager";
 
 function CurrentlyRunning() {
   const navigate = useNavigate(); 
   const [movies, setMovies] = useState([]);
   const [carouselGroups, setCarouselGroups] = useState([]);
 
-  useEffect(() => {
-    fetch("http://localhost:5000/movies")
-      .then((res) => res.json())
-      .then((data) => {
-        // Filter movies where currently_running is true
-        const currentlyRunningMovies = data.filter(movie => movie.currently_running)
-          .map(movie => ({
-            title: movie.title,
-            trailer_picture_url: movie.trailer_picture_url,
-            trailer_video_url: movie.trailer_video_url,
-            currently_running: movie.currentlyRunning,
-            rating: movie.mpaa_us_film_rating_code,
-          }));
-        setMovies(currentlyRunningMovies);
-      })
-      .catch((error) => console.error("Error fetching movies:", error));   
-  }, []); 
+useEffect(() => {
+        const fetchMovies = async () => {
+            const data = await MovieMgr.GetMovieList();
+            // Filter movies where currently_running is true and map necessary fields
+            const currentlyRunningMovies = data
+                .filter(movie => movie.currently_running)
+                .map(movie => ({
+                    title: movie.title,
+                    trailer_picture_url: movie.trailer_picture_url,
+                    trailer_video_url: movie.trailer_video_url,
+                    currently_running: movie.currently_running,
+                    rating: movie.mpaa_us_film_rating_code,
+                }));
+
+            setMovies(currentlyRunningMovies);
+        };
+
+        fetchMovies();
+    }, []);
 
   useEffect(() => { 
     // Group into sets of 3 for the carousel

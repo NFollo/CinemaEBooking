@@ -5,6 +5,7 @@ import {useState, useEffect} from 'react';
 import AdminNavBar from '../NavBarViews/AdminNavBar';
 import { Navigate } from "react-router-dom";
 import Cookies from "js-cookie";
+import MovieMgr from "../../applicationLogic/AxiosMovieManager";
 
 function ManageMovies({query, onSearch, input, clearInput, logout}) {
 
@@ -99,22 +100,21 @@ function ManageMovies({query, onSearch, input, clearInput, logout}) {
         });
     } // search movies
   
-    useEffect(() => {
-      fetch("http://localhost:5000/movies") // Fetch from backend API
-          .then((res) => res.json()) // Parse JSON response
-          .then((data) =>{
-              setMovies(
-                  data.map((movie) => ({
-                      title: movie.title,
-                      trailer_picture_url: movie.trailer_picture_url,
-                      trailer_video_url: movie.trailer_video_url,
-                      currently_running: movie.currently_running, // Keep same as API
-                  }))
-              );
-          console.log(data);
-          })
-          .catch((error) => console.error("Error fetching movies:", error));   
-      }, []);
+useEffect(() => {
+        const fetchMovies = async () => {
+            const data = await MovieMgr.GetMovieList();
+            setMovies(
+                data.map((movie) => ({
+                    title: movie.title,
+                    trailer_picture_url: movie.trailer_picture_url,
+                    trailer_video_url: movie.trailer_video_url,
+                    currently_running: movie.currently_running,
+                }))
+            );
+        };
+
+        fetchMovies();
+    }, []);
 
     useEffect(() => {
         searchMovies();

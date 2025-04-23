@@ -2,6 +2,7 @@ import './ComingSoon.css';
 import { useNavigate } from "react-router-dom"; 
 import Carousel from 'react-bootstrap/Carousel';
 import { useState, useEffect } from 'react';
+import MovieMgr from "../../applicationLogic/AxiosMovieManager";
 
 function ComingSoon() {
   const navigate = useNavigate(); 
@@ -10,22 +11,30 @@ function ComingSoon() {
   const [sixMovies, setSixMovies] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:5000/movies")
-      .then((res) => res.json())
-      .then((data) => {
-        // Filter movies where currently_running is false (coming soon)
-        const filteredMovies = data.filter(movie => !movie.currently_running)
+    const fetchMovies = async () => {
+      try {
+        const allMovies = await MovieMgr.GetMovieList(); 
+  
+        const filteredMovies = allMovies
+          .filter(movie => !movie.currently_running) // Filter movies that are "coming soon"
           .map(movie => ({
             title: movie.title,
             trailer_picture_url: movie.trailer_picture_url,
             trailer_video_url: movie.trailer_video_url,
-            currently_running: movie.currentlyRunning,
-            rating: movie.mpaa_us_film_rating_code,
+            currently_running: movie.currently_running,
+            rating: movie.mpaa_us_film_rating_code, 
           }));
-        setMovies(filteredMovies);
-      })
-      .catch((error) => console.error("Error fetching movies:", error));   
-  }, []); 
+  
+        setMovies(filteredMovies); 
+        //setLoading(false); // Set loading state to false
+      } catch (error) {
+        return; // no need to do anyhting, the error is already in movieMgr
+        //(false);
+      }
+    };
+  
+    fetchMovies(); // Call fetchMovies when component mounts
+  }, []); // Empty dependency array ensures this only runs once on mount
 
   useEffect(() => { 
     // Group into sets of 3 for the carousel

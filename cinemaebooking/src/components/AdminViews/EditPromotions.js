@@ -7,6 +7,7 @@ import PromotionForm from './PromotionForm';
 import AdminNavBar from '../NavBarViews/AdminNavBar';
 import { Navigate } from "react-router-dom";
 import Cookies from "js-cookie";
+import MovieMgr from "../../applicationLogic/AxiosMovieManager";
 
 function EditPromotions( {onSearch, input, clearInput, logout} ) {
   const [movies, setMovies] = useState([]);
@@ -24,9 +25,11 @@ function EditPromotions( {onSearch, input, clearInput, logout} ) {
 
   // Fetch all movies
 useEffect(() => {
-  axios.get("http://localhost:5000/movies")
-    .then((res) => setMovies(res.data))
-    .catch((err) => console.error("Error fetching movies:", err));
+  const fetchMovies = async () => {
+    const data = await MovieMgr.GetMovieList();
+    setMovies(data);
+  };
+  fetchMovies()
 
   // Load promotion data from location.state or localStorage / if refreshing the pages, remembers the page
   if (location.state?.promotion) {

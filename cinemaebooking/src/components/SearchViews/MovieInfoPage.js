@@ -7,6 +7,7 @@ import Cookies from "js-cookie";
 import NavBar from '../NavBarViews/NavBar';
 import LoggedNavBar from '../NavBarViews/LoggedNavBar';
 import AdminNavBar from '../NavBarViews/AdminNavBar';
+import MovieMgr from "../../applicationLogic/AxiosMovieManager";
 
 function MovieInfoPage({movie, onSearch, input, clearInput, logout}) {
     // navigation for BookTickets button
@@ -55,32 +56,34 @@ function MovieInfoPage({movie, onSearch, input, clearInput, logout}) {
 
     useEffect(() => {
         const getMovieData = async () => {
-          try {
-            const response = await axios.get('http://localhost:5000/movies/' + movieInfo.title);
-            console.log(response.data);
-            setMovieData(response.data);
-            //console.log(status);
-            if (!response.data.currently_running) {
+            const data = await MovieMgr.GetSingleMovieByTitle(movieInfo.title); 
+            if (data === -1) {
+              console.error("Failed to load movie data.");
+              return;
+            }
+        
+            console.log(data);
+            setMovieData(data);
+        
+            if (!data.currently_running) {
               setStatus("Coming Soon");
             }
-            setCategories(response.data.categories);
-            setDescription(response.data.synopsis);
-            setCastMembers(response.data.cast);
-            setDirectors(response.data.directors);
-            setProducers(response.data.producers);
-            setRating(response.data.mpaa_us_film_rating_code);
-      
+        
+            setCategories(data.categories);
+            setDescription(data.synopsis);
+            setCastMembers(data.cast);
+            setDirectors(data.directors);
+            setProducers(data.producers);
+            setRating(data.mpaa_us_film_rating_code);
+        
             // update id
             setMovieData(prev => ({
               ...prev,
-              _id: response.data._id
+              _id: data._id
             }));
-          } catch (e) {
-            console.log("Error fetching movie data: " + e);
-          }
-        };
-      
-        getMovieData();
+          };
+        
+          getMovieData();
       }, []);
       
 

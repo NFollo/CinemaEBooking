@@ -6,6 +6,8 @@ import axios from "axios";
 import AdminNavBar from '../NavBarViews/AdminNavBar';
 import { Navigate } from "react-router-dom";
 import Cookies from "js-cookie";
+import MovieMgr from "../../applicationLogic/AxiosMovieManager";
+
 
 function CreateMovie( {onSearch, input, clearInput, logout} ) {
 
@@ -26,12 +28,13 @@ function CreateMovie( {onSearch, input, clearInput, logout} ) {
     const [isRunning, setIsRunning] = useState(false);
 
     async function addMovie (movie) {
-        //console.log(movie);
-        const billingRes = await axios.post("http://localhost:5000/movies", movie);
-        //const billingAddressId = billingRes.data.address_id;
-        //console.log(billingAddressId);
-        navigate("/managemovies");
-        alert("Movie added successfully");
+        const createdMovie = await MovieMgr.CreateMovie(movie);
+        if (createdMovie) {
+            alert("Movie added successfully");
+            navigate("/managemovies");
+        } else {
+            alert("Failed to add movie");
+        }
     }
 
     const onFormSubmit = (e) => {

@@ -6,6 +6,7 @@ import Cookies from "js-cookie";
 import NavBar from '../NavBarViews/NavBar';
 import LoggedNavBar from '../NavBarViews/LoggedNavBar';
 import AdminNavBar from '../NavBarViews/AdminNavBar';
+import MovieMgr from "../../applicationLogic/AxiosMovieManager";
 
 function SearchPage({ query, onSearch, input, clearInput, logout }) {
     const navigate = useNavigate();
@@ -19,19 +20,22 @@ function SearchPage({ query, onSearch, input, clearInput, logout }) {
     const [authorization, setAuthorization] = useState(Cookies.get("authorization"));
 
     useEffect(() => {
-        fetch("http://localhost:5000/movies")
-            .then((res) => res.json())
-            .then((data) => {
-                setMovies(data);
-                // Extract all unique categories
-                const categories = new Set();
-                data.forEach(movie => {
-                    movie.categories?.forEach(cat => categories.add(cat));
-                });
-                setAllCategories(Array.from(categories).sort());
-            })
-            .catch((error) => console.error("Error fetching movies:", error));
-    }, []);
+        const fetchMovies = async () => {
+          const data = await MovieMgr.GetMovieList(); // Call the Axios wrapper
+      
+          setMovies(data);
+      
+          // Extract all unique categories
+          const categories = new Set();
+          data.forEach(movie => {
+            movie.categories?.forEach(cat => categories.add(cat));
+          });
+      
+          setAllCategories(Array.from(categories).sort());
+        };
+      
+        fetchMovies();
+      }, []);
 
     const searchMovies = () => {
         const movieContainer = document.getElementById("movies");

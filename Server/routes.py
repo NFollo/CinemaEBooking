@@ -253,22 +253,22 @@ def init_routes(app, mail):
         except Exception as err:
             return jsonify({"error": "Failed to fetch movie", "message": str(err)}), 500
 
-    @app.route('/movies/homepageInfo', methods=['POST', 'GET']) 
-    def moviesTitleAndPic(): 
-        if request.method == 'GET':
-            try:
-                movies = Movie.objects()  # Fetch all movies from the database
-                movies_list = [
-                        {"id": str(movie.id), 
-                        "title": movie.title, 
-                        ""
-                        "trailer_picture_url": movie.trailer_picture_url, 
-                        "trailer_video_url": movie.trailer_video_url,
-                        "currently_running": movie.currently_running} 
-                    for movie in movies]  
-                return jsonify(movies_list), 200
-            except Exception as err:
-                return jsonify({"error": "Failed to fetch movies", "message": str(err)}), 500
+    # @app.route('/movies/homepageInfo', methods=['POST', 'GET']) 
+    # def moviesTitleAndPic(): 
+    #     if request.method == 'GET':
+    #         try:
+    #             movies = Movie.objects()  # Fetch all movies from the database
+    #             movies_list = [
+    #                     {"id": str(movie.id), 
+    #                     "title": movie.title, 
+    #                     ""
+    #                     "trailer_picture_url": movie.trailer_picture_url, 
+    #                     "trailer_video_url": movie.trailer_video_url,
+    #                     "currently_running": movie.currently_running} 
+    #                 for movie in movies]  
+    #             return jsonify(movies_list), 200
+    #         except Exception as err:
+    #             return jsonify({"error": "Failed to fetch movies", "message": str(err)}), 500
         
     @app.route('/createPaymentCard', methods=['POST']) # TODO: Users should only be able to add up to three payment cards... - Angel
     def newPaymentCard(): 
