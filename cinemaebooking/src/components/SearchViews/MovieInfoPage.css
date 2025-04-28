@@ -88,3 +88,11 @@
     width: 50%;
     height: 50vh;
 }
+
+.MovieInfoPageLoading {
+    font-weight: bold;
+    font-style: italic;
+    font-size: 180%;
+    justify-self: center;
+    padding-top: 20%;
+}

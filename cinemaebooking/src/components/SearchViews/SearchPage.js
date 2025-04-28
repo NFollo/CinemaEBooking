@@ -16,6 +16,8 @@ function SearchPage({ query, onSearch, input, clearInput, logout }) {
     const [allCategories, setAllCategories] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState('');
 
+    const [hasData, setHasData] = useState(false);
+
     // authorization
     const [authorization, setAuthorization] = useState(Cookies.get("authorization"));
 
@@ -32,6 +34,9 @@ function SearchPage({ query, onSearch, input, clearInput, logout }) {
           });
       
           setAllCategories(Array.from(categories).sort());
+
+          setHasData(true);
+
         };
       
         fetchMovies();
@@ -136,8 +141,9 @@ function SearchPage({ query, onSearch, input, clearInput, logout }) {
                     )}
                 </div>
             </div>
+            {hasData ? "" : <div className="SearchPageLoading">Loading data...</div>}
             <div id="movies" className="SearchPageMovies"></div>
-            {!isMovieMatch && (query !== "" || selectedCategory !== "") && (
+            {!isMovieMatch && (query !== "" || selectedCategory !== "") && (hasData) && (
                 <p className="centered">No movies match the search criteria!</p>
             )}
         </div>

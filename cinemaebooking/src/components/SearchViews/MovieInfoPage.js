@@ -13,6 +13,8 @@ function MovieInfoPage({movie, onSearch, input, clearInput, logout}) {
     // navigation for BookTickets button
     const navigate = useNavigate();
     const location = useLocation(); 
+
+    const [hasData, setHasData] = useState(false);
     
     // no movie 
 
@@ -81,6 +83,9 @@ function MovieInfoPage({movie, onSearch, input, clearInput, logout}) {
               ...prev,
               _id: data._id
             }));
+
+            setHasData(true);
+
           };
         
           getMovieData();
@@ -100,6 +105,7 @@ function MovieInfoPage({movie, onSearch, input, clearInput, logout}) {
                             : (authorization === "customer" ? <LoggedNavBar onSearch={onSearch} logout={logout} input={input} clearInput={clearInput}/> 
                             : <NavBar onSearch={onSearch} input={input} clearInput={clearInput}/>)}
         </div>
+        {hasData ? 
         <div className='pageContainer'>
             <p className='title'>{movieInfo.title}</p>
 
@@ -138,6 +144,7 @@ function MovieInfoPage({movie, onSearch, input, clearInput, logout}) {
 
             
         </div>
+        : <div className="MovieInfoPageLoading">Loading...</div>}
         </div>
     );
 }

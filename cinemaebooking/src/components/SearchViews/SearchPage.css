@@ -27,7 +27,13 @@
     height: 20vw;
 }
 
-
+.SearchPageLoading {
+    font-weight: bold;
+    font-size: 200%;
+    font-style: italic;
+    justify-self: center;
+    padding-top: 5%;
+}
 
 .SearchPageMovieTitle {
     font-size: 150%;
