@@ -3,12 +3,12 @@ import subprocess
 import os
 from dotenv import load_dotenv
 from routes import init_routes
-from db import init_db
+# from db import init_db
 from flask_cors import CORS
 from flask_mail import Mail
 
 # Start Flask App
-app = Flask(__name__)
+app = Flask(__name__) # Singleton: one app instance
 CORS(app)
 
 load_dotenv()
@@ -35,8 +35,8 @@ if __name__ == '__main__':
     app.config['MAIL_USERNAME'] = os.environ['MAIL_USERNAME']
     app.config['MAIL_PASSWORD'] = os.environ['MAIL_PASSWORD']
     mail = Mail(app)
-    init_db(app)
-    init_routes(app, mail)
+    # init_db(app)
+    init_routes(app, mail) # Using those singletons
     app.run(debug=True)
 
     
