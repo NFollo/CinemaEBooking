@@ -124,7 +124,8 @@ function SearchPage({ query, onSearch, input, clearInput, logout }) {
                 
                 <div className="filter-controls">
                     <button onClick={toggleFilterBy} className="toggle-button">
-                        Filter by: {filterBy === 'title' ? 'Category' : 'Title'}
+                        Filtering by: {filterBy.charAt(0).toUpperCase() + filterBy.slice(1)}
+                        {/* Filter by: {filterBy === 'title' ? 'Category' : 'Title'} */}
                     </button>
                     
                     {filterBy === 'category' && (
