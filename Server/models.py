@@ -1,5 +1,5 @@
 import mongoengine as me
-from mongoengine import connect, get_db, EmbeddedDocumentListField
+from mongoengine import connect, get_db
 import os
 from dotenv import load_dotenv
 
@@ -98,7 +98,6 @@ class Promotion(me.Document):
 
 class Ticket(me.EmbeddedDocument):
     ticket_type = me.StringField(default="adult", required=True) # one of adult, senior, or child
-    seat_number = me.StringField(required=True)
     price = me.IntField(required=True)
     meta = {"collection": "tickets"}
 
@@ -108,5 +107,6 @@ class Booking(me.Document):
     promotion = me.ReferenceField(Promotion)
     show = me.ReferenceField(Show, required=True)
     price = me.FloatField(required=True)
-    seats = me.EmbeddedDocumentListField(Ticket, required=True)
+    tickets = me.EmbeddedDocumentListField(Ticket, required=True)
+    seats = me.ListField(me.StringField(), required=True)
     meta = {"collection": "bookings"}
