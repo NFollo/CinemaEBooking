@@ -58,7 +58,7 @@ function BuyTicketsPage() {
     return `${displayHour}:00 PM`;
   };
   
-  
+  const [allData, setAllData] = useState([]);
 
   useEffect(() => {
     const fetchMovieShows = async () => {
@@ -69,6 +69,8 @@ function BuyTicketsPage() {
         const res = await fetch(`http://localhost:5000/shows/movie/${movieId}`);
         const data = await res.json();
         console.log("Fetched show data:", data);
+        setAllData(data);
+        console.log(allData);
   
         const result = {};
         const dateSet = new Set();
@@ -117,8 +119,19 @@ function BuyTicketsPage() {
       return;
     }
 
+    //console.log("TEST");
+    //console.log(allData);
+    var showID = "";
+    allData.forEach((show) => {
+      if (show.date.toString() === selectedDate && show.time.toString() === selectedTime && show.showroom === selectedShow.showroom) {
+        showID = show._id;
+        //console.log(show);
+        //console.log(show._id);
+      }
+    });
+
     navigate(
-      `/seatselection?movie=${encodeURIComponent(movie.title)}&date=${selectedDate}&showtime=${selectedTime}&tickets=${totalTickets}&showroom=${getShowroomNumber(selectedShow.showroom)}`,
+      `/seatselection?movie=${encodeURIComponent(movie.title)}&date=${selectedDate}&showtime=${selectedTime}&tickets=${totalTickets}&showroom=${getShowroomNumber(selectedShow.showroom)}&showID=${showID}`,
       {
         state: {
           movie,

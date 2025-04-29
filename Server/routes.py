@@ -689,23 +689,88 @@ def init_routes(app, mail):
                 return jsonify({"message": f"Promotion sent to {len(email_list)} users."}), 200
             except Exception as e:
                 return jsonify({"error": f"Failed to send emails: {str(e)}"}), 500
-    
+            
+    @app.route('/OrderConfirmation/send', methods=['POST']) # need booking id
+    def sendOrderConfirmation():
+        try:
+            data = request.json
+            booking_id = data.get("booking_id")
+
+            if not booking_id:
+                return jsonify({"error": "Missing booking_id"}), 400
+
+            # Fetch booking
+            booking = Booking.objects.get(id=ObjectId(booking_id))
+            user = booking.customer
+            show = booking.show
+            movie = show.movie if show else None
+            tickets = booking.seats
+            promotion = booking.promotion
+
+            # Compose order summary
+            ticket_lines = ""
+            for ticket in tickets:
+                ticket_lines += f"- {ticket.ticket_type.capitalize()} | Seat: {ticket.seat_number} | Price: ${ticket.price}\n"
+
+            promo_text = f"\nPromotion Code Applied: {promotion.promo_code} | Discount: {promotion.discount}%\n" if promotion else ""
+
+            body = f"""\
+                Hello {user.name},
+
+                Thank you for your booking!
+
+                Here is your order summary:
+
+                Movie: {movie.title if movie else 'N/A'}
+                Date: {show.date.strftime("%Y-%m-%d")}
+                Time: {show.time.strftime("%H:%M")}
+
+                Tickets:
+                {ticket_lines}
+                {promo_text}
+                Total Price: ${booking.price}
+
+                Enjoy your movie!
+                """
+
+            subject = "Your Movie Booking Confirmation"
+            msg = Message(subject, sender=os.environ['MAIL_USERNAME'], recipients=user.email)
+            msg.body = body
+            mail.send(msg)
+            return jsonify({"message": "Order confirmation email sent!"}), 200
+
+        except Exception as err:
+            return jsonify({"error": "Failed to send confirmation email", "message": str(err)}), 500
+        
     @app.route('/bookings/<userId>', methods=['GET']) 
     def get_bookings(userId):     
         ''' Fetch all bookings of user with specified userId '''
         try:
-            bookings = Booking.objects(customer=userId)
+            user_id = ObjectId(userId)
+
+            # Fetch bookings where customer == userId
+            bookings = Booking.objects(customer=user_id)
+
             bookings_list = []
             for booking in bookings:
+                # Extract ticket info from embedded documents
+                seats = [
+                    {
+                        "ticket_type": seat.ticket_type,
+                        "seat_number": seat.seat_number,
+                        "price": seat.price
+                    }
+                    for seat in booking.seats
+                ]
+
                 booking_data = {
-                    "id": booking.id,
-                    "seats": booking.seats,
-                    "movie_name": booking.show.movie.title,
-                    "date": booking.show.date,
-                    "time": booking.show.time,
+                    "id": str(booking.id),
+                    "seats": seats,
+                    "movie_name": booking.show.movie.title if booking.show and booking.show.movie else "N/A",
+                    "date": booking.show.date.strftime("%Y-%m-%d") if booking.show and booking.show.date else "N/A",
+                    "time": booking.show.time.strftime("%H:%M") if booking.show and booking.show.time else "N/A",
                     "price": booking.price,
                 }
-
                 bookings_list.append(booking_data)
 
             return jsonify(bookings_list), 200
