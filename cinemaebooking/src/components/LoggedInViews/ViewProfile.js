@@ -17,6 +17,11 @@ function ViewProfile( {onSearch, input, clearInput, logout} ) {
     // authorization
     const [authorization, setAuthorization] = useState(Cookies.get("authorization"));
 
+    // data loading variables
+    const [hasInfo, setHasInfo] = useState(false);
+    const [hasAddress, setHasAddress] = useState(false);
+    const [hasCards, setHasCards] = useState(false);
+
     // Basic Info
     const [m_userInfo, setUserInfo] = useState({
         firstName: "",
@@ -99,6 +104,7 @@ function ViewProfile( {onSearch, input, clearInput, logout} ) {
             setUserInfo(newUserInfo);
             userInfo(newUserInfo); // builder call
             receivePromotions(newUserInfo.receivePromotions); // builderCall
+            setHasInfo(true);
 
             // get home address information
             if (retrievedUser.address != null) {
@@ -113,6 +119,7 @@ function ViewProfile( {onSearch, input, clearInput, logout} ) {
                 };
                 setAddress(newAddress);
                 address(newAddress); // builder call
+                setHasAddress(true);
             }
 
 
@@ -140,6 +147,7 @@ function ViewProfile( {onSearch, input, clearInput, logout} ) {
                 };
                 setCard1(newCard);
                 card1(newCard); // builder call
+                setHasCards(true);
             }
 
             if (numberOfCards >= 2) {
@@ -161,6 +169,7 @@ function ViewProfile( {onSearch, input, clearInput, logout} ) {
                 };
                 setCard2(newCard);
                 card2(newCard); // builder call
+                setHasCards(true);
             }
 
             if (numberOfCards >= 3) {
@@ -182,9 +191,13 @@ function ViewProfile( {onSearch, input, clearInput, logout} ) {
                 };
                 setCard3(newCard)
                 card3(newCard); // builder call
+                setHasCards(true);
             }
         } catch (error) {
           console.error("Error fetching user data:", error);
+          setHasInfo(true);
+          setHasAddress(true);
+          setHasCards(true);
         }};
         getData();
     }, []);
@@ -210,7 +223,7 @@ function ViewProfile( {onSearch, input, clearInput, logout} ) {
             View Profile
         </div>
         <div className="ViewProfileInfo">
-            {build()} {/* builder.build() */}
+            {(hasInfo && hasAddress && hasCards) ? build() : <div className="ViewProfileLoading">Loading User Data..</div>} {/* builder.build() */}
             <div><button onClick={navViewHistory} className="ViewProfileEdit">View Order History</button></div>       
             <button onClick={navEditProfile} className="ViewProfileEdit">Edit Profile</button>
         </div>

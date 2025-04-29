@@ -24,6 +24,10 @@
     padding-bottom: 2%;
 }
 
+.ViewProfileLoading {
+    font-style: italic;
+}
+
 .ViewProfileEdit {
     margin-top: 2%;
     width: 20%;
