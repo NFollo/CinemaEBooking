@@ -71,9 +71,10 @@ function SchedulePage( {onSearch, input, clearInput, logout} ) {
         const selectedDay = parseInt(targetDate.substring(8,10));
         const selectedDate = new Date(selectedYear, selectedMonthIndex, selectedDay)
         const today = new Date();
-        if (selectedDate.getTime() < today.getTime()) {
+        if (selectedDate.getTime() <= today.getTime()) {
             setDisplayTime(false);
             setSelectedTime(-1);
+            alert("Invalid date. Movies may only be scheduled for dates in the future.");
             return;
         } 
 
