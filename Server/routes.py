@@ -6,6 +6,7 @@ import random
 from datetime import datetime, timedelta
 from flask_mail import Message
 from bson import ObjectId
+from collections import defaultdict
 
 def encrypt(value):
     # encrypt value with bcrypt
@@ -719,9 +720,21 @@ def init_routes(app, mail):
             promotion = booking.promotion
 
             # Compose order summary
-            ticket_lines = ""
+            ticket_counts = defaultdict(int)
+            ticket_prices = {}
+
             for ticket in tickets:
-                ticket_lines += f"- {ticket.ticket_type.capitalize()} | Seat: {ticket.seat_number} | Price: ${ticket.price}\n"
+                ticket_counts[ticket.ticket_type] += 1
+                ticket_prices[ticket.ticket_type] = ticket.price  # assumes price is consistent per type
+
+            # Compose ticket summary
+            ticket_lines = ""
+            for ticket_type, count in ticket_counts.items():
+                line = f"{count} x {ticket_type.capitalize()} ticket"
+                if count > 1:
+                    line += f"s"
+                line += f" @ ${ticket_prices[ticket_type]} each\n"
+                ticket_lines += line
 
             promo_text = f"\nPromotion Code Applied: {promotion.promo_code} | Discount: {promotion.discount}%\n" if promotion else ""
 
@@ -838,7 +851,7 @@ def init_routes(app, mail):
                 tickets=ticket_objects,
                 seats=seat_list
             )
-            
+
             booking.save()
 
             return jsonify({
