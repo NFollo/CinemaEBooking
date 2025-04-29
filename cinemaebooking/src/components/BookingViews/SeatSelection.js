@@ -9,12 +9,15 @@ const SeatSelection = () => {
   const queryParams = new URLSearchParams(location.search);
   const movieTitle = queryParams.get("movie") || "Unknown Movie";
   const showtime = queryParams.get("showtime") || "N/A";
+  const showroom = queryParams.get("showroom") || "N/A";
   const selectedDate = queryParams.get("date") || "N/A";
   const numTickets = parseInt(queryParams.get("tickets"), 10) || 1;
   const ticketPrice = 15.99;
 
   const [selectedSeats, setSelectedSeats] = useState([]);
-  const unavailableSeats = ["A1", "D6", "F5"]; // unavaliable seats delete this later
+  const allSeats = ["A1","A2","A3","A4","A5","A6","A7","A8","B1","B2","B3","B4","B5","B6","B7","B8","C1","C2","C3","C4","C5","C6","C7","C8","D1","D2","D3","D4","D5","D6","D7","D8","E1","E2","E3","E4","E5","E6","E7","E8","F1","F2","F3","F4","F5","F6","F7","F8"]
+  var unavailableSeats = ["A1", "D6", "F5"]; // unavaliable seats delete this later
+  //unavailableSeats = allSeats;
 
   useEffect(() => {
     const savedSeats = JSON.parse(localStorage.getItem("selectedSeats")) || [];
@@ -48,6 +51,7 @@ const SeatSelection = () => {
       state: { 
         movieTitle, 
         selectedDate, 
+        showroom,
         showtime, 
         selectedSeats, 
         totalPrice: selectedSeats.length * ticketPrice 

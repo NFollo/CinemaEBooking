@@ -118,7 +118,7 @@ function BuyTicketsPage() {
     }
 
     navigate(
-      `/seatselection?movie=${encodeURIComponent(movie.title)}&date=${selectedDate}&showtime=${selectedTime}&tickets=${totalTickets}`,
+      `/seatselection?movie=${encodeURIComponent(movie.title)}&date=${selectedDate}&showtime=${selectedTime}&tickets=${totalTickets}&showroom=${getShowroomNumber(selectedShow.showroom)}`,
       {
         state: {
           movie,

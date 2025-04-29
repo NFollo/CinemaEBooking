@@ -10,6 +10,7 @@ const OrderConfirmation = () => {
   const defaultOrder = {
     movieTitle: "Unknown Movie",
     selectedDate: "N/A",
+    showroom: "N/A",
     showtime: "N/A",
     selectedSeats: [],
     totalPrice: 0,
@@ -19,6 +20,7 @@ const OrderConfirmation = () => {
   const {
     movieTitle,
     selectedDate,
+    showroom,
     showtime,
     selectedSeats,
     totalPrice,
@@ -37,6 +39,7 @@ const OrderConfirmation = () => {
           <div className="orderDetails">
             <div className="detailItem"><strong>Movie:</strong> <span>{movieTitle}</span></div>
             <div className="detailItem"><strong>Date:</strong> <span>{selectedDate}</span></div>
+            <div className="detailItem"><strong>Showroom:</strong> <span>{showroom}</span></div>
             <div className="detailItem"><strong>Showtime:</strong> <span>{showtime}</span></div>
             <div className="detailItem"><strong>Seats:</strong> <span>{selectedSeats.join(", ")}</span></div>
             <div className="detailItem">

@@ -96,6 +96,7 @@ const CheckoutPage = () => {
   const defaultOrder = {
     movieTitle: "Unknown Movie",
     selectedDate: "N/A",
+    showroom: "N/A",
     showtime: "N/A",
     selectedSeats: [],
     totalPrice: 0,
@@ -190,7 +191,7 @@ const CheckoutPage = () => {
   }, []);
   
 
-  const { movieTitle, selectedDate, showtime, selectedSeats, totalPrice } =
+  const { movieTitle, selectedDate, showroom, showtime, selectedSeats, totalPrice } =
     location.state || defaultOrder;
 
   const handlePayment = () => {
@@ -209,6 +210,7 @@ const CheckoutPage = () => {
       state: {
         movieTitle,
         selectedDate,
+        showroom,
         showtime,
         selectedSeats,
         totalPrice,
@@ -230,6 +232,7 @@ const CheckoutPage = () => {
         <div className="orderDetails">
           <div className="detailItem"><strong>Movie:</strong> <span>{movieTitle}</span></div>
           <div className="detailItem"><strong>Date:</strong> <span>{formatDate(selectedDate)}</span></div>
+          <div className="detailItem"><strong>Showroom:</strong> <span>{showroom}</span></div>
           <div className="detailItem"><strong>Showtime:</strong> <span>{formatShowtime(showtime)}</span></div>
           <div className="detailItem"><strong>Seats:</strong> <span>{selectedSeats.join(", ")}</span></div>
           <div className="detailItem"><strong>Total Price:</strong> <span>${totalPrice.toFixed(2)}</span></div>
