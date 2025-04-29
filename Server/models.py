@@ -48,6 +48,7 @@ class Show(me.Document):
     date = me.StringField(required=True) # format "YYYY-MM-DD"
     time = me.IntField(required=True)
     duration = me.IntField(required=True)
+    taken_seats = me.ListField(me.StringField())
     meta = {"collection": "shows"}
 
 class Address(me.Document):
