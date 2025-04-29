@@ -794,48 +794,59 @@ def init_routes(app, mail):
     @app.route('/bookings', methods=['POST'])
     def create_booking():
         try:
-            # Get data from the request
             data = request.json
 
             customer_id = data.get("customer_id")
             show_id = data.get("show_id")
-            promo_id = data.get("promotion_id", None)  # Optional
-            seats = data.get("seats")
-            price = data.get("price")
-            
-            # Check if all required data is provided
-            if not customer_id or not show_id or not seats or price is None:
+            promo_id = data.get("promotion_id", None)
+            ticket_info = data.get("tickets")
+            seat_list = data.get("seats")
+            total_price = data.get("price")
+
+            if not customer_id or not show_id or not ticket_info or not seat_list:
                 return jsonify({"error": "Missing required fields"}), 400
 
-            # Fetch the customer, show, and promotion (if any) from the database
-            customer = User.objects.get(id=customer_id)
-            show = Show.objects.get(id=show_id)
-            promotion = Promotion.objects.get(id=promo_id) if promo_id else None
+            # Validate quantities match
+            total_tickets = sum(ticket.get("quantity", 0) for ticket in ticket_info)
+            if total_tickets != len(seat_list):
+                return jsonify({"error": "Number of tickets does not match number of seats"}), 400
 
-            # Create Ticket objects for each seat
-            ticket_objects = [Ticket(ticket_type=ticket['ticket_type'], seat_number=ticket['seat_number'], price=ticket['price']) for ticket in seats]
+            # Fetch references
+            customer = User.objects.get(id=ObjectId(customer_id))
+            show = Show.objects.get(id=ObjectId(show_id))
+            promotion = Promotion.objects.get(id=ObjectId(promo_id)) if promo_id else None
 
-            # Create the booking object
+            # Create flattened Ticket objects
+            ticket_objects = []
+            seat_index = 0
+            for ticket in ticket_info:
+                for _ in range(ticket["quantity"]):
+                    ticket_objects.append(Ticket(
+                        ticket_type=ticket["ticket_type"],
+                        price=ticket["price"]
+                    ))
+                    seat_index += 1
+
+
+            # Create and save booking
             booking = Booking(
                 date=datetime.utcnow(),
                 customer=customer,
                 promotion=promotion,
                 show=show,
-                price=price,
-                seats=ticket_objects
+                price=total_price,
+                tickets=ticket_objects,
+                seats=seat_list
             )
-
-            # Save the booking to the database
+            
             booking.save()
 
-            # Return success response with booking details
             return jsonify({
                 "message": "Booking successfully created",
                 "booking_id": str(booking.id),
-                "customer": customer.name,
-                "show": show.movie_title,
-                "seats": seats,
-                "price": booking.price
+                "total_price": total_price,
+                "seats": seat_list,
+                "ticket_count": total_tickets
             }), 201
 
         except Exception as e:
