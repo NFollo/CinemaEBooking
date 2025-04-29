@@ -413,7 +413,8 @@ const CheckoutPage = () => {
 
         
         <button className="payButton" onClick={handlePayment}>
-          Pay ${(totalPrice - discount).toFixed(2)}
+          {/* Pay ${(totalPrice - discount).toFixed(2)} */}
+          Confirm Order
         </button>
 
         
