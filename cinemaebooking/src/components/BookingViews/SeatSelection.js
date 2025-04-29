@@ -42,6 +42,9 @@ const SeatSelection = () => {
     });
   };
 
+  const movieId = location.state?.movieId;
+  //console.log("SEAT SELECTION movie id:", movieId);
+
   const handleConfirm = () => {
     if (selectedSeats.length !== numTickets) {
       alert(`Please select exactly ${numTickets} seats.`);
@@ -50,6 +53,7 @@ const SeatSelection = () => {
     navigate(`/checkout?movie=${movieTitle}`, {
       state: { 
         movieTitle, 
+        movieId: movieId,
         selectedDate, 
         showroom,
         showtime, 
