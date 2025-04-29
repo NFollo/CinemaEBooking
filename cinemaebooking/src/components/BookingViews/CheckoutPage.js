@@ -141,11 +141,6 @@ const CheckoutPage = () => {
     return `${displayHour}:00 PM`;
   };
 
-  // useEffect(() => {
-  //   console.log("Order state:", location.state);
-  // }, [location.state]);
-  
-
   useEffect(() => {
     const getCards = async () => {
       try {
@@ -257,6 +252,7 @@ const CheckoutPage = () => {
         <h2>Checkout</h2>
         <button className="navButton" onClick={() => navigate("/")}>Exit</button>
       </div>
+
       {/* order details */}
       <div className="checkoutContainer">
         <h3 className="orderTitle">Order Details</h3>
@@ -266,11 +262,8 @@ const CheckoutPage = () => {
           <div className="detailItem"><strong>Showroom:</strong> <span>{showroom}</span></div>
           <div className="detailItem"><strong>Showtime:</strong> <span>{formatShowtime(showtime)}</span></div>
           <div className="detailItem"><strong>Seats:</strong> <span>{selectedSeats.join(", ")}</span></div>
-          {/* <div className="detailItem"><strong>Total Price:</strong> <span>${originalTotal.toFixed(2)}</span></div> */}
           <div className="detailItem">
             <strong>Total:</strong> 
-            
-            {/* <span>${originalTotal.toFixed(2)}</span> */}
             <span>
                 {discount > 0 ? (
                   <>
@@ -281,46 +274,29 @@ const CheckoutPage = () => {
                 )}
               </span>
           </div>
-
-          {/* {discount > 0 && (
-            <div className="detailItem">
-              <strong>Discount Applied:</strong> <span>- ${discount.toFixed(2)}</span>
-            </div>
-          )}
-
-          {discount > 0 && (
-            <div className="detailItem">
-              <strong>Final Total:</strong> <span>${finalTotal.toFixed(2)}</span>
-            </div>
-          )} */}
-
-          
         </div>
       </div>
+
+      <div className="promoContainer">
+        <div className="promoBox">
+          <h3>Promo Code</h3>
+          <input 
+            type="text" 
+            placeholder="Enter your code" 
+            className="promoInput" 
+            value={promoCode || ""}
+            onChange={(e) => setPromoCode(e.target.value)} 
+          />
+            <button className="applyButton" onClick={applyPromoCode}>Apply</button>
+          </div>
+          {error && <p className="errorText">{error}</p>}
+          {discount > 0 && <p className="successText">Discount Applied: -${discount.toFixed(2)}</p>}
+        </div>
 
       {/* payment options */}
       <div className="checkoutContainer">
         <h3>Payment</h3>
         <div className="paymentOptions">
-            
-          {/* <label className={`paymentOption ${paymentMethod === "saved" ? "selected" : ""}`}>
-            <input
-              type="radio"
-              name="paymentMethod"
-              value="saved"
-              checked={paymentMethod === "saved"}
-              onChange={() => setPaymentMethod("saved")}
-            />
-            <div className="paymentCard">
-              <img
-                src="https://upload.wikimedia.org/wikipedia/commons/0/04/Visa.svg"
-                alt="Visa"
-                className="cardLogo"
-              />
-              <span>Ending in •••• 4242</span>
-            </div>
-          </label> */}
-
           {numberOfCards >= 1 && (
             <label className={`paymentOption ${paymentMethod === "saved1" ? "selected" : ""}`}>
               <input
@@ -398,34 +374,10 @@ const CheckoutPage = () => {
            </div>
          )}
        </div>
-
-       
-       <div className="promoContainer">
-        <div className="promoBox">
-          <h3>Promo Code</h3>
-          <input 
-            type="text" 
-            placeholder="Enter your code" 
-            className="promoInput" 
-            value={promoCode || ""}
-            onChange={(e) => setPromoCode(e.target.value)} 
-          />
-
-            <button className="applyButton" onClick={applyPromoCode}>Apply</button>
-            {/* <button className="applyButton">Apply</button> */}
-
-          </div>
-          {error && <p className="errorText">{error}</p>}
-          {discount > 0 && <p className="successText">Discount Applied: -${discount.toFixed(2)}</p>}
-        </div>
-
-        
         <button className="payButton" onClick={handlePayment}>
           {/* Pay ${(totalPrice - discount).toFixed(2)} */}
           Confirm Order
-        </button>
-
-        
+        </button> 
     </div>
   );
 };

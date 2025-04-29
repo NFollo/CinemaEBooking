@@ -19,7 +19,7 @@ function MainFeatured() {
               Sonic 3
             </div>
             <div className="MainFeaturedCarouselBody">
-              The third Sonic movie
+              Sonic and Tails must now fight their enemy, Shadow
             </div>
           </div>
         </Carousel.Item>
@@ -33,7 +33,7 @@ function MainFeatured() {
               Sonic 2
             </div>
             <div className="MainFeaturedCarouselBody">
-              The second Sonic movie
+              Sonic returns with his sidekick, Tails
             </div>
           </div>
         </Carousel.Item>
@@ -44,10 +44,10 @@ function MainFeatured() {
               </iframe>
             </div>
             <div className="MainFeaturedCarouselTitle">
-              Sonic 
+              Sonic
             </div>
             <div className="MainFeaturedCarouselBody">
-              Sonic is fast
+              Sonic the Hedgehog must fight Dr. Robotnik
             </div>
           </div>
         </Carousel.Item>
