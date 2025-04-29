@@ -81,6 +81,12 @@ const CheckoutPage = () => {
       setDiscount(0);
       return;
     }
+
+    if (!matchedPromo.email_send) { // checks if email was sent
+      setError("This promo code is not currently active.");
+      setDiscount(0);
+      return;
+    }
   
     const today = new Date();
     const expirationDate = new Date(matchedPromo.expiration_date);
