@@ -65,6 +65,19 @@ function SchedulePage( {onSearch, input, clearInput, logout} ) {
             return;
         }
 
+        // do not allow scheduling before today's date
+        const selectedYear = parseInt(targetDate.substring(0,4));
+        const selectedMonthIndex = parseInt(targetDate.substring(5,7)) - 1;
+        const selectedDay = parseInt(targetDate.substring(8,10));
+        const selectedDate = new Date(selectedYear, selectedMonthIndex, selectedDay)
+        const today = new Date();
+        if (selectedDate.getTime() <= today.getTime()) {
+            setDisplayTime(false);
+            setSelectedTime(-1);
+            alert("Invalid date. Movies may only be scheduled for dates in the future.");
+            return;
+        } 
+
         getShowsByDate(targetDate)
         .then( (shows) => {
             // reset prior time counts
