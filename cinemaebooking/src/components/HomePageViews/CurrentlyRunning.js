@@ -9,6 +9,8 @@ function CurrentlyRunning() {
   const [movies, setMovies] = useState([]);
   const [carouselGroups, setCarouselGroups] = useState([]);
 
+  const [hasData, setHasData] = useState(false);
+
 useEffect(() => {
         const fetchMovies = async () => {
             const data = await MovieMgr.GetMovieList();
@@ -24,6 +26,11 @@ useEffect(() => {
                 }));
 
             setMovies(currentlyRunningMovies);
+            function delayData() {
+              setHasData(true);
+            }
+            setTimeout(delayData, 500);
+
         };
 
         fetchMovies();
@@ -57,7 +64,7 @@ useEffect(() => {
       <div className="ComingSoonText">
         Currently Running
       </div>
-      {carouselGroups.length > 0 ? (
+      {!hasData ? <div className="no-movies">Loading Data...</div> : (carouselGroups.length > 0 ? (
         <Carousel className="ComingSoonCarousel">
           {carouselGroups.map((movieGroup, groupIndex) => (
             <Carousel.Item key={`carousel-item-${groupIndex}`}>
@@ -76,9 +83,9 @@ useEffect(() => {
             </Carousel.Item>
           ))}
         </Carousel>
-      ) : (
-        <div className="no-movies">No movies currently running</div>
-      )}
+      ) :  (
+        <div className="no-movies">No movies currently running</div> 
+      ))}
       <button className="ComingSoonBrowse" onClick={handleBrowseClick}>
         Browse All Movies
       </button>   
