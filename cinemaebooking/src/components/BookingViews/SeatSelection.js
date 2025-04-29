@@ -13,27 +13,23 @@ const SeatSelection = () => {
   const showroom = queryParams.get("showroom") || "N/A";
   const selectedDate = queryParams.get("date") || "N/A";
   const numTickets = parseInt(queryParams.get("tickets"), 10) || 1;
+  const showID = queryParams.get("showID") || "N/A";
   const ticketPrice = 15.99;
 
   const [selectedSeats, setSelectedSeats] = useState([]);
   const allSeats = ["A1","A2","A3","A4","A5","A6","A7","A8","B1","B2","B3","B4","B5","B6","B7","B8","C1","C2","C3","C4","C5","C6","C7","C8","D1","D2","D3","D4","D5","D6","D7","D8","E1","E2","E3","E4","E5","E6","E7","E8","F1","F2","F3","F4","F5","F6","F7","F8"]
   const [unavailableSeats, setUnavailableSeats] = useState([]);
-  const showId = "67d47a1e2016246101cf8c00";
 
   useEffect(() => {
     const getData = async () => {
       const savedSeats = JSON.parse(localStorage.getItem("selectedSeats")) || [];
       setSelectedSeats(savedSeats);
-      const show = await getShowById(showId);
-      console.log("show")
-      console.log(show)
+      const show = await getShowById(showID);
       const taken = show.hasOwnProperty('taken_seats') ? show.taken_seats : [];
       setUnavailableSeats(taken);
     };
     getData();
   }, []);
-
-  useEffect(() => {console.log(unavailableSeats);}, [unavailableSeats])
 
   useEffect(() => {
     localStorage.setItem("selectedSeats", JSON.stringify(selectedSeats));
