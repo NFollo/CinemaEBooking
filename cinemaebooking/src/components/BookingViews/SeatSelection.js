@@ -14,6 +14,9 @@ const SeatSelection = () => {
   const selectedDate = queryParams.get("date") || "N/A";
   const numTickets = parseInt(queryParams.get("tickets"), 10) || 1;
   const showID = queryParams.get("showID") || "N/A";
+  const child = queryParams.get("child");
+  const adult = queryParams.get("adult");
+  const senior = queryParams.get("senior");
   const ticketPrice = 15.99;
 
   const [selectedSeats, setSelectedSeats] = useState([]);
@@ -65,7 +68,10 @@ const SeatSelection = () => {
         showroom,
         showtime, 
         selectedSeats, 
-        totalPrice: selectedSeats.length * ticketPrice 
+        totalPrice: selectedSeats.length * ticketPrice,
+        child,
+        adult,
+        senior, 
       }
     });
   };

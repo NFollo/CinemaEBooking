@@ -208,7 +208,7 @@ const CheckoutPage = () => {
   }, []);
   
 
-  const { movieTitle, selectedDate, showroom, showtime, selectedSeats, totalPrice } =
+  const { movieTitle, selectedDate, showroom, showtime, selectedSeats, totalPrice, child, adult, senior } =
     location.state || defaultOrder;
 
   const originalTotal = totalPrice; // save original price
@@ -235,6 +235,9 @@ const CheckoutPage = () => {
         selectedSeats,
         totalPrice,
         discount,
+        child, 
+        adult,
+        senior,
       },
     });
   };

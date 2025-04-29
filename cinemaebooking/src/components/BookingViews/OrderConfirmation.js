@@ -25,6 +25,9 @@ const OrderConfirmation = () => {
     selectedSeats,
     totalPrice,
     discount,
+    child,
+    adult,
+    senior,
   } = location.state || defaultOrder;
 
   return (
@@ -42,6 +45,9 @@ const OrderConfirmation = () => {
             <div className="detailItem"><strong>Showroom:</strong> <span>{showroom}</span></div>
             <div className="detailItem"><strong>Showtime:</strong> <span>{showtime}</span></div>
             <div className="detailItem"><strong>Seats:</strong> <span>{selectedSeats.join(", ")}</span></div>
+            {child > 0 ? <div className="detailItem"><strong>Child Tickets:</strong> <span>{child}</span></div> : ""}
+            {adult > 0 ? <div className="detailItem"><strong>Adult Tickets:</strong> <span>{adult}</span></div> : ""}
+            {senior > 0 ? <div className="detailItem"><strong>Senior Tickets:</strong> <span>{senior}</span></div> : senior}
             <div className="detailItem">
               <strong>Total Price:</strong>
               <span>
