@@ -79,7 +79,7 @@ const CheckoutPage = () => {
       const expirationDate = new Date(matchedPromo.expiration_date);
   
       if (today <= expirationDate) {
-        const discountAmount = (totalPrice * matchedPromo.discount) / 100;
+        const discountAmount = Number(originalTotal) * matchedPromo.discount; // ✅ FIXED
         setDiscount(discountAmount);
         setError("");
       } else {
@@ -91,6 +91,8 @@ const CheckoutPage = () => {
       setDiscount(0);
     }
   };
+  
+  
   
 
   const defaultOrder = {
@@ -194,6 +196,9 @@ const CheckoutPage = () => {
   const { movieTitle, selectedDate, showroom, showtime, selectedSeats, totalPrice } =
     location.state || defaultOrder;
 
+  const originalTotal = totalPrice; // save original price
+  const finalTotal = originalTotal - discount; // total after discount
+
   const handlePayment = () => {
     if (!paymentMethod) { // if the user does not select a payment method
       alert("Please select or add a payment method.");
@@ -235,7 +240,24 @@ const CheckoutPage = () => {
           <div className="detailItem"><strong>Showroom:</strong> <span>{showroom}</span></div>
           <div className="detailItem"><strong>Showtime:</strong> <span>{formatShowtime(showtime)}</span></div>
           <div className="detailItem"><strong>Seats:</strong> <span>{selectedSeats.join(", ")}</span></div>
-          <div className="detailItem"><strong>Total Price:</strong> <span>${totalPrice.toFixed(2)}</span></div>
+          {/* <div className="detailItem"><strong>Total Price:</strong> <span>${originalTotal.toFixed(2)}</span></div> */}
+          <div className="detailItem">
+            <strong>Total:</strong> <span>${originalTotal.toFixed(2)}</span>
+          </div>
+
+          {discount > 0 && (
+            <div className="detailItem">
+              <strong>Discount Applied:</strong> <span>- ${discount.toFixed(2)}</span>
+            </div>
+          )}
+
+          {discount > 0 && (
+            <div className="detailItem">
+              <strong>Final Total:</strong> <span>${finalTotal.toFixed(2)}</span>
+            </div>
+          )}
+
+          
         </div>
       </div>
 
@@ -351,12 +373,12 @@ const CheckoutPage = () => {
             onChange={(e) => setPromoCode(e.target.value)} 
           />
 
-            {/* <button className="applyButton" onClick={applyPromoCode}>Apply</button> */}
-            <button className="applyButton">Apply</button>
+            <button className="applyButton" onClick={applyPromoCode}>Apply</button>
+            {/* <button className="applyButton">Apply</button> */}
 
           </div>
           {error && <p className="errorText">{error}</p>}
-          {discount > 0 && <p className="successText">Discount Applied: -${discount.toFixed(2)}</p>}
+          {/* {discount > 0 && <p className="successText">Discount Applied: -${discount.toFixed(2)}</p>} */}
         </div>
 
         
