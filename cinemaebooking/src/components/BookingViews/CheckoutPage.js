@@ -10,7 +10,7 @@ import {getUserByEmail} from "../../applicationLogic/UserManager";
 const CheckoutPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const [paymentMethod, setPaymentMethod] = useState("saved");
+  const [paymentMethod, setPaymentMethod] = useState("");
   const [cardNumber, setCardNumber] = useState("");
   const [expiryMonth, setExpiryMonth] = useState("");
   const [expiryYear, setExpiryYear] = useState("");
@@ -221,17 +221,19 @@ const CheckoutPage = () => {
   const finalTotal = originalTotal - discount; // total after discount
 
   const handlePayment = () => {
-    if (!paymentMethod) { // if the user does not select a payment method
+    const validMethods = ["saved1", "saved2", "saved3", "new"];
+    if (!validMethods.includes(paymentMethod)) {
       alert("Please select or add a payment method.");
       return;
     }
-
+  
     if (paymentMethod === "new") {
       if (!cardNumber || !expiryMonth || !expiryYear || !cvc || !zip) {
         alert("Please fill in all card details.");
         return;
       }
     }
+  
     navigate("/orderconfirmation", {
       state: {
         movieTitle,
@@ -241,13 +243,13 @@ const CheckoutPage = () => {
         selectedSeats,
         totalPrice,
         discount,
-        child, 
+        child,
         adult,
         senior,
       },
     });
-  };
-
+  };  
+  
   return (
     <div className="checkoutPage">
       <div className="header">
