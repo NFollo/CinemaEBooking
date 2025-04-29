@@ -38,3 +38,4 @@ if __name__ == '__main__':
     init_db(app)
     init_routes(app, mail)
     app.run(debug=True)
+    
