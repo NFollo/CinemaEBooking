@@ -741,6 +741,8 @@ def init_routes(app, mail):
                 {promo_text}
                 Total Price: ${booking.price}
 
+                Purchase Date: {booking.date}
+
                 Enjoy your movie!
                 """
 
@@ -788,6 +790,56 @@ def init_routes(app, mail):
 
         except Exception as err:
             return jsonify({"error": "Failed to fetch bookings", "message": str(err)}), 500
+    
+    @app.route('/bookings', methods=['POST'])
+    def create_booking():
+        try:
+            # Get data from the request
+            data = request.json
+
+            customer_id = data.get("customer_id")
+            show_id = data.get("show_id")
+            promo_id = data.get("promotion_id", None)  # Optional
+            seats = data.get("seats")
+            price = data.get("price")
+            
+            # Check if all required data is provided
+            if not customer_id or not show_id or not seats or price is None:
+                return jsonify({"error": "Missing required fields"}), 400
+
+            # Fetch the customer, show, and promotion (if any) from the database
+            customer = User.objects.get(id=customer_id)
+            show = Show.objects.get(id=show_id)
+            promotion = Promotion.objects.get(id=promo_id) if promo_id else None
+
+            # Create Ticket objects for each seat
+            ticket_objects = [Ticket(ticket_type=ticket['ticket_type'], seat_number=ticket['seat_number'], price=ticket['price']) for ticket in seats]
+
+            # Create the booking object
+            booking = Booking(
+                date=datetime.utcnow(),
+                customer=customer,
+                promotion=promotion,
+                show=show,
+                price=price,
+                seats=ticket_objects
+            )
+
+            # Save the booking to the database
+            booking.save()
+
+            # Return success response with booking details
+            return jsonify({
+                "message": "Booking successfully created",
+                "booking_id": str(booking.id),
+                "customer": customer.name,
+                "show": show.movie_title,
+                "seats": seats,
+                "price": booking.price
+            }), 201
+
+        except Exception as e:
+            return jsonify({"error": f"Failed to create booking: {str(e)}"}), 500
     
     return
 
