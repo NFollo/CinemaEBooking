@@ -355,19 +355,20 @@ const CheckoutPage = () => {
             </label>
           )}
           
-          <label className={`paymentOption ${paymentMethod === "new" ? "selected" : ""}`}>
-            <input
-              type="radio"
-              name="paymentMethod"
-              value="new"
-              checked={paymentMethod === "new"}
-              onChange={() => setPaymentMethod("new")}
-            />
-            <div className="addNewCard"> + Use new payment method</div>
-          </label>
+          {numberOfCards < 3 && (
+            <label className={`paymentOption ${paymentMethod === "new" ? "selected" : ""}`}>
+              <input
+                type="radio"
+                name="paymentMethod"
+                value="new"
+                checked={paymentMethod === "new"}
+                onChange={() => setPaymentMethod("new")}
+              />
+              <div className="addNewCard"> + Use new payment method</div>
+            </label>
+          )}
         </div>
-
-        
+   
         {paymentMethod === "new" && (
           <div className="cardDetails">
             <input
