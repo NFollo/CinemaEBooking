@@ -99,6 +99,8 @@ class Booking(me.Document):
     customer = me.ReferenceField(User, required=True)
     promotion = me.ReferenceField(Promotion)
     show = me.ReferenceField(Show, required=True)
+    price = me.FloatField(required=True)
+    seats = me.ListField(me.StringField())
     meta = {"collection": "bookings"}
 
 class Ticket(me.Document):

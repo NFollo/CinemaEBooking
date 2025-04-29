@@ -1,0 +1,10 @@
+.BookingsContainer {
+    padding: 5px;
+    justify-self: center;
+}
+
+.Booking {
+    border: black solid 1px;
+    border-radius: 10px;
+    padding: 5px;
+}

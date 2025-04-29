@@ -689,6 +689,30 @@ def init_routes(app, mail):
                 return jsonify({"message": f"Promotion sent to {len(email_list)} users."}), 200
             except Exception as e:
                 return jsonify({"error": f"Failed to send emails: {str(e)}"}), 500
+    
+    @app.route('/bookings/<userId>', methods=['GET']) 
+    def get_bookings(userId):     
+        ''' Fetch all bookings of user with specified userId '''
+        try:
+            bookings = Booking.objects(customer=userId)
+            bookings_list = []
+            for booking in bookings:
+                booking_data = {
+                    "id": booking.id,
+                    "seats": booking.seats,
+                    "movie_name": booking.show.movie.title,
+                    "date": booking.show.date,
+                    "time": booking.show.time,
+                    "price": booking.price,
+                }
+
+                bookings_list.append(booking_data)
+
+            return jsonify(bookings_list), 200
+
+        except Exception as err:
+            return jsonify({"error": "Failed to fetch bookings", "message": str(err)}), 500
+    
     return
 
 

@@ -193,6 +193,9 @@ function ViewProfile( {onSearch, input, clearInput, logout} ) {
     const navEditProfile = () => {
         navigate("/editprofile");
     };
+    const navViewHistory = () => {
+        navigate("/orderhistory");
+    }
 
     return (
     <div>
@@ -202,12 +205,13 @@ function ViewProfile( {onSearch, input, clearInput, logout} ) {
                     : (authorization === "customer" ? <LoggedNavBar onSearch={onSearch} logout={logout} input={input} clearInput={clearInput}/> 
                     : "")}
         </div>
-      <div className="ViewProfile">
+        <div className="ViewProfile">
         <div className="ViewProfileTitle">
             View Profile
         </div>
         <div className="ViewProfileInfo">
-            {build()} {/* builder.build() */}        
+            {build()} {/* builder.build() */}
+            <div><button onClick={navViewHistory} className="ViewProfileEdit">View Order History</button></div>       
             <button onClick={navEditProfile} className="ViewProfileEdit">Edit Profile</button>
         </div>
       </div>

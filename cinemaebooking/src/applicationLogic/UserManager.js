@@ -1,6 +1,6 @@
 import {axiosCreateUser, axiosGetUserByEmail, axiosGetSubscribedUsers,
     axiosUpdateUserAddress, axiosUpdateUserVerificationStatus, axiosUpdateUserPassword,
-    axiosUpdateUserDetails} from "./AxiosUserManager";
+    axiosUpdateUserDetails, axiosGetUserBookings} from "./AxiosUserManager";
 
 /**
  * Simulated interface for managing user information.
@@ -70,3 +70,12 @@ export async function updateUserPassword(email, password) {
 export async function updateUserDetails(email, userData) {
     return axiosUpdateUserDetails(email, userData);
 } // updateUserDetails
+
+
+/**
+ * Gets bookings of user with specified email address.
+ * Returns a json object representing the booking data upon success, or -1 upon failure.
+ */
+export async function getUserBookings(email) {
+    return axiosGetUserBookings(email);
+} // getUserBookings

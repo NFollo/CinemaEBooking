@@ -122,3 +122,21 @@ export async function axiosUpdateUserDetails(email, userData) {
 
     return user;
 } // axiosUpdateUserDetails
+
+
+export async function axiosGetUserBookings(email) {
+    const user = await axiosGetUserByEmail(email);
+
+    let bookings;
+    const response = await axios.get(`http://localhost:5000/bookings/${user._id.$oid}`)
+        .catch((error) => {
+            console.error("Error retrieving bookings: ", error);
+            bookings = -1;
+        }
+    );
+
+    if (bookings !== -1)
+        return response.data;
+
+    return bookings;
+} // axiosGetUserBookings

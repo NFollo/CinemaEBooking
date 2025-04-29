@@ -22,6 +22,7 @@ import TitleBody from "./HomePageViews/TitleBody";
 
 import EditProfile from "./LoggedInViews/EditProfile";
 import ViewProfile from "./LoggedInViews/ViewProfile";
+import OrderHistoryPage from "./LoggedInViews/OrderHistoryPage"
 
 import LoginForgotPassword from "./LoginViews/LoginForgotPassword";
 import LoginPage from "./LoginViews/LoginPage";
@@ -104,6 +105,7 @@ function Main() {
             <Route exact path='/search' element={<SearchPage query={input} onSearch={onSearch} logout={logout} input={input} clearInput={clearInput}/>} />
             <Route exact path='/schedule' element={<SchedulePage onSearch={onSearch} logout={logout} input={input} clearInput={clearInput} />} />
             <Route exact path='/viewprofile' element={<ViewProfile onSearch={onSearch} logout={logout} input={input} clearInput={clearInput} />} />
+            <Route exact path='/orderhistory' element={<OrderHistoryPage onSearch={onSearch} logout={logout} input={input} clearInput={clearInput}/>}/>
             <Route exact path='/editprofile' element={<EditProfile onSearch={onSearch} logout={logout} input={input} clearInput={clearInput} />} />
             <Route exact path='/manageusers' element={<ManageUsers onSearch={onSearch} logout={logout} input={input} clearInput={clearInput} />} /> 
             <Route exact path='/admineditprofile' element={<AdminEditProfile onSearch={onSearch} logout={logout} input={input} clearInput={clearInput} />} /> 
