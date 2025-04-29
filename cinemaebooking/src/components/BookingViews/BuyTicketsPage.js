@@ -131,7 +131,7 @@ function BuyTicketsPage() {
     });
 
     navigate(
-      `/seatselection?movie=${encodeURIComponent(movie.title)}&date=${selectedDate}&showtime=${selectedTime}&tickets=${totalTickets}&showroom=${getShowroomNumber(selectedShow.showroom)}&showID=${showID}`,
+      `/seatselection?movie=${encodeURIComponent(movie.title)}&date=${selectedDate}&showtime=${selectedTime}&tickets=${totalTickets}&showroom=${getShowroomNumber(selectedShow.showroom)}&showID=${showID}&child=${tickets.child}&adult=${tickets.adult}&senior=${tickets.senior}`,
       {
         state: {
           movie,
@@ -202,27 +202,38 @@ function BuyTicketsPage() {
         <div className="dateSelection">
           <h3>Select Date:</h3>
           <div className="dateButtons">
-          {availableDates.map((date) => {
-          const [year, month, day] = date.split("-");
-          const localDate = new Date(year, month - 1, day); // JS months are 0-indexed
-          
-          return (
-            <button
-              key={date}
-              className={`dateButton ${selectedDate === date ? "selected" : ""}`}
-              onClick={() => {
-                setSelectedDate(date);
-                setSelectedShowtime("");
-              }}
-            >
-              {localDate.toLocaleDateString("en-US", {
-                year: "numeric",
-                month: "long",
-                day: "numeric"
-              })}
-            </button>
-          );
-        })}
+
+          {availableDates
+            .filter((date) => {
+              const [year, month, day] = date.split("-");
+              const showDate = new Date(year, month - 1, day);
+              const todayDate = new Date();
+              todayDate.setHours(0, 0, 0, 0); 
+
+              return showDate >= todayDate; 
+            })
+            .map((date) => {
+              const [year, month, day] = date.split("-");
+              const localDate = new Date(year, month - 1, day);
+
+              return (
+                <button
+                  key={date}
+                  className={`dateButton ${selectedDate === date ? "selected" : ""}`}
+                  onClick={() => {
+                    setSelectedDate(date);
+                    setSelectedShowtime("");
+                  }}
+                >
+                  {localDate.toLocaleDateString("en-US", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric"
+                  })}
+                </button>
+              );
+            })}
+
 
           </div>
         </div>
