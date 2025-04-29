@@ -131,7 +131,7 @@ function BuyTicketsPage() {
     });
 
     navigate(
-      `/seatselection?movie=${encodeURIComponent(movie.title)}&date=${selectedDate}&showtime=${selectedTime}&tickets=${totalTickets}&showroom=${getShowroomNumber(selectedShow.showroom)}&showID=${showID}`,
+      `/seatselection?movie=${encodeURIComponent(movie.title)}&date=${selectedDate}&showtime=${selectedTime}&tickets=${totalTickets}&showroom=${getShowroomNumber(selectedShow.showroom)}&showID=${showID}&child=${tickets.child}&adult=${tickets.adult}&senior=${tickets.senior}`,
       {
         state: {
           movie,

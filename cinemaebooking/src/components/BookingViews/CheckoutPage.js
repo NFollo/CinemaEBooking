@@ -81,6 +81,12 @@ const CheckoutPage = () => {
       setDiscount(0);
       return;
     }
+
+    if (!matchedPromo.email_send) { // checks if email was sent
+      setError("This promo code is not currently active.");
+      setDiscount(0);
+      return;
+    }
   
     const today = new Date();
     const expirationDate = new Date(matchedPromo.expiration_date);
@@ -208,7 +214,7 @@ const CheckoutPage = () => {
   }, []);
   
 
-  const { movieTitle, selectedDate, showroom, showtime, selectedSeats, totalPrice } =
+  const { movieTitle, selectedDate, showroom, showtime, selectedSeats, totalPrice, child, adult, senior } =
     location.state || defaultOrder;
 
   const originalTotal = totalPrice; // save original price
@@ -235,6 +241,9 @@ const CheckoutPage = () => {
         selectedSeats,
         totalPrice,
         discount,
+        child, 
+        adult,
+        senior,
       },
     });
   };
@@ -355,19 +364,20 @@ const CheckoutPage = () => {
             </label>
           )}
           
-          <label className={`paymentOption ${paymentMethod === "new" ? "selected" : ""}`}>
-            <input
-              type="radio"
-              name="paymentMethod"
-              value="new"
-              checked={paymentMethod === "new"}
-              onChange={() => setPaymentMethod("new")}
-            />
-            <div className="addNewCard"> + Use new payment method</div>
-          </label>
+          {numberOfCards < 3 && (
+            <label className={`paymentOption ${paymentMethod === "new" ? "selected" : ""}`}>
+              <input
+                type="radio"
+                name="paymentMethod"
+                value="new"
+                checked={paymentMethod === "new"}
+                onChange={() => setPaymentMethod("new")}
+              />
+              <div className="addNewCard"> + Use new payment method</div>
+            </label>
+          )}
         </div>
-
-        
+   
         {paymentMethod === "new" && (
           <div className="cardDetails">
             <input
