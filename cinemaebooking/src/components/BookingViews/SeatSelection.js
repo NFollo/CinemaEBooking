@@ -12,6 +12,8 @@ const SeatSelection = () => {
   const showroom = queryParams.get("showroom") || "N/A";
   const selectedDate = queryParams.get("date") || "N/A";
   const numTickets = parseInt(queryParams.get("tickets"), 10) || 1;
+  const showID = queryParams.get("showID") || "N/A";
+  //console.log("showID = " + showID);
   const ticketPrice = 15.99;
 
   const [selectedSeats, setSelectedSeats] = useState([]);
