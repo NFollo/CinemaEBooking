@@ -135,6 +135,7 @@ function BuyTicketsPage() {
       {
         state: {
           movie,
+          movieId: movie._id?.$oid,
           selectedDate,
           showtime: selectedTime,
           selectedShow,

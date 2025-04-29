@@ -96,16 +96,17 @@ class Promotion(me.Document):
     email_send = me.BooleanField(default=False)
     meta = {"collection": "promotions"}
 
+class Ticket(me.Document):
+    ticket_type = me.StringField(default="adult", required=True) # one of adult, senior, or child
+    seat_number = me.StringField(required=True)
+    price = me.IntField(required=True)
+    meta = {"collection": "shows"}
+
 class Booking(me.Document):
+    date = me.DateTimeField(required=True) # the date the booking was made
     customer = me.ReferenceField(User, required=True)
     promotion = me.ReferenceField(Promotion)
     show = me.ReferenceField(Show, required=True)
     price = me.FloatField(required=True)
-    seats = me.ListField(me.StringField())
+    seats = me.EmbeddedDocumentListField(Ticket, required=True)
     meta = {"collection": "bookings"}
-
-class Ticket(me.Document):
-    ticket_type = me.StringField(default="adult", required=True) # one of adult, senior, or child
-    price = me.IntField(required=True)
-    booking = me.ReferenceField(Booking, required=True)
-    meta = {"collection": "shows"}

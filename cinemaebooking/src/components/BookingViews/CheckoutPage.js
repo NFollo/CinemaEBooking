@@ -55,6 +55,8 @@ const CheckoutPage = () => {
   const [card3Last4, setCard3Last4] = useState("");
 
   const [validPromoCodes, setValidPromoCodes] = useState([]);
+  const movieId = location.state?.movieId;
+  //console.log("checkoutpage movie id:", movieId);
 
   useEffect(() => {
     const fetchPromotions = async () => {
@@ -74,27 +76,40 @@ const CheckoutPage = () => {
   const applyPromoCode = () => {
     const matchedPromo = validPromoCodes.find(promo => promo.promo_code === promoCode);
   
-    if (matchedPromo) {
-      const today = new Date();
-      const expirationDate = new Date(matchedPromo.expiration_date);
-  
-      if (today <= expirationDate) {
-        const discountAmount = Number(originalTotal) * matchedPromo.discount; // ✅ FIXED
-        setDiscount(discountAmount);
-        setError("");
-      } else {
-        setError("Promo code has expired");
-        setDiscount(0);
-      }
-    } else {
+    if (!matchedPromo) {
       setError("Invalid promo code");
       setDiscount(0);
+      return;
     }
+  
+    const today = new Date();
+    const expirationDate = new Date(matchedPromo.expiration_date);
+  
+    // checks if promo is for this movie
+    const currentMovieId =
+      location.state?.movieId ||
+      location.state?.selectedShow?.movie ||
+      location.state?.movie?._id?.$oid;
+      //console.log("Current movie ID:", currentMovieId);
+      //console.log("Promo movie ID:", matchedPromo.movie_id);
+
+    if (matchedPromo.movie_id !== currentMovieId) {
+      setError("Promo code does not apply to this movie.");
+      setDiscount(0);
+      return;
+    }
+  
+    if (today > expirationDate) {
+      setError("Promo code has expired");
+      setDiscount(0);
+      return;
+    }
+  
+    const discountAmount = Number(originalTotal) * matchedPromo.discount;
+    setDiscount(discountAmount);
+    setError("");
   };
   
-  
-  
-
   const defaultOrder = {
     movieTitle: "Unknown Movie",
     selectedDate: "N/A",
