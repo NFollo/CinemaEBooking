@@ -257,10 +257,21 @@ const CheckoutPage = () => {
           <div className="detailItem"><strong>Seats:</strong> <span>{selectedSeats.join(", ")}</span></div>
           {/* <div className="detailItem"><strong>Total Price:</strong> <span>${originalTotal.toFixed(2)}</span></div> */}
           <div className="detailItem">
-            <strong>Total:</strong> <span>${originalTotal.toFixed(2)}</span>
+            <strong>Total:</strong> 
+            
+            {/* <span>${originalTotal.toFixed(2)}</span> */}
+            <span>
+                {discount > 0 ? (
+                  <>
+                    <s>${originalTotal.toFixed(2)}</s> → ${finalTotal.toFixed(2)}
+                  </>
+                ) : (
+                  `$${totalPrice.toFixed(2)}`
+                )}
+              </span>
           </div>
 
-          {discount > 0 && (
+          {/* {discount > 0 && (
             <div className="detailItem">
               <strong>Discount Applied:</strong> <span>- ${discount.toFixed(2)}</span>
             </div>
@@ -270,7 +281,7 @@ const CheckoutPage = () => {
             <div className="detailItem">
               <strong>Final Total:</strong> <span>${finalTotal.toFixed(2)}</span>
             </div>
-          )}
+          )} */}
 
           
         </div>
@@ -393,7 +404,7 @@ const CheckoutPage = () => {
 
           </div>
           {error && <p className="errorText">{error}</p>}
-          {/* {discount > 0 && <p className="successText">Discount Applied: -${discount.toFixed(2)}</p>} */}
+          {discount > 0 && <p className="successText">Discount Applied: -${discount.toFixed(2)}</p>}
         </div>
 
         

@@ -10,6 +10,8 @@ function ComingSoon() {
   const [comingSoonMovies, setComingSoonMovies] = useState([]);
   const [sixMovies, setSixMovies] = useState([]);
 
+  const [hasData, setHasData] = useState(false);
+
   useEffect(() => {
     const fetchMovies = async () => {
       try {
@@ -27,6 +29,10 @@ function ComingSoon() {
   
         setMovies(filteredMovies); 
         //setLoading(false); // Set loading state to false
+        function delayData() {
+          setHasData(true);
+        }
+        setTimeout(delayData, 500);
       } catch (error) {
         return; // no need to do anyhting, the error is already in movieMgr
         //(false);
@@ -63,7 +69,7 @@ function ComingSoon() {
       <div className="ComingSoonText">
         Coming Soon
       </div>
-      {sixMovies.length > 0 ? (
+      {!hasData ? <div className="no-movies">Loading Data...</div> : (sixMovies.length > 0 ? (
         <Carousel className="ComingSoonCarousel">
           {sixMovies.map((movieGroup, index) => (
             <Carousel.Item key={`carousel-item-${index}`}>
@@ -83,8 +89,8 @@ function ComingSoon() {
           ))}
         </Carousel>
       ) : (
-        <div className="no-movies">No upcoming movies found</div>
-      )}
+        <div className="no-movies">No movies comming soon</div>
+      ))}
       <button className="ComingSoonBrowse" onClick={handleBrowseClick}>
         Browse All Movies
       </button>   

@@ -503,6 +503,17 @@ def init_routes(app, mail):
             except Exception as err:
                 return jsonify({"error": "Failed to fetch shows", "message": str(err)}), 500
             
+    @app.route('/shows/id/<id>', methods=['GET'])
+    def get_show_by_id(id):
+        ''' Fetch show with matching id '''
+        if request.method == 'GET': 
+            try:
+                show = Show.objects.get(id=id)
+                show_dict = show.to_mongo().to_dict()
+                return jsonify(show_dict), 200
+            except Exception as err:
+                return jsonify({"error": "Failed to fetch show", "message": str(err)}), 500
+
     @app.route('/shows/movie/<movieId>', methods=['GET'])
     def get_shows_by_movie(movieId):
         ''' Fetch all shows with date as targetDate '''

@@ -108,3 +108,10 @@
 .SoonMovieRating {
     font-size: 70%;
 }
+
+.no-movies {
+    font-size: 180%;
+    justify-self: center;
+    padding: 10% 0%;
+    font-weight: bold;
+}
