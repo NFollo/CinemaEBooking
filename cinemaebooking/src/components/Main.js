@@ -119,7 +119,7 @@ function Main() {
             <Route path="/checkout" element={<CheckoutPage />} />            
             <Route path="/orderconfirmation" element={<OrderConfirmation />} />
             <Route exact path='/movieinfo' element={<MovieInfoPage onSearch={onSearch} logout={logout} input={input} clearInput={clearInput} />} />
-            <Route path='/*' element={<div>Error404</div>} />
+            <Route path='/*' element={<div className="Main404">Error 404</div>} />
           </Routes>
         </div>
       </Router>

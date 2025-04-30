@@ -6,6 +6,7 @@ import createAcc from "../../img/create-acc.png";
 import login from "../../img/login.png";
 import editFunc from "../../img/edit.png";
 import { Link, useNavigate } from 'react-router-dom';
+import history from "../../img/history.png"
 // import user from "../img/user.png"; 
 // import edit from "../img/edit.png";
 // import logout from "../img/log-out.png";
@@ -91,6 +92,11 @@ function AdminNavBar({onSearch, input, clearInput, logout}) {
                 <DropdownItem img={createAcc} text="Edit Profile" />
               </button>
             </Link>
+            <Link to={'/orderhistory'}>
+                          <button className="signUp">
+                            <DropdownItem img={history} text="Order History" />
+                          </button>
+                        </Link>
             <Link to={'/'}>
               <button className="login" onClick={myLogout}>
                 <DropdownItem img={login} text="Sign Out" />

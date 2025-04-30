@@ -7,6 +7,7 @@ import login from "../../img/login.png";
 import { Link, useNavigate } from 'react-router-dom';
 import user from "../../img/user.png"; 
 import edit from "../../img/edit.png";
+import history from "../../img/history.png"
 // import logout from "../img/log-out.png";
 // import { SearchBar } from "./SearchBar";
 
@@ -73,6 +74,11 @@ function LoggedNavBar({onSearch, input, clearInput, logout}) {
             <Link to={'/editprofile'}>
               <button className="signUp">
                 <DropdownItem img={edit} text="Edit Profile" />
+              </button>
+            </Link>
+            <Link to={'/orderhistory'}>
+              <button className="signUp">
+                <DropdownItem img={history} text="Order History" />
               </button>
             </Link>
             <Link to={'/'}>
