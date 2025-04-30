@@ -758,7 +758,7 @@ def init_routes(app, mail):
             promo_text = f"\nPromotion Code Applied: {promotion.promo_code} | Discount: {promotion.discount}%\n" if promotion else ""
 
             body = f"""\
-                Hello {user.name},
+                Hello {user.first_name},
 
                 Thank you for your booking!
 
@@ -772,7 +772,7 @@ def init_routes(app, mail):
                 Tickets:
                 {ticket_lines}
                 {promo_text}
-                
+
                 Total Price: ${booking.price}
 
                 Purchase Date: {booking.date}
