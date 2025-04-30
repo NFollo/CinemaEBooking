@@ -734,7 +734,8 @@ def init_routes(app, mail):
             user = booking.customer
             show = booking.show
             movie = show.movie if show else None
-            tickets = booking.seats
+            tickets = booking.tickets
+            seats = booking.seats
             promotion = booking.promotion
 
             # Compose order summary
@@ -766,10 +767,12 @@ def init_routes(app, mail):
                 Movie: {movie.title if movie else 'N/A'}
                 Date: {show.date.strftime("%Y-%m-%d")}
                 Time: {show.time.strftime("%H:%M")}
+                Seats: {seats}
 
                 Tickets:
                 {ticket_lines}
                 {promo_text}
+                
                 Total Price: ${booking.price}
 
                 Purchase Date: {booking.date}
