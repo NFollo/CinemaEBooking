@@ -206,9 +206,9 @@ function ViewProfile( {onSearch, input, clearInput, logout} ) {
     const navEditProfile = () => {
         navigate("/editprofile");
     };
-    const navViewHistory = () => {
-        navigate("/orderhistory");
-    }
+    // const navViewHistory = () => {
+    //     navigate("/orderhistory");
+    // }
 
     return (
     <div>
@@ -224,7 +224,7 @@ function ViewProfile( {onSearch, input, clearInput, logout} ) {
         </div>
         <div className="ViewProfileInfo">
             {(hasInfo && hasAddress && hasCards) ? build() : <div className="ViewProfileLoading">Loading User Data..</div>} {/* builder.build() */}
-            <div><button onClick={navViewHistory} className="ViewProfileEdit">View Order History</button></div>       
+                
             <button onClick={navEditProfile} className="ViewProfileEdit">Edit Profile</button>
         </div>
       </div>
