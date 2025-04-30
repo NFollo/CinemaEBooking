@@ -140,7 +140,7 @@ function LoginForgotPasswordForm() {
           <div className="LoginFormSection">
             Enter a new password
             <input 
-            type="text" 
+            type="password" 
             name="PW1" 
             minLength={8}
             value={PW1} 
@@ -150,7 +150,7 @@ function LoginForgotPasswordForm() {
           <div className="LoginFormSection">
             Confirm Password
             <input 
-            type="text" 
+            type="password" 
             name="PW2" 
             minLength={8}
             value={PW2} 
