@@ -765,8 +765,8 @@ def init_routes(app, mail):
                 Here is your order summary:
 
                 Movie: {movie.title if movie else 'N/A'}
-                Date: {show.date.strftime("%Y-%m-%d")}
-                Time: {show.time.strftime("%H:%M")}
+                Date: {show.date}
+                Time: {show.time}
                 Seats: {seats}
 
                 Tickets:
