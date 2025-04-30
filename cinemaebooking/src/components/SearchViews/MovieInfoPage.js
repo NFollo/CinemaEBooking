@@ -21,8 +21,11 @@ function MovieInfoPage({movie, onSearch, input, clearInput, logout}) {
     const [authorization, setAuthorization] = useState(Cookies.get("authorization"));
 
     /*
-    * 
-    */
+     * Proxy is MovieInfo.js
+     * Pass state functions to Movie.js so it can tell MovieInfoPage.js if the data has loaded or failed to load
+     * Until then, a base message is displayed
+     * Once the data is loaded, MovieInfoPage.js will start showing the loaded data
+     */
     return (
         <div>
         <div>
