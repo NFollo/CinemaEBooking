@@ -12,52 +12,59 @@ const OrderConfirmation = () => {
   //const [userID, setUserID] = useState(null);
   //var userID = null;
 
-  useEffect(() => {
-    const getUserID = async () => {
-      try {
-        // get user ID
-        const res = await axios.get("http://localhost:5000/users/email/"+email);
-        console.log("fetched user data: ", res.data)
-        console.log("userId = " + res.data._id?.$oid);
-        //setUserID(res.data._id?.$oid);
-        //userID = res.data._id?.$oid;
+  const [hasPushedData, setHasPushedData] = useState(false);
 
-        // post data to DB
-        const booking = {
-          "customer_id": res.data._id?.$oid,
-          "show_id": showID,
-          "promotion_id": promoID,
-          "tickets": [
-            {"ticket_type": "adult",
-              "quantity": parseInt(adult),
-              "price": 15.99,
-            },
-            {"ticket_type": "child",
-              "quantity": parseInt(child),
-              "price": 12.99,
-            },
-            {"ticket_type": "senior",
-              "quantity": parseInt(senior),
-              "price": 14.49,
-            }
-          ],
-          "seats": selectedSeats,
-          "price": parseInt((totalPrice - discount).toFixed(2))
-        };
-        axios.post("http://localhost:5000/bookings", { booking })
-        .then((res) => {
-          console.log("posted booking to DB", res.data);          
-        })
-        .catch((err) => {
-          console.error("Error posting the booking:", err);
-        });
+  // useEffect(() => {
+  //   const getUserID = async () => {
+  //     if (!hasPushedData) {
+  //       try {
+  //         // get user ID
+  //         const res = await axios.get("http://localhost:5000/users/email/"+email);
+  //         console.log("fetched user data: ", res.data)
+  //         console.log("userId = " + res.data._id?.$oid);
+  //         //setUserID(res.data._id?.$oid);
+  //         //userID = res.data._id?.$oid;
 
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-      }
-    };
-    getUserID();
-  }, []);
+  //         // post data to DB
+  //         const booking = {
+  //           "customer_id": res.data._id?.$oid,
+  //           "show_id": showID,
+  //           "promotion_id": promoID,
+  //           "tickets": [
+  //             {"ticket_type": "adult",
+  //               "quantity": parseInt(adult),
+  //               "price": 15.99,
+  //             },
+  //             {"ticket_type": "child",
+  //               "quantity": parseInt(child),
+  //               "price": 12.99,
+  //             },
+  //             {"ticket_type": "senior",
+  //               "quantity": parseInt(senior),
+  //               "price": 14.49,
+  //             }
+  //           ],
+  //           "seats": selectedSeats,
+  //           "price": parseFloat((totalPrice - discount).toFixed(2))
+  //         };
+  //         axios.post("http://localhost:5000/bookings", booking)
+  //         .then((res) => {
+  //           console.log("posted booking to DB", res.data);          
+  //         })
+  //         .catch((err) => {
+  //           console.error("Error posting the booking:", err);
+  //         });
+
+  //       } catch (error) {
+  //         console.error("Error fetching user data:", error);
+  //       }
+  //       setHasPushedData(true);
+  //     } else {
+  //       console.log("Already pushed this data to the database");
+  //     }
+  //   };
+  //   getUserID();
+  // }, []);
 
   const navigate = useNavigate();
   const location = useLocation();

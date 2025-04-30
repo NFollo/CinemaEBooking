@@ -60,12 +60,55 @@ const CheckoutPage = () => {
 
   const [promoID, setPromoID] = useState(null);
 
+  const [userID, setUserID] = useState(null);
+  const email = Cookies.get("email");
+
+  const pushData = async () => {
+
+    var booking = {
+      "customer_id": userID,
+      "show_id": showID,
+      "promotion_id": promoID,
+      "tickets": [
+        {"ticket_type": "adult",
+          "quantity": parseInt(adult),
+          "price": 15.99,
+        },
+        {"ticket_type": "child",
+          "quantity": parseInt(child),
+          "price": 12.99,
+        },
+        {"ticket_type": "senior",
+          "quantity": parseInt(senior),
+          "price": 14.49,
+        }
+      ],
+      "seats": selectedSeats,
+      "price": parseFloat((totalPrice - discount).toFixed(2))
+    };
+
+    axios.post("http://localhost:5000/bookings", booking)
+    .then((res) => {
+      console.log("posted booking to DB", res.data);          
+    })
+    .catch((err) => {
+      console.error("Error posting the booking:", err);
+    });
+
+  }
+
   useEffect(() => {
     const fetchPromotions = async () => {
       try {
         const res = await axios.get("http://localhost:5000/promotions");
         setValidPromoCodes(res.data);
         console.log("fetched promos: ", res.data)
+
+        const res2 = await axios.get("http://localhost:5000/users/email/"+email);
+        console.log("fetched user data: ", res2.data)
+        console.log("userId = " + res2.data._id?.$oid);
+        setUserID(res2.data._id?.$oid);
+
       } catch (error) {
         console.error("Failed to fetch promotions:", error);
       }
@@ -237,6 +280,8 @@ const CheckoutPage = () => {
         return;
       }
     }
+
+    pushData();
   
     navigate("/orderconfirmation", {
       state: {
