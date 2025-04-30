@@ -60,6 +60,7 @@ const SeatSelection = () => {
       alert(`Please select exactly ${numTickets} seats.`);
       return;
     }
+    //console.log("ShowId: " + showID);
     navigate(`/checkout?movie=${movieTitle}`, {
       state: { 
         movieTitle, 
@@ -72,6 +73,7 @@ const SeatSelection = () => {
         child,
         adult,
         senior, 
+        showID,
       }
     });
   };
