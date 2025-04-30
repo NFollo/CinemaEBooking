@@ -26,6 +26,7 @@ function MovieInfoPage({movie, onSearch, input, clearInput, logout}) {
      * Until then, a base message is displayed
      * Once the data is loaded, MovieInfoPage.js will start showing the loaded data
      */
+    
     return (
         <div>
         <div>
