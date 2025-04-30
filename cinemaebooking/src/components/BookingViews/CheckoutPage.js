@@ -6,11 +6,14 @@ import axios from "axios";
 
 import {getAddress} from "../../applicationLogic/AddressManager";
 import {getUserByEmail} from "../../applicationLogic/UserManager";
+import {createPaymentCard} from "../../applicationLogic/CardManager";
 
 const CheckoutPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [paymentMethod, setPaymentMethod] = useState("");
+  const [cardType, setCardType] = useState("");
+  const [cardName, setCardName] = useState("");
   const [cardNumber, setCardNumber] = useState("");
   const [expiryMonth, setExpiryMonth] = useState("");
   const [expiryYear, setExpiryYear] = useState("");
@@ -60,7 +63,6 @@ const CheckoutPage = () => {
 
   const [validPromoCodes, setValidPromoCodes] = useState([]);
   const movieId = location.state?.movieId;
-  console.log("checkoutpage movie id:", movieId);
 
   const [promoID, setPromoID] = useState(null);
 
@@ -290,6 +292,39 @@ const formatToCardNumber = (evt) => {
     });
   };  
   
+  async function saveCardDetails() {
+    if (cardType === "" || cardNumber.length !== 19 || cardName === "" || expiryMonth === "" 
+      || expiryYear === "" || cvc.length !== 3 || street === "" || city === "" || state === "" 
+      || country === "" || zip === "") {
+        alert("Please ensure all card details are completed");
+        return;
+    }
+
+    const cardDetails = {
+      cardType: cardType,
+      nameOnCard: cardName,
+      cardNumber: cardNumber,
+      month: expiryMonth,
+      year: expiryYear,
+      cvc: cvc
+    }
+
+    const addressDetails = {
+      street: street,
+      city: city,
+      state: state,
+      country: country,
+      zipCode: zip
+    }
+
+    const cardId = await createPaymentCard(cardDetails, addressDetails);
+    if (cardId === -1) {
+      alert("Error creating payment card");
+      return;
+    }
+    window.location.reload();
+  } // saveCardDetails
+
   return (
     <div className="checkoutPage">
       <div className="header">
@@ -423,22 +458,31 @@ const formatToCardNumber = (evt) => {
         {paymentMethod === "new" && (
           <div className="cardDetails">
             <div className="cardRow">
-              <input type="text" placeholder="Card Number" className="cardInput small" value={cardNumber} onChange={(e) => setCardNumber(e.target.value)}
-                onKeyDown={disallowNonNumericInput} onKeyUp={formatToCardNumber} maxlength="19"/>
+            <select value={cardType} className="cardInput small" onChange={(e) => setCardType(e.target.value)}>
+              <option value="">Select</option>
+              <option value="credit">Credit</option>
+              <option value="debit">Debit</option>
+            </select>
+            <input type="text" placeholder="Card Number" className="cardInput small" value={cardNumber} onChange={(e) => setCardNumber(e.target.value)}
+              onKeyDown={disallowNonNumericInput} onKeyUp={formatToCardNumber} maxlength="19"/>
+            <input type="text" placeholder="Name On Card" className="cardInput small" value={cardName} onChange={(e) => setCardName(e.target.value)} />
+            </div>
+            <div className="cardRow">
               <input type="text" placeholder="Month" className="cardInput small" value={expiryMonth} onChange={(e) => setExpiryMonth(e.target.value)} />
               <input type="text" placeholder="Year" className="cardInput small" value={expiryYear} onChange={(e) => setExpiryYear(e.target.value)} />
-            </div>
-            <div className="cardRow">
-              <input type="text" placeholder="CVC" className="cardInput small" value={cvc} onChange={(e) => setCvc(e.target.value)} 
+              <input type="password" placeholder="CVC" className="cardInput small" value={cvc} onChange={(e) => setCvc(e.target.value)} 
                 onKeyDown={disallowNonNumericInput} maxlength="3"/>
-              <input type="text" placeholder="Street" className="cardInput small" value={street} onChange={(e) => setStreet(e.target.value)} />
-              <input type="text" placeholder="City" className="cardInput small" value={city} onChange={(e) => setCity(e.target.value)} />
             </div>
             <div className="cardRow">
+              <input type="text" placeholder="Street" className="cardInput small" value={street} onChange={(e) => setStreet(e.target.value)} />
+              <input type="text" placeholder="City" className="cardInput small" value={city} onChange={(e) => setCity(e.target.value)} />  
               <input type="text" placeholder="State" className="cardInput small" value={state} onChange={(e) => setState(e.target.value)} />
-              <input type="text" placeholder="Country" className="cardInput small" value={country} onChange={(e) => setCountry(e.target.value)} />
-              <input type="text" placeholder="ZIP Code" className="cardInput small" value={zip} onChange={(e) => setZip(e.target.value)} />
+            </div>
+            <div className="cardRow2">
+              <input type="text" placeholder="Country" className="cardInput" value={country} onChange={(e) => setCountry(e.target.value)} />
+              <input type="text" placeholder="ZIP Code" className="cardInput" value={zip} onChange={(e) => setZip(e.target.value)} />
             </div> 
+            <button className="applyButton" onClick={saveCardDetails}>Save Card Details</button>
           </div>
          )}
        </div>

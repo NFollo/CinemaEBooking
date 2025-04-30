@@ -159,6 +159,12 @@
     display: flex;
     justify-content: space-between;
 }
+
+.cardRow2 {
+    display: flex;
+    justify-content: space-between;
+    gap: 1em;
+}
   
 .cardInput.small {
     width: 30%;
