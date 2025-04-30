@@ -801,21 +801,14 @@ def init_routes(app, mail):
             bookings_list = []
             for booking in bookings:
                 # Extract ticket info from embedded documents
-                seats = [
-                    {
-                        "ticket_type": seat.ticket_type,
-                        "seat_number": seat.seat_number,
-                        "price": seat.price
-                    }
-                    for seat in booking.seats
-                ]
-
                 booking_data = {
                     "id": str(booking.id),
-                    "seats": seats,
+                    "seats": booking.seats,
                     "movie_name": booking.show.movie.title if booking.show and booking.show.movie else "N/A",
-                    "date": booking.show.date.strftime("%Y-%m-%d") if booking.show and booking.show.date else "N/A",
-                    "time": booking.show.time.strftime("%H:%M") if booking.show and booking.show.time else "N/A",
+                    #"date": booking.show.date.strftime("%Y-%m-%d") if booking.show and booking.show.date else "N/A",
+                    #"time": booking.show.time.strftime("%H:%M") if booking.show and booking.show.time else "N/A",
+                    "date": booking.show.date,
+                    "time": booking.show.time,
                     "price": booking.price,
                 }
                 bookings_list.append(booking_data)
