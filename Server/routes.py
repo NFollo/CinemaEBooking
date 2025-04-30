@@ -514,6 +514,24 @@ def init_routes(app, mail):
                 return jsonify(show_dict), 200
             except Exception as err:
                 return jsonify({"error": "Failed to fetch show", "message": str(err)}), 500
+            
+    @app.route('/shows/<id>/book_seats', methods=['Post'])
+    def book_seats(id):
+        ''' Append new seats to the taken_seats array for a show '''
+        if request.method == 'POST':
+            try:
+                new_seats = request.json.get('seats', [])
+                
+                show = Show.objects.get(id=id)
+                
+                # Append the new seats to the taken_seats array, avoiding duplicates
+                show.update(add_to_set__taken_seats={"$each": new_seats})
+                
+                updated_show = show.to_mongo().to_dict()
+                return jsonify(updated_show), 200
+
+            except Exception as err:
+                return jsonify({"error": "Failed to book seats", "message": str(err)}), 500
 
     @app.route('/shows/movie/<movieId>', methods=['GET'])
     def get_shows_by_movie(movieId):
