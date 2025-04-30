@@ -58,6 +58,7 @@ function MovieInfoPage({movie, onSearch, input, clearInput, logout}) {
 
     useEffect(() => {
         const getMovieData = async () => {
+            // proxy start
             const data = await MovieMgr.GetSingleMovieByTitle(movieInfo.title); 
             if (data === -1) {
               console.error("Failed to load movie data.");
@@ -84,6 +85,7 @@ function MovieInfoPage({movie, onSearch, input, clearInput, logout}) {
               _id: data._id
             }));
 
+            // proxy
             setHasData(true);
 
           };
