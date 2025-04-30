@@ -781,7 +781,7 @@ def init_routes(app, mail):
                 """
 
             subject = "Your Movie Booking Confirmation"
-            msg = Message(subject, sender=os.environ['MAIL_USERNAME'], recipients=user.email)
+            msg = Message(subject, sender=os.environ['MAIL_USERNAME'], recipients=[user.email])
             msg.body = body
             mail.send(msg)
             return jsonify({"message": "Order confirmation email sent!"}), 200
