@@ -775,7 +775,7 @@ def init_routes(app, mail):
 
                 Total Price: ${booking.price}
 
-                Purchase Date: {booking.date}
+                Purchase Date: {booking.date.strftime('%Y-%m-%d %H:%M:%S')}
 
                 Enjoy your movie!
                 """
