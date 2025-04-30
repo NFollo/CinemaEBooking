@@ -250,7 +250,6 @@ def init_routes(app, mail):
         try:
             movie = Movie.objects.get(title=targetTitle)
             movie_dict = movie.to_mongo().to_dict()
-            movie_dict['_id'] = str(movie_dict['_id'])
             return jsonify(movie_dict), 200
         except Exception as err:
             return jsonify({"error": "Failed to fetch movie", "message": str(err)}), 500
