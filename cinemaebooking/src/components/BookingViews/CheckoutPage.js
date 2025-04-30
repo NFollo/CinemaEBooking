@@ -58,6 +58,8 @@ const CheckoutPage = () => {
   const movieId = location.state?.movieId;
   console.log("checkoutpage movie id:", movieId);
 
+  const [promoID, setPromoID] = useState(null);
+
   useEffect(() => {
     const fetchPromotions = async () => {
       try {
@@ -114,6 +116,8 @@ const CheckoutPage = () => {
     const discountAmount = Number(originalTotal) * matchedPromo.discount;
     setDiscount(discountAmount);
     setError("");
+    setPromoID(matchedPromo._id);
+    console.log(promoID);
   };
   
   const defaultOrder = {
@@ -214,7 +218,7 @@ const CheckoutPage = () => {
   }, []);
   
 
-  const { movieTitle, selectedDate, showroom, showtime, selectedSeats, totalPrice, child, adult, senior } =
+  const { movieTitle, selectedDate, showroom, showtime, selectedSeats, totalPrice, child, adult, senior, showID } =
     location.state || defaultOrder;
 
   const originalTotal = totalPrice; // save original price
@@ -246,6 +250,8 @@ const CheckoutPage = () => {
         child,
         adult,
         senior,
+        showID,
+        promoID
       },
     });
   };  
