@@ -17,7 +17,19 @@ const SeatSelection = () => {
   const child = queryParams.get("child");
   const adult = queryParams.get("adult");
   const senior = queryParams.get("senior");
-  const ticketPrice = 15.99;
+  //const ticketPrice = 15.99;
+  const tickets = location.state?.tickets || { adult: 0, child: 0, senior: 0 };
+
+  const ticketPrices = {
+    adult: 15.99,
+    child: 12.99,
+    senior: 14.49,
+  };
+
+  const totalPrice =
+    tickets.adult * ticketPrices.adult +
+    tickets.child * ticketPrices.child +
+    tickets.senior * ticketPrices.senior;
 
   const [selectedSeats, setSelectedSeats] = useState([]);
   const allSeats = ["A1","A2","A3","A4","A5","A6","A7","A8","B1","B2","B3","B4","B5","B6","B7","B8","C1","C2","C3","C4","C5","C6","C7","C8","D1","D2","D3","D4","D5","D6","D7","D8","E1","E2","E3","E4","E5","E6","E7","E8","F1","F2","F3","F4","F5","F6","F7","F8"]
@@ -62,19 +74,19 @@ const SeatSelection = () => {
     }
     //console.log("ShowId: " + showID);
     navigate(`/checkout?movie=${movieTitle}`, {
-      state: { 
-        movieTitle, 
-        movieId: movieId,
-        selectedDate, 
+      state: {
+        movieTitle,
+        movieId,
+        selectedDate,
         showroom,
-        showtime, 
-        selectedSeats, 
-        totalPrice: selectedSeats.length * ticketPrice,
-        child,
-        adult,
-        senior, 
+        showtime,
+        selectedSeats,
+        totalPrice,
+        child: tickets.child,
+        adult: tickets.adult,
+        senior: tickets.senior,
         showID,
-      }
+      },
     });
   };
 

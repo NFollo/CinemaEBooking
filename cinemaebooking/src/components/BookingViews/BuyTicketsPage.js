@@ -30,11 +30,11 @@ function BuyTicketsPage() {
     trailer_picture_url: "https://via.placeholder.com/150",
     
   };
-  console.log("Selected movie ID:", movie._id);
 
-
+  //console.log("movie ID:", movie._id);
+  
   // THIS IS HOW YOU GET THE MOVIE ID
-  console.log("BUY TICKET PAGE MOVIE ID: " + movie._id?.$oid) 
+  //console.log("BUY TICKET PAGE MOVIE ID: " + movie._id?.$oid) 
 
 
   const ticketPrices = {  
@@ -135,7 +135,7 @@ function BuyTicketsPage() {
       {
         state: {
           movie,
-          movieId: movie._id?.$oid,
+          movieId: movie._id,
           selectedDate,
           showtime: selectedTime,
           selectedShow,
