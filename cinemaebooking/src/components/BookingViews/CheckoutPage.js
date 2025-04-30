@@ -56,7 +56,7 @@ const CheckoutPage = () => {
 
   const [validPromoCodes, setValidPromoCodes] = useState([]);
   const movieId = location.state?.movieId;
-  console.log("checkoutpage movie id:", movieId);
+  //console.log("checkoutpage movie id:", movieId);
 
   const [promoID, setPromoID] = useState(null);
 
