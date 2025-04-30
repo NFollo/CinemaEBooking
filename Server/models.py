@@ -102,7 +102,7 @@ class Ticket(me.EmbeddedDocument):
     meta = {"collection": "tickets"}
 
 class Booking(me.Document):
-    date = me.DateTimeField(required=True) # the date the booking was made
+    date = me.DateTimeField() # the date the booking was made
     customer = me.ReferenceField(User, required=True)
     promotion = me.ReferenceField(Promotion)
     show = me.ReferenceField(Show, required=True)
