@@ -95,10 +95,27 @@ const CheckoutPage = () => {
 
     axios.post("http://localhost:5000/bookings", booking)
     .then((res) => {
-      console.log("posted booking to DB", res.data);          
+      console.log("posted booking to DB", res.data);  
+      console.log("booking id = " + res.data.booking_id);
+      
+      axios.post("http://localhost:5000/OrderConfirmation/send", {"booking_id": res.data.booking_id})     
+      .then((res) => {
+        console.log("Email successful: ", res.data);  
+      })
+      .catch((err) => {
+        console.error("Error sending email:", err);
+      }); 
     })
     .catch((err) => {
       console.error("Error posting the booking:", err);
+    });
+
+    axios.post("http://localhost:5000/shows/"+showID+"/book_seats", {"seats": selectedSeats})
+    .then((res) => {
+      console.log("posted seat to show", res.data);     
+    })
+    .catch((err) => {
+      console.error("Error posting the seats to the showing:", err);
     });
 
   }
