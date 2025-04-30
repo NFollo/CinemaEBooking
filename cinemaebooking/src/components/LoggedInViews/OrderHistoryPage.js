@@ -29,11 +29,13 @@ function OrderHistoryPage( {onSearch, input, clearInput, logout} ) {
                     : (authorization === "customer" ? <LoggedNavBar onSearch={onSearch} logout={logout} input={input} clearInput={clearInput}/> 
                     : "")}
         <div className="BookingsContainer">
-        {bookings.map((booking) => <div key={booking.id.$oid} className="Booking">
-            <div>Booking Ref: {booking.id.$oid}</div>
+        {bookings.map((booking) => <div key={booking.id} className="Booking">
+            <div>Booking Ref: {booking.id}</div>
             <div>{booking.movie_name} on {booking.date} at {booking.time}:00</div>
-            <div>{booking.seats.length} Ticket{booking.seats.length !== 1 ? "s" : ""}: {booking.seats.map((seat) => seat)}</div>
+            <div>{booking.seats.length} Ticket{booking.seats.length !== 1 ? "s" : ""}: {booking.seats.map((seat) => seat + " ")}</div>
             <div>${booking.price}</div>
+            <div>Purchase Date: {booking.purchaseDate}</div>
+            <div>Purchase Time: {booking.purchaseTime}</div>
             </div>)}
         </div>
     </div>
