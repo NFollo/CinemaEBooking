@@ -15,6 +15,7 @@ function MovieInfoPage({movie, onSearch, input, clearInput, logout}) {
     const location = useLocation(); 
 
     const [hasData, setHasData] = useState(false);
+    const [failedLoad, setFailedLoad] = useState(false);
     
     // no movie 
 
@@ -62,6 +63,8 @@ function MovieInfoPage({movie, onSearch, input, clearInput, logout}) {
             const data = await MovieMgr.GetSingleMovieByTitle(movieInfo.title); 
             if (data === -1) {
               console.error("Failed to load movie data.");
+              setFailedLoad(true);
+              setHasData(true);
               return;
             }
         
@@ -108,6 +111,7 @@ function MovieInfoPage({movie, onSearch, input, clearInput, logout}) {
                             : <NavBar onSearch={onSearch} input={input} clearInput={clearInput}/>)}
         </div>
         {hasData ? 
+        (failedLoad ? <div className="MovieInfoPageLoading">Failed to load data</div> :
         <div className='pageContainer'>
             <p className='title'>{movieInfo.title}</p>
 
@@ -145,7 +149,7 @@ function MovieInfoPage({movie, onSearch, input, clearInput, logout}) {
             <br></br>
 
             
-        </div>
+        </div>)
         : <div className="MovieInfoPageLoading">Loading...</div>}
         </div>
     );
