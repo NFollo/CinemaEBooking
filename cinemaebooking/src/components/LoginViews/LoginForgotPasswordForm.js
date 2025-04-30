@@ -142,6 +142,7 @@ function LoginForgotPasswordForm() {
             <input 
             type="password" 
             name="PW1" 
+            autoComplete="new-password"
             minLength={8}
             value={PW1} 
             onChange={(e) => setPW1(e.target.value)}>
@@ -152,6 +153,7 @@ function LoginForgotPasswordForm() {
             <input 
             type="password" 
             name="PW2" 
+            autoComplete="new-password"
             minLength={8}
             value={PW2} 
             onChange={(e) => setPW2(e.target.value)}
