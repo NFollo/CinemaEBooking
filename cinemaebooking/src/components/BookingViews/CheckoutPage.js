@@ -15,6 +15,10 @@ const CheckoutPage = () => {
   const [expiryMonth, setExpiryMonth] = useState("");
   const [expiryYear, setExpiryYear] = useState("");
   const [cvc, setCvc] = useState("");
+  const [street, setStreet] = useState("");
+  const [city, setCity] = useState("");
+  const [state, setState] = useState("");
+  const [country, setCountry] = useState("");
   const [zip, setZip] = useState("");
   const [promoCode, setPromoCode] = useState("");
   const [discount, setDiscount] = useState(0);
@@ -59,6 +63,36 @@ const CheckoutPage = () => {
   //console.log("checkoutpage movie id:", movieId);
 
   const [promoID, setPromoID] = useState(null);
+
+  // only allow numbers
+  const disallowNonNumericInput = (evt) => {
+    if (evt.ctrlKey) return;
+    if (evt.key.length > 1) return;
+    if (/[0-9]/.test(evt.key)) return;
+    evt.preventDefault();
+};
+
+// format card number
+const formatToCardNumber = (evt) => {
+    const digits = evt.target.value.replace(/\D/g, '').substring(0, 16);
+    const part1 = digits.substring(0, 4);
+    const part2 = digits.substring(4, 8);
+    const part3 = digits.substring(8, 12);
+    const part4 = digits.substring(12, 16);
+
+    let formattedCard = '';
+    if (digits.length > 12) {
+        formattedCard = `${part1}-${part2}-${part3}-${part4}`;
+    } else if (digits.length > 8) {
+        formattedCard = `${part1}-${part2}-${part3}`;
+    } else if (digits.length > 4) {
+        formattedCard = `${part1}-${part2}`;
+    } else {
+        formattedCard = part1;
+    }
+
+    setCardNumber(formattedCard);
+}
 
   useEffect(() => {
     const fetchPromotions = async () => {
@@ -364,20 +398,24 @@ const CheckoutPage = () => {
    
         {paymentMethod === "new" && (
           <div className="cardDetails">
-            <input
-              type="text"
-              placeholder="Card Number"
-              className="cardInput"
-              value={cardNumber}
-              onChange={(e) => setCardNumber(e.target.value)}
-            />
-             <div className="cardRow">
-              <input type="text" placeholder="MM" className="cardInput small" value={expiryMonth} onChange={(e) => setExpiryMonth(e.target.value)} />
-              <input type="text" placeholder="YY" className="cardInput small" value={expiryYear} onChange={(e) => setExpiryYear(e.target.value)} />
-              <input type="text" placeholder="CVC" className="cardInput small" value={cvc} onChange={(e) => setCvc(e.target.value)} />
+            <div className="cardRow">
+              <input type="text" placeholder="Card Number" className="cardInput small" value={cardNumber} onChange={(e) => setCardNumber(e.target.value)}
+                onKeyDown={disallowNonNumericInput} onKeyUp={formatToCardNumber} maxlength="19"/>
+              <input type="text" placeholder="Month" className="cardInput small" value={expiryMonth} onChange={(e) => setExpiryMonth(e.target.value)} />
+              <input type="text" placeholder="Year" className="cardInput small" value={expiryYear} onChange={(e) => setExpiryYear(e.target.value)} />
             </div>
-            <input type="text" placeholder="ZIP Code" className="cardInput" value={zip} onChange={(e) => setZip(e.target.value)} />
-           </div>
+            <div className="cardRow">
+              <input type="text" placeholder="CVC" className="cardInput small" value={cvc} onChange={(e) => setCvc(e.target.value)} 
+                onKeyDown={disallowNonNumericInput} maxlength="3"/>
+              <input type="text" placeholder="Street" className="cardInput small" value={street} onChange={(e) => setStreet(e.target.value)} />
+              <input type="text" placeholder="City" className="cardInput small" value={city} onChange={(e) => setCity(e.target.value)} />
+            </div>
+            <div className="cardRow">
+              <input type="text" placeholder="State" className="cardInput small" value={state} onChange={(e) => setState(e.target.value)} />
+              <input type="text" placeholder="Country" className="cardInput small" value={country} onChange={(e) => setCountry(e.target.value)} />
+              <input type="text" placeholder="ZIP Code" className="cardInput small" value={zip} onChange={(e) => setZip(e.target.value)} />
+            </div> 
+          </div>
          )}
        </div>
         <button className="payButton" onClick={handlePayment}>
